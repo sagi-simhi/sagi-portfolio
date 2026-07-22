@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sagi Simhi</title>
+<meta name="description" content="Sagi Simhi — Economics & Management student pursuing capital markets, trading, and fintech roles. Portfolio dashboards, financial analysis, and behavioral fintech design.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- ============ NAVBAR ============ -->
+<header class="nav" id="siteNav">
+  <div class="nav-inner">
+    <div class="nav-identity">
+      <div class="nav-name-group">
+        <a href="#top" class="nav-brand" id="navBrand" aria-label="Scroll to top">Sagi Simhi</a>
+      </div>
+      <div class="nav-status">
+        <span class="nav-status-dot" aria-hidden="true"></span>
+        <span class="nav-status-text">Open to student &amp; intern roles</span>
+      </div>
+    </div>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#education">Education</a>
+      <a href="#stack">Stack</a>
+      <a href="#projects">Projects</a>
+      <a href="#experience">Experience</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+  <div class="scroll-progress" id="scrollProgress" aria-hidden="true">
+    <div class="scroll-progress-bar" id="scrollProgressBar"></div>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero" id="top">
+
+    <!-- background market graph — trading terminal & double-exposure style -->
+    <div class="market-bg" aria-hidden="true">
+      <svg class="market-bg-svg" viewBox="0 0 560 620" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="candleGlow" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#10b981" stop-opacity="0.95"/>
+            <stop offset="100%" stop-color="#059669" stop-opacity="0.6"/>
+          </linearGradient>
+          <linearGradient id="bearGlow" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#f43f5e" stop-opacity="0.9"/>
+            <stop offset="100%" stop-color="#e11d48" stop-opacity="0.5"/>
+          </linearGradient>
+          <linearGradient id="trendFade" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#10b981" stop-opacity="0"/>
+            <stop offset="15%" stop-color="#10b981" stop-opacity="0.9"/>
+            <stop offset="100%" stop-color="#5ed4ab" stop-opacity="1"/>
+          </linearGradient>
+          <radialGradient id="fieldGlow" cx="65%" cy="35%" r="65%">
+            <stop offset="0%" stop-color="#10b981" stop-opacity="0.18"/>
+            <stop offset="100%" stop-color="#10b981" stop-opacity="0"/>
+          </radialGradient>
+          <linearGradient id="reflectionFade" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#000" stop-opacity="1"/>
+            <stop offset="100%" stop-color="#000" stop-opacity="0"/>
+          </linearGradient>
+          <mask id="reflectionMask">
+            <rect x="0" y="0" width="560" height="620" fill="url(#reflectionFade)"/>
+          </mask>
+          <filter id="softGlow" x="-60%" y="-60%" width="220%" height="220%">
+            <feGaussianBlur stdDeviation="4.2" result="blur"/>
+            <feMerge>
+              <feMergeNode in="blur"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+          <filter id="reflectionBlur" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="2.6"/>
+          </filter>
+        </defs>
+
+        <!-- ambient glow field -->
+        <rect x="0" y="0" width="560" height="620" fill="url(#fieldGlow)"/>
+
+        <!-- floating terminal trading metrics -->
+        <g class="market-metrics">
+          <g transform="translate(370, 90)">
+            <text x="0" y="0" class="metric-label">VOLUME / 24H</text>
+            <text x="0" y="15" class="metric-value up">+15.8%</text>
+          </g>
+          <g transform="translate(60, 210)">
+            <text x="0" y="0" class="metric-label">SHARPE RATIO</text>
+            <text x="0" y="15" class="metric-value neutral">2.41</text>
+          </g>
+          <g transform="translate(420, 320)">
+            <text x="0" y="0" class="metric-label">ALPHA</text>
+            <text x="0" y="15" class="metric-value up">+4.8%</text>
+          </g>
+          <g transform="translate(90, 440)">
+            <text x="0" y="0" class="metric-label">MAX DRAWDOWN</text>
+            <text x="0" y="15" class="metric-value down">-3.2%</text>
+          </g>
+        </g>
+
+        <!-- horizontal grid -->
+        <g class="market-grid">
+          <line x1="0" y1="120" x2="560" y2="120"/>
+          <line x1="0" y1="240" x2="560" y2="240"/>
+          <line x1="0" y1="360" x2="560" y2="360"/>
+          <line x1="0" y1="480" x2="560" y2="480"/>
+        </g>
+
+        <!-- ============ REFLECTION LAYER (double exposure) ============ -->
+        <g class="market-reflection" mask="url(#reflectionMask)" filter="url(#reflectionBlur)"
+           transform="translate(0,624) scale(1,-1)">
+          <g class="candles-reflect">
+            <g class="candle"><line x1="30" y1="520" x2="30" y2="560" class="wick"/><rect x="20" y="528" width="20" height="24" rx="1.5" class="body bear"/></g>
+            <g class="candle"><line x1="70" y1="500" x2="70" y2="548" class="wick"/><rect x="60" y="512" width="20" height="26" rx="1.5" class="body bull"/></g>
+            <g class="candle"><line x1="110" y1="470" x2="110" y2="520" class="wick"/><rect x="100" y="480" width="20" height="30" rx="1.5" class="body bull"/></g>
+            <g class="candle"><line x1="150" y1="460" x2="150" y2="498" class="wick"/><rect x="140" y="470" width="20" height="18" rx="1.5" class="body bear"/></g>
+            <g class="candle"><line x1="190" y1="410" x2="190" y2="470" class="wick"/><rect x="180" y="422" width="20" height="34" rx="1.5" class="body bull"/></g>
+            <g class="candle"><line x1="230" y1="380" x2="230" y2="428" class="wick"/><rect x="220" y="392" width="20" height="26" rx="1.5" class="body bull"/></g>
+            <g class="candle"><line x1="270" y1="360" x2="270" y2="400" class="wick"/><rect x="260" y="372" width="20" height="16" rx="1.5" class="body bear"/></g>
+            <g class="candle"><line x1="310" y1="310" x2="310" y2="368" class="wick"/><rect x="300" y="322" width="20" height="34" rx="1.5" class="body bull"/></g>
+            <g class="candle"><line x1="350" y1="270" x2="350" y2="322" class="wick"/><rect x="340" y="282" width="20" height="28" rx="1.5" class="body bull"/></g>
+            <g class="candle"><line x1="390" y1="248" x2="390" y2="286" class="wick"/><rect x="380" y="258" width="20" height="18" rx="1.5" class="body bear"/></g>
+            <g class="candle"><line x1="430" y1="196" x2="430" y2="254" class="wick"/><rect x="420" y="208" width="20" height="32" rx="1.5" class="body bull"/></g>
+            <g class="candle"><line x1="470" y1="158" x2="470" y2="208" class="wick"/><rect x="460" y="170" width="20" height="26" rx="1.5" class="body bull"/></g>
+            <g class="candle"><line x1="510" y1="120" x2="510" y2="170" class="wick"/><rect x="500" y="132" width="20" height="28" rx="1.5" class="body bull"/></g>
+          </g>
+          <path class="trend-line-reflect" d="M20 546 L60 524 L100 494 L140 480 L180 438 L220 404 L260 380
+             L300 338 L340 296 L380 266 L420 220 L460 182 L520 128"
+             fill="none" stroke="url(#trendFade)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </g>
+
+        <!-- ============ PRIMARY CANDLESTICKS ============ -->
+        <g class="candles" filter="url(#softGlow)">
+          <g class="candle candle-1"><line x1="30" y1="520" x2="30" y2="560" class="wick"/><rect x="20" y="528" width="20" height="24" rx="1.5" class="body bear"/></g>
+          <g class="candle candle-2"><line x1="70" y1="500" x2="70" y2="548" class="wick"/><rect x="60" y="512" width="20" height="26" rx="1.5" class="body bull"/></g>
+          <g class="candle candle-3"><line x1="110" y1="470" x2="110" y2="520" class="wick"/><rect x="100" y="480" width="20" height="30" rx="1.5" class="body bull"/></g>
+          <g class="candle candle-4"><line x1="150" y1="460" x2="150" y2="498" class="wick"/><rect x="140" y="470" width="20" height="18" rx="1.5" class="body bear"/></g>
+          <g class="candle candle-5"><line x1="190" y1="410" x2="190" y2="470" class="wick"/><rect x="180" y="422" width="20" height="34" rx="1.5" class="body bull"/></g>
+          <g class="candle candle-6"><line x1="230" y1="380" x2="230" y2="428" class="wick"/><rect x="220" y="392" width="20" height="26" rx="1.5" class="body bull"/></g>
+          <g class="candle candle-7"><line x1="270" y1="360" x2="270" y2="400" class="wick"/><rect x="260" y="372" width="20" height="16" rx="1.5" class="body bear"/></g>
+          <g class="candle candle-8"><line x1="310" y1="310" x2="310" y2="368" class="wick"/><rect x="300" y="322" width="20" height="34" rx="1.5" class="body bull"/></g>
+          <g class="candle candle-9"><line x1="350" y1="270" x2="350" y2="322" class="wick"/><rect x="340" y="282" width="20" height="28" rx="1.5" class="body bull"/></g>
+          <g class="candle candle-10"><line x1="390" y1="248" x2="390" y2="286" class="wick"/><rect x="380" y="258" width="20" height="18" rx="1.5" class="body bear"/></g>
+          <g class="candle candle-11"><line x1="430" y1="196" x2="430" y2="254" class="wick"/><rect x="420" y="208" width="20" height="32" rx="1.5" class="body bull"/></g>
+          <g class="candle candle-12"><line x1="470" y1="158" x2="470" y2="208" class="wick"/><rect x="460" y="170" width="20" height="26" rx="1.5" class="body bull"/></g>
+          <g class="candle candle-13"><line x1="510" y1="120" x2="510" y2="170" class="wick"/><rect x="500" y="132" width="20" height="28" rx="1.5" class="body bull"/></g>
+        </g>
+
+        <!-- ============ TREND LINE ============ -->
+        <path class="trend-line"
+          d="M20 546 L60 524 L100 494 L140 480 L180 438 L220 404 L260 380
+             L300 338 L340 296 L380 266 L420 220 L460 182 L520 128"
+          fill="none" stroke="url(#trendFade)" stroke-width="2.5"
+          stroke-linecap="round" stroke-linejoin="round"/>
+
+        <circle class="trend-endpoint" cx="520" cy="128" r="5"/>
+      </svg>
+    </div>
+
+    <div class="hero-inner">
+      <p class="hero-eyebrow">Economics &amp; Financial Data</p>
+      <h1 class="hero-title">
+        I build data-driven<br>
+        financial tools that<br>
+        help companies see<br>
+        their numbers <span class="hero-title-accent">clearly.</span>
+      </h1>
+
+      <p class="hero-bio">
+        I approach markets the way I was trained to approach operations - with discipline, hard data, and a bias for building the tool that answers the question rather than waiting for someone else to build it. Currently pairing a dual degree in Economics &amp; Management with self-directed work in portfolio construction and behavioral fintech design.
+      </p>
+
+      <div class="hero-cta">
+        <a href="#projects" class="btn btn-primary">View Projects</a>
+        <a href="#contact" class="btn btn-ghost">Get in Touch</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ EDUCATION ============ -->
+  <section class="section" id="education" aria-labelledby="educationHeading">
+    <div class="section-inner">
+      <p class="section-eyebrow">Academic Record</p>
+      <h2 class="section-title" id="educationHeading">Education &amp; Certifications</h2>
+
+      <div class="edu-grid">
+
+        <article class="edu-card edu-card-primary">
+          <div class="edu-card-head">
+            <h3>B.A. in Economics &amp; Management</h3>
+            <span class="edu-period mono">Oct 2025 – 2028</span>
+          </div>
+          <p class="edu-org">The Open University of Israel</p>
+        </article>
+
+        <article class="edu-card">
+          <div class="edu-card-head">
+            <h3>Pre-Academic Program</h3>
+            <span class="edu-period mono">Sep 2023 – Sep 2024</span>
+          </div>
+          <p class="edu-org">Levinsky–Wingate Academic Center</p>
+          <ul class="edu-scores">
+            <li><span class="score-label">Mathematics</span><span class="score-meta">4 units</span><span class="score-val mono">93</span></li>
+            <li><span class="score-label">English</span><span class="score-meta">5 units</span><span class="score-val mono">88</span></li>
+            <li><span class="score-label">Humanities</span><span class="score-meta">weighted avg</span><span class="score-val mono">90</span></li>
+          </ul>
+        </article>
+
+        <article class="edu-card edu-card-wide">
+          <div class="edu-card-head">
+            <h3>Independent Coursework</h3>
+            <span class="edu-period mono">campusIL &amp; Tel Aviv University</span>
+          </div>
+          <ul class="course-list">
+            <li>Understanding Financial Statements</li>
+            <li>Introduction to Psychological Science</li>
+            <li>First Steps in Computer Science &amp; Programming in Python</li>
+          </ul>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SKILLS / STACK ============ -->
+  <section class="section" id="stack" aria-labelledby="stackHeading">
+    <div class="section-inner">
+      <p class="section-eyebrow">Core Competencies</p>
+      <h2 class="section-title" id="stackHeading">Tech Stack &amp; Toolkit</h2>
+
+      <div class="stack-grid">
+
+        <div class="stack-group">
+          <h3 class="stack-group-title">Finance &amp; Markets</h3>
+          <div class="tag-row">
+            <span class="tag">Factor-Tilted Investing</span>
+            <span class="tag">Asset Allocation</span>
+            <span class="tag">Financial Statement Analysis</span>
+          </div>
+        </div>
+
+        <div class="stack-group">
+          <h3 class="stack-group-title">Technical &amp; Web</h3>
+          <div class="tag-row">
+            <span class="tag tag-mono">HTML</span>
+            <span class="tag tag-mono">CSS</span>
+            <span class="tag tag-mono">JavaScript</span>
+            <span class="tag tag-mono">Netlify</span>
+            <span class="tag tag-mono">Web Deployment</span>
+          </div>
+        </div>
+
+        <div class="stack-group">
+          <h3 class="stack-group-title">Methodologies</h3>
+          <div class="tag-row">
+            <span class="tag">Data-Driven Decision Making</span>
+            <span class="tag">Behavioral Finance Design</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PROJECTS ============ -->
+  <section class="section" id="projects" aria-labelledby="projectsHeading">
+    <div class="section-inner">
+      <p class="section-eyebrow">Selected Work</p>
+      <h2 class="section-title" id="projectsHeading">Projects</h2>
+
+      <div class="project-grid">
+
+        <a class="project-card" href="strategy-20-80/index.html" target="_blank" id="project1" aria-labelledby="project1Title">
+          <div class="project-card-top">
+            <span class="project-index mono">01</span>
+            <span class="project-tag">Interactive Dashboard</span>
+          </div>
+          <h3 class="project-title" id="project1Title">Factor-Tilted Portfolio Dashboard</h3>
+          <p class="project-desc">
+            An interactive web dashboard built to track and visualize a long-term global investment portfolio (80% FTSE All-World, 20% Small-Cap Value) benchmarked against the S&amp;P 500 and MSCI ACWI.
+          </p>
+          <div class="project-meta">
+            <span class="tag tag-mono">CAGR</span>
+            <span class="tag tag-mono">Sharpe Ratio</span>
+            <span class="tag tag-mono">Drawdown</span>
+          </div>
+          <a class="project-link" href="strategy-20-80/index.html" target="_blank" rel="noopener noreferrer">View Project <span class="arrow" aria-hidden="true">→</span></a>
+        </a>
+
+        <a class="project-card" href="#" id="project2" aria-labelledby="project2Title">
+          <div class="project-card-top">
+            <span class="project-index mono">02</span>
+            <span class="project-tag">Behavioral Fintech Concept</span>
+          </div>
+          <h3 class="project-title" id="project2Title">Gamified Fintech Widget - "Duolingo for Finance"</h3>
+          <p class="project-desc">
+            A conceptual behavioral finance tool designed for an Israeli trading app. Features a 48-hour budget commitment window, an "Investment Streak" gamification mechanic, and an automated deposit prompt suggesting tax-efficient investments (Irish-domiciled global ETFs).
+          </p>
+          <div class="project-meta">
+            <span class="tag tag-mono">UX Design</span>
+            <span class="tag tag-mono">Behavioral Finance</span>
+            <span class="tag tag-mono">Product Concept</span>
+          </div>
+          <span class="project-link">View Project <span class="arrow" aria-hidden="true">→</span></span>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ EXPERIENCE ============ -->
+  <section class="section" id="experience" aria-labelledby="experienceHeading">
+    <div class="section-inner">
+      <p class="section-eyebrow">Track Record</p>
+      <h2 class="section-title" id="experienceHeading">Experience</h2>
+
+      <ol class="timeline">
+
+        <li class="timeline-item">
+          <div class="timeline-marker" aria-hidden="true"></div>
+          <div class="timeline-content">
+            <div class="timeline-head">
+              <h3>Operations Shift Supervisor &amp; SOC Analyst</h3>
+              <span class="timeline-period mono">Sep 2022 – Present</span>
+            </div>
+            <p class="timeline-org">Teva Pharmaceuticals</p>
+            <ul class="timeline-points">
+              <li>Directed operational shifts, optimizing personnel coordination and task prioritization.</li>
+              <li>Proactively mitigated risks, significantly reducing response times and organizational exposure.</li>
+            </ul>
+          </div>
+        </li>
+
+        <li class="timeline-item">
+          <div class="timeline-marker" aria-hidden="true"></div>
+          <div class="timeline-content">
+            <div class="timeline-head">
+              <h3>International Operations Manager</h3>
+              <span class="timeline-period mono">Aug 2021 – Jul 2022</span>
+            </div>
+            <p class="timeline-org">ETI Consulting Ltd. - Toulouse, France</p>
+            <ul class="timeline-points">
+              <li>Orchestrated local operations, ensuring continuity in a dynamic environment.</li>
+              <li>Managed stakeholder relationships with local authorities to ensure regulatory compliance.</li>
+            </ul>
+          </div>
+        </li>
+
+        <li class="timeline-item">
+          <div class="timeline-marker" aria-hidden="true"></div>
+          <div class="timeline-content">
+            <div class="timeline-head">
+              <h3>Shift Leader</h3>
+              <span class="timeline-period mono">Aug 2019 – Aug 2021</span>
+            </div>
+            <p class="timeline-org">Israel Railways Ltd.</p>
+            <ul class="timeline-points">
+              <li>Enforced safety protocols, achieving full compliance with national mandates.</li>
+              <li>Met performance benchmarks, ensuring operational excellence under pressure.</li>
+            </ul>
+          </div>
+        </li>
+
+        <li class="timeline-item">
+          <div class="timeline-marker" aria-hidden="true"></div>
+          <div class="timeline-content">
+            <div class="timeline-head">
+              <h3>Tactical Operator</h3>
+              <span class="timeline-period mono">Nov 2016 – Jun 2019</span>
+            </div>
+            <p class="timeline-org">Special Reconnaissance Unit (Sayeret), IDF</p>
+            <ul class="timeline-points">
+              <li>Stabilized unscripted situations with rapid, data-driven responses.</li>
+              <li>Solved complex problems through teamwork and rapid situational analysis.</li>
+            </ul>
+          </div>
+        </li>
+
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section class="section section-contact" id="contact" aria-labelledby="contactHeading">
+    <div class="section-inner">
+      <p class="section-eyebrow">Let's Connect</p>
+      <h2 class="section-title" id="contactHeading">Get in Touch</h2>
+      <p class="contact-sub">Open to conversations about internships, analyst roles, and trading desk opportunities.</p>
+
+      <div class="contact-actions">
+        <a class="btn btn-primary" href="https://www.linkedin.com/in/sagi-simhi" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <a class="btn btn-ghost" href="mailto:sagi.simhi@gmail.com">Email Me</a>
+        <a class="btn btn-outline" href="CV.pdf" download>Download CV</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="site-footer">
+  <p>Concept, Design, and Development by Sagi Simhi</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
