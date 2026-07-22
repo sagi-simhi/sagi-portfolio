@@ -493,8 +493,9 @@ a:focus-visible, button:focus-visible {
    ============================================================ */
 .project-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  grid-template-columns: 1fr;
   gap: 24px;
+  justify-items: center;
 }
 
 .project-card {
@@ -505,6 +506,7 @@ a:focus-visible, button:focus-visible {
   border-radius: var(--radius-md);
   padding: 32px;
   transition: transform 0.2s ease, border-color 0.2s ease;
+  width: min(100%, 720px);
 }
 .project-card:hover {
   transform: translateY(-4px);
@@ -550,6 +552,7 @@ a:focus-visible, button:focus-visible {
   flex-wrap: wrap;
   gap: 8px;
   margin-bottom: 24px;
+  align-items: center;
 }
 
 .project-link {
@@ -559,6 +562,7 @@ a:focus-visible, button:focus-visible {
   align-items: center;
   gap: 8px;
   margin-top: auto;
+  width: fit-content;
 }
 .project-link .arrow {
   transition: transform 0.2s ease;
