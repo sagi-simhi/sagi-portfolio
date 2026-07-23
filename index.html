@@ -17,35 +17,23 @@
 
 <a class="skip-link" href="#main">Skip to content</a>
 
-<!-- ============ NAVBAR ============ -->
-<header class="nav" id="siteNav">
-  <div class="nav-inner">
-    <div class="nav-identity">
-      <div class="nav-name-group">
-        <a href="#top" class="nav-brand" id="navBrand" aria-label="Scroll to top">Sagi Simhi</a>
-      </div>
-      <div class="nav-status">
-        <span class="nav-status-dot" aria-hidden="true"></span>
-        <span class="nav-status-text">Open to student &amp; intern roles</span>
-      </div>
-    </div>
-    <nav class="nav-links" aria-label="Primary">
-      <a href="#education">Education</a>
-      <a href="#stack">Stack</a>
-      <a href="#projects">Projects</a>
-      <a href="#experience">Experience</a>
-      <a href="#contact">Contact</a>
+<!-- ============ NAVBAR (rafis.work style) ============ -->
+<header class="site-header">
+    <nav class="nav-container">
+        <a href="#" class="nav-logo">Sagi Simhi</a>
+        <div class="nav-right">
+            <div class="nav-links">
+                <a href="#projects">Projects</a>
+                <a href="#experience">Experience</a>
+                <a href="#education">Education</a>
+            </div>
+            <a href="#contact" class="nav-contact-btn">Contact</a>
+        </div>
     </nav>
-  </div>
-  <div class="scroll-progress" id="scrollProgress" aria-hidden="true">
-    <div class="scroll-progress-bar" id="scrollProgressBar"></div>
-  </div>
 </header>
 
-<main id="main">
-
-  <!-- ============ HERO ============ -->
-  <section class="hero" id="top">
+<!-- ============ HERO ============ -->
+<section class="hero pt-24 md:pt-28" id="top">
 
     <!-- background market graph — trading terminal & double-exposure style -->
     <div class="market-bg" aria-hidden="true">
@@ -120,7 +108,7 @@
 
         <!-- ============ REFLECTION LAYER (double exposure) ============ -->
         <g class="market-reflection" mask="url(#reflectionMask)" filter="url(#reflectionBlur)"
-           transform="translate(0,624) scale(1,-1)">
+            transform="translate(0,624) scale(1,-1)">
           <g class="candles-reflect">
             <g class="candle"><line x1="30" y1="520" x2="30" y2="560" class="wick"/><rect x="20" y="528" width="20" height="24" rx="1.5" class="body bear"/></g>
             <g class="candle"><line x1="70" y1="500" x2="70" y2="548" class="wick"/><rect x="60" y="512" width="20" height="26" rx="1.5" class="body bull"/></g>
@@ -137,8 +125,8 @@
             <g class="candle"><line x1="510" y1="120" x2="510" y2="170" class="wick"/><rect x="500" y="132" width="20" height="28" rx="1.5" class="body bull"/></g>
           </g>
           <path class="trend-line-reflect" d="M20 546 L60 524 L100 494 L140 480 L180 438 L220 404 L260 380
-             L300 338 L340 296 L380 266 L420 220 L460 182 L520 128"
-             fill="none" stroke="url(#trendFade)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+               L300 338 L340 296 L380 266 L420 220 L460 182 L520 128"
+               fill="none" stroke="url(#trendFade)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
         </g>
 
         <!-- ============ PRIMARY CANDLESTICKS ============ -->
@@ -169,14 +157,22 @@
       </svg>
     </div>
 
-    <div class="hero-inner">
-      <p class="hero-eyebrow">Economics &amp; Financial Data</p>
-      <h1 class="hero-title">
-        I build data-driven<br>
-        financial tools that<br>
-        help companies see<br>
-        their numbers <span class="hero-title-accent">clearly.</span>
-      </h1>
+<div class="hero-inner">
+  <!-- Status Badge עם הנקודה הירוקה המהבהבת -->
+  <div class="hero-status-wrapper">
+      <span class="status-badge">
+          <span class="status-dot"></span>
+          Open to student & intern roles
+      </span>
+  </div>
+
+  <p class="hero-eyebrow">Economics &amp; Financial Data</p>
+  <h1 class="hero-title">
+    I build data-driven<br>
+    financial tools that<br>
+    help companies see<br>
+    their numbers <span class="hero-title-accent">clearly.</span>
+  </h1>
 
       <p class="hero-bio">
         I approach markets the way I was trained to approach operations - with discipline, hard data, and a bias for building the tool that answers the question rather than waiting for someone else to build it. Currently pairing a dual degree in Economics &amp; Management with self-directed work in portfolio construction and behavioral fintech design.
