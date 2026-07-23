@@ -493,9 +493,15 @@ a:focus-visible, button:focus-visible {
    ============================================================ */
 .project-grid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 24px;
-  justify-items: center;
+  grid-template-columns: repeat(2, minmax(0, 1fr)); /* יוצר שתי עמודות שוות זה לצד זה במחשב */
+  gap: 2rem; /* רווח נקי בין הקוביות */
+}
+
+/* במובייל הם יסתדרו אוטומטית בעמודה אחת לנוחות קריאה */
+@media (max-width: 768px) {
+  .project-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .project-card {
