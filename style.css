@@ -166,34 +166,34 @@ a:focus-visible, button:focus-visible {
   box-shadow: 0 0 20px rgba(63, 184, 143, 0.16);
 }
 
-/* ============ PERFECT RAFI.WORK STYLE NAVBAR ============ */
+/* ============ SEAMLESS SLIM NAVBAR ============ */
 .site-header {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 1000;
-  width: 100%;
-  background: rgba(11, 15, 25, 0.15); /* שקיפות מוחלטת שמתמזגת לחלוטין עם הרקע */
+  width: 100vw;
+  background: rgba(11, 15, 25, 0.2); /* שקיפות עמוקה שנותנת לרקע האמיתי לבלוט מתחתיו בצורה מושלמת */
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border-bottom: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
 }
 
 .nav-container {
-  max-width: 100%; /* התפרסות מלאה לכל רוחב המסך */
+  max-width: 100%;
   width: 100%;
   margin: 0;
-  padding: 1rem 2.5rem; /* מרווח צדדי מדויק שצמוד לקצוות כמו ב-rafis.work */
+  padding: 0.45rem 2.5rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
 .nav-logo {
-  font-family: inherit; /* שימוש בפונט הראשי של האתר */
+  font-family: inherit;
   font-weight: 700;
-  font-size: 1.05rem;
+  font-size: 0.95rem;
   color: #ffffff;
   text-decoration: none;
   letter-spacing: -0.02em;
@@ -202,14 +202,14 @@ a:focus-visible, button:focus-visible {
 .nav-right {
   display: flex;
   align-items: center;
-  gap: 2.25rem;
+  gap: 2rem;
 }
 
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 2rem;
-  font-size: 0.9rem;
+  gap: 1.75rem;
+  font-size: 0.85rem;
   font-weight: 400;
   color: #94a3b8;
 }
@@ -224,19 +224,18 @@ a:focus-visible, button:focus-visible {
   color: #ffffff;
 }
 
-/* כפתור Contact מודגש בירוק */
 .nav-contact-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.45rem 1.25rem;
+  padding: 0.3rem 1rem;
   border-radius: 9999px;
   background: linear-gradient(135deg, #10b981 0%, #059669 100%);
   color: #ffffff;
-  font-size: 0.875rem;
+  font-size: 0.8rem;
   font-weight: 500;
   text-decoration: none;
-  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.35);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
   transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
@@ -245,14 +244,25 @@ a:focus-visible, button:focus-visible {
   transform: translateY(-1px);
 }
 
-/* התאמה למסכים ניידים */
+/* איפוס הרווח ב-body כדי שהרקע יתחיל מהפינה המוחלטת של המסך */
+body {
+  padding-top: 0 !important;
+}
+
+/* משיכת הרקע והתוכן למעלה מתחת לסרגל, עם ריווח פנימי לטקסט עצמו */
+.hero {
+  padding-top: 5rem !important;
+}
+
 @media (max-width: 768px) {
   .nav-container {
-    padding: 0.85rem 1.25rem;
+    padding: 0.4rem 1.25rem;
   }
   .nav-links {
     display: none;
   }
+}
+
 }  position: fixed;
   top: 0;
   left: 0;
@@ -1322,3 +1332,40 @@ a:focus-visible, button:focus-visible {
 .candles-reflect .wick{ stroke:rgba(148,163,184,0.3); }
 .trend-line-reflect{ opacity:0.28; }
 @keyframes reflectionFadeIn{ to{ opacity:1; } }
+
+/* ============ MODERN RAFI.WORK STYLE CARDS ============ */
+.edu-card,
+.project-card,
+.stack-group,
+.timeline-content {
+  background: rgba(255, 255, 255, 0.025) !important; /* שקיפות עדינה ונקייה כמו בסטייל המקורי */
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+  border-radius: 1rem !important; /* פינות מעוגלות יפה */
+  padding: 1.5rem !important;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.3) !important;
+  transition: all 0.25s ease !important;
+}
+
+/* הסרת קווי הפרדה פנימיים מיותרים שהיו בכרטיסים הישנים */
+.stack-group-title {
+  border-bottom: none !important;
+  padding-bottom: 0.75rem !important;
+  margin-bottom: 1rem !important;
+}
+
+/* אפקט ריחוף עדין ויוקרתי */
+.edu-card:hover,
+.project-card:hover,
+.stack-group:hover,
+.timeline-content:hover {
+  background: rgba(255, 255, 255, 0.04) !important;
+  border-color: rgba(16, 185, 129, 0.25) !important;
+  transform: translateY(-2px);
+}
+
+/* ============ TIGHTEN HERO SPACING ============ */
+.hero {
+  padding-top: 3.8rem !important; /* מעלה את התוכן והרקע צמוד יותר לחלק העליון מתחת לסרגל */
+}
