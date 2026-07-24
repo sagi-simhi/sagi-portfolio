@@ -174,12 +174,11 @@ a:focus-visible, button:focus-visible {
   right: 0;
   z-index: 1000;
   width: 100vw;
-  background: rgba(11, 15, 25, 0.2); /* שקיפות עמוקה שנותנת לרקע האמיתי לבלוט מתחתיו בצורה מושלמת */
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  background: transparent; /* שקיפות מלאה – הרקע של הדף עובר דרכו ישירות */
+  backdrop-filter: blur(10px); /* טשטוש עדין של התוכן שגולש מתחתיו */
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: none; /* הסרת כל קו הפרדה שיוצר חיתוך */
 }
-
 .nav-container {
   max-width: 100%;
   width: 100%;
@@ -1368,4 +1367,96 @@ body {
 /* ============ TIGHTEN HERO SPACING ============ */
 .hero {
   padding-top: 3.8rem !important; /* מעלה את התוכן והרקע צמוד יותר לחלק העליון מתחת לסרגל */
+
+  .terminal-glass-box {
+  /* רקע כהה מאוד, כמעט אטום, שמרגיע את העין */
+  background: rgba(15, 15, 18, 0.65); 
+  
+  /* טשטוש עדין שלא יוצר עומס ויזואלי, בלי הגברת צבעוניות */
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  
+  /* מסגרת סופר-עדינה - רק כדי להפריד את התיבה מהרקע הכללי */
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  
+  /* פס תאורה עליון דקיק שנותן תחושה של עומק מינימליסטי */
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  
+  /* פינות הרבה פחות עגולות - משדר משהו רשמי ומקצועי יותר */
+  border-radius: 6px; 
+  
+  /* צל כהה שנטמע ברקע הכללי */
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4); 
+}
+
+/* ============ עיצוב זכוכית תפעולית לכל הכרטיסיות בדף ============ */
+.card, 
+.project-card, 
+.experience-card, 
+.box,
+.terminal-glass-box {
+  /* רקע כהה מאוד, כמעט אטום, שמרגיע את העין */
+  background: rgba(15, 15, 18, 0.65); 
+  
+  /* טשטוש עדין שלא יוצר עומס ויזואלי */
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  
+  /* מסגרת סופר-עדינה להפרדה מהרקע */
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  
+  /* פס תאורה עליון דקיק שנותן עומק */
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  
+  /* פינות מקצועיות ומרווח פנימי */
+  border-radius: 6px; 
+  padding: 24px;
+  
+  /* צל כהה שנטמע ברקע */
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4); 
+  
+  /* הגדרת מעבר רך לאנימציית ריחוף */
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+/* ============ אפקט מעבר עכבר (Hover) ============ */
+/* כשהמשתמש יעבור עם העכבר, הכרטיסייה תקבל מסגרת קצת יותר בהירה ותעלה מעט */
+.card:hover, 
+.project-card:hover, 
+.experience-card:hover, 
+.box:hover,
+.terminal-glass-box:hover {
+  /* המסגרת וההילה הירוקה (מההצעה החדשה) */
+  border: 1px solid rgba(81, 196, 153, 0.4);
+  box-shadow: 0 8px 32px 0 rgba(81, 196, 153, 0.15);
+  
+  /* האפקט שמרים את הכרטיסייה (מהקוד המקורי שלך) */
+  transform: translateY(-3px);
+}
+
+html, body {
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  /* רקע בהיר וחי יותר - אפור-פלדה מודרני */
+  background-color: #1A2530;
+  
+  /* גרדיאנט עדין שמאיר את מרכז המסך ודועך החוצה */
+  background-image: radial-gradient(
+    circle at 50% 0%, 
+    #2C3E50 0%, 
+    #1A2530 60%, 
+    #111822 100%
+  );
+  
+  background-attachment: fixed;
+  background-size: cover;
+  background-repeat: no-repeat;
+  
+  color: #A0AEC0;
+}
+
 }
