@@ -40,7 +40,6 @@
   }
 
   var navbar = findNavbar();
-
   if (!navbar) {
     // Fail quietly rather than throwing — a missing navbar shouldn't
     // break the rest of the page.
