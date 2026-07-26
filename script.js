@@ -176,4 +176,101 @@
     yearEl.textContent = new Date().getFullYear();
   }
 
+  
+
+})();
+
+/* ============================================
+   Premium Typewriter Hero Animation
+   Runs once on page load. Progressive character
+   reveal only — no opacity/transform animation
+   on the heading itself.
+   ============================================ */
+(function initHeroTypewriter() {
+    function run() {
+        const heroTitle = document.getElementById('heroTitle');
+        if (!heroTitle) return;
+
+        const visual = heroTitle.querySelector('.hero-title-visual');
+        if (!visual) return;
+
+        // Bail out early for reduced-motion users: leave the
+        // full static text exactly as rendered in HTML.
+        const prefersReducedMotion = window.matchMedia(
+            '(prefers-reduced-motion: reduce)'
+        ).matches;
+        if (prefersReducedMotion) return;
+
+        const lines = Array.from(visual.querySelectorAll('.hero-line'));
+        if (lines.length === 0) return;
+
+        // Capture each line's real text, then clear it for typing.
+        const lineTexts = lines.map((line) => line.textContent);
+        lines.forEach((line) => {
+            line.textContent = '';
+        });
+
+        // Single shared cursor node, moved between lines as needed.
+        const cursor = document.createElement('span');
+        cursor.className = 'typewriter-cursor';
+        cursor.setAttribute('aria-hidden', 'true');
+
+        const MIN_CHAR_DELAY = 35;
+        const MAX_CHAR_DELAY = 45;
+        const PAUSE_BETWEEN_WORDS = 250;
+        const FINAL_PAUSE = 300;
+
+        const randomCharDelay = () =>
+            MIN_CHAR_DELAY + Math.random() * (MAX_CHAR_DELAY - MIN_CHAR_DELAY);
+
+        const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+        // Types a single line character-by-character.
+        // Cursor is always kept as the last child, so each new
+        // character is inserted immediately before it — this keeps
+        // the caret glued to the current typing position with no
+        // extra DOM reflow beyond a single text node insertion.
+        function typeLine(lineEl, text) {
+            return new Promise((resolve) => {
+                lineEl.appendChild(cursor);
+                let i = 0;
+
+                function typeNextChar() {
+                    if (i < text.length) {
+                        lineEl.insertBefore(
+                            document.createTextNode(text[i]),
+                            cursor
+                        );
+                        i += 1;
+                        setTimeout(typeNextChar, randomCharDelay());
+                    } else {
+                        resolve();
+                    }
+                }
+
+                typeNextChar();
+            });
+        }
+
+        async function runSequence() {
+            for (let i = 0; i < lines.length; i += 1) {
+                await typeLine(lines[i], lineTexts[i]);
+                if (i < lines.length - 1) {
+                    await wait(PAUSE_BETWEEN_WORDS);
+                }
+            }
+            await wait(FINAL_PAUSE);
+            cursor.remove(); // caret disappears once typing is done
+        }
+
+        runSequence();
+    }
+
+    // Ensure DOM is ready before querying elements, in case this
+    // script is loaded in <head> rather than at the end of <body>.
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', run);
+    } else {
+        run();
+    }
 })();

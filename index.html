@@ -169,11 +169,17 @@
   </div>
 
   <p class="hero-eyebrow">B.A Candidate in Economics &amp; Management</p>
-<h1 class="hero-title">
-    Economics.<br>
-    Operations.<br>
-    <span class="hero-title-accent">Data.</span>
-  </h1>
+<h1 class="hero-title" id="heroTitle">
+    <span class="hero-title-visual" aria-hidden="true">
+        <span class="hero-line">Economics.</span><br>
+        <span class="hero-line">Operations.</span><br>
+        <span class="hero-line hero-title-accent">Data.</span>
+    </span>
+
+    <span class="sr-only">
+        Economics. Operations. Data.
+    </span>
+</h1>
 
       <p class="hero-bio">
         I approach markets the way I was trained to approach operations - with discipline, hard data, and a bias for building the tool that answers the question rather than waiting for someone else to build it. Currently pairing a dual degree in Economics &amp; Management with self-directed work in portfolio construction and behavioral fintech design.
@@ -226,6 +232,29 @@
             <li>First Steps in Computer Science &amp; Programming in Python</li>
           </ul>
         </article>
+
+        <article class="edu-card edu-card-wide edu-card-languages">
+  <div class="edu-card-head">
+    <h3>Languages</h3>
+  </div>
+
+  <ul class="language-list">
+    <li>
+      <span class="language-name">Hebrew</span>
+      <span class="language-level mono">Native</span>
+    </li>
+
+    <li>
+      <span class="language-name">English</span>
+      <span class="language-level mono">Professional Working Proficiency</span>
+    </li>
+
+    <li>
+      <span class="language-name">French</span>
+      <span class="language-level mono">Elementary (A2)</span>
+    </li>
+  </ul>
+</article>
 
       </div>
     </div>
@@ -410,7 +439,37 @@
 
 <!-- ============ FOOTER ============ -->
 <footer class="site-footer">
-  <p>Concept, Design, and Development by Sagi Simhi</p>
+  <div class="site-footer-inner">
+    <p>Concept, Design, and Development by Sagi Simhi</p>
+
+    <a
+      href="https://github.com/sagi-simhi"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="footer-social-link"
+      aria-label="Visit Sagi Simhi's GitHub profile (opens in a new tab)"
+    >
+      <svg
+        class="footer-social-icon"
+        viewBox="0 0 24 24"
+        width="20"
+        height="20"
+        fill="currentColor"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.207 11.387.6.113.793-.26.793-.577
+                 0-.285-.01-1.04-.016-2.04-3.338.725-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.756-1.333-1.756
+                 -1.09-.745.083-.729.083-.729 1.205.084 1.84 1.237 1.84 1.237 1.07 1.834 2.807 1.304 3.492.997
+                 .108-.775.42-1.305.763-1.605-2.665-.303-5.467-1.334-5.467-5.93 0-1.31.468-2.38 1.235-3.22
+                 -.123-.303-.535-1.523.117-3.176 0 0 1.008-.322 3.3 1.23A11.5 11.5 0 0 1 12 5.803c1.02.005
+                 2.045.138 3.003.404 2.29-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.873.12 3.176.77.84
+                 1.233 1.91 1.233 3.22 0 4.61-2.807 5.624-5.48 5.92.432.372.816 1.103.816 2.223
+                 0 1.606-.014 2.898-.014 3.293 0 .32.19.694.8.576C20.565 21.795 24 17.298 24 12
+                 c0-6.63-5.37-12-12-12z"/>
+      </svg>
+    </a>
+  </div>
 </footer>
 
 <script src="script.js"></script>

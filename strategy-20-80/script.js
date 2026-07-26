@@ -149,8 +149,8 @@
   function fmtPct(x, d){ d = d===undefined?1:d; return (x*100).toFixed(d)+'%'; }
   function setText(id, text){ var el = document.getElementById(id); if(el) el.textContent = text; }
   function periodLabel(months){
-    if (months===120) return '10-year backtest';
-    return '10-year backtest';
+    if (months===120) return '10-year';
+    return '10-year';
   }
 
   /* ============================================================
@@ -158,20 +158,20 @@
      ============================================================ */
   function generateInsight(custom, base, weightPct, periodLbl){
     if (weightPct === 0){
-      return 'No Factor Tilt is currently applied — the portfolio is 100% FTSE All-World. Move the slider right to introduce Small-Cap Value exposure via AVGS and compare the effect on ' + periodLbl + ' risk and return below.';
+      return 'No Factor Tilt is currently applied — the portfolio is 100% FTSE All-World. Move the slider to introduce Small-Cap Value exposure via AVGS and explore its effect on ' + periodLbl + ' risk and return characteristics below.';
     }
     var cagrD = (custom.cagr - base.cagr) * 100;
     var volD = (custom.vol - base.vol) * 100;
     var mddD = (custom.mdd - base.mdd) * 100;
     var sharpeD = custom.sharpe - base.sharpe;
     var cagrPhrase = cagrD >= 0
-      ? 'adds <strong>' + cagrD.toFixed(1) + ' pts</strong> of CAGR'
-      : 'costs <strong>' + Math.abs(cagrD).toFixed(1) + ' pts</strong> of CAGR';
+      ? 'is associated with <strong>' + cagrD.toFixed(1) + ' pts</strong> more simulated CAGR'
+      : 'is associated with <strong>' + Math.abs(cagrD).toFixed(1) + ' pts</strong> less simulated CAGR';
     var sharpePhrase;
-    if (Math.abs(sharpeD) < 0.01) sharpePhrase = 'leaves the Sharpe Ratio essentially unchanged at <strong>' + custom.sharpe.toFixed(2) + '</strong>';
-    else if (sharpeD > 0) sharpePhrase = 'lifts the Sharpe Ratio to <strong>' + custom.sharpe.toFixed(2) + '</strong>';
-    else sharpePhrase = 'pulls the Sharpe Ratio down to <strong>' + custom.sharpe.toFixed(2) + '</strong>';
-    return 'Over the ' + periodLbl + ' window, a <strong>' + weightPct + '%</strong> Factor Tilt ' + cagrPhrase + ' versus holding the Base Asset alone — at the cost of ' + volD.toFixed(1) + ' pts more volatility and a ' + Math.abs(mddD).toFixed(1) + '-pt deeper max drawdown. Net effect: it ' + sharpePhrase + '. This is the size and value premia at work — a compensated risk, not a free one.';
+    if (Math.abs(sharpeD) < 0.01) sharpePhrase = 'leaves the simulated Sharpe Ratio essentially unchanged at <strong>' + custom.sharpe.toFixed(2) + '</strong>';
+    else if (sharpeD > 0) sharpePhrase = 'moves the simulated Sharpe Ratio to <strong>' + custom.sharpe.toFixed(2) + '</strong>';
+    else sharpePhrase = 'moves the simulated Sharpe Ratio down to <strong>' + custom.sharpe.toFixed(2) + '</strong>';
+    return 'In this ' + periodLbl + ' simulation, a <strong>' + weightPct + '%</strong> Factor Tilt ' + cagrPhrase + ' versus holding the Core Asset alone — alongside ' + volD.toFixed(1) + ' pts more volatility and a ' + Math.abs(mddD).toFixed(1) + '-pt deeper max drawdown. Net effect in this scenario: it ' + sharpePhrase + '. This illustrates the historically observed size and value premia at work in the model — a sensitivity, not a recommendation, and not a forecast of future results.';
   }
 
   /* ============================================================

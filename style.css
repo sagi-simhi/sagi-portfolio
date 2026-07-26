@@ -578,16 +578,55 @@ body {
 
 .course-list {
   display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
+  flex-direction: column;   /* stack pills vertically, one per line */
+  align-items: flex-start;  /* prevents pills from stretching full-width
+                                (block layout would need width:fit-content
+                                to achieve the same thing) */
+  gap: 12px;                /* unchanged — flex column gap still applies
+                                as vertical spacing between items */
 }
+
 .course-list li {
+  /* untouched — all chip styling stays exactly as-is */
   background: var(--navy-850);
   padding: 8px 16px;
   border-radius: 20px;
   font-size: 0.9rem;
   color: var(--ink-muted);
   border: 1px solid var(--border-soft);
+}
+
+/* ============================================
+   Languages
+   ============================================ */
+
+.language-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.language-list li {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.language-list li:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.language-name {
+  font-size: 1rem;
+  color: var(--ink);
+}
+
+.language-level {
+  font-size: 0.85rem;
+  color: var(--ink-muted);
 }
 
 /* ============================================================
@@ -824,6 +863,53 @@ body {
   border-top: 1px solid var(--border);
   font-size: 0.85rem;
   color: var(--slate-500);
+}
+
+/* ============================================
+   Footer
+   ============================================ */
+
+.site-footer-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+@media (max-width: 480px) {
+    .site-footer-inner {
+        justify-content: center;
+        text-align: center;
+    }
+}
+
+.footer-social-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ink-muted);
+    line-height: 0;
+    padding: 6px;
+    margin: -6px;
+    border-radius: 50%;
+    transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.footer-social-link:hover {
+    color: var(--ink);
+    background-color: var(--navy-850);
+}
+
+.footer-social-link:focus-visible {
+    outline: 2px solid var(--ink-muted);
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .footer-social-link {
+        transition: none;
+    }
 }
 
 /* ============================================================
@@ -1460,3 +1546,45 @@ body {
 }
 
 }
+
+/* ============================================
+   Typewriter Hero Animation
+   ============================================ */
+
+/* Visually-hidden but accessible to screen readers */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* The blinking caret */
+.typewriter-cursor {
+    display: inline-block;
+    width: 2px;
+    height: 1em;              /* matches line text height */
+    margin-left: 1px;
+    background-color: rgba(255, 255, 255, 0.85);
+    vertical-align: text-bottom; /* sits on the baseline, not floating */
+    animation: caret-blink 1s steps(1, start) infinite;
+}
+
+@keyframes caret-blink {
+    0%, 49%   { opacity: 1; }
+    50%, 100% { opacity: 0; }
+}
+
+/* Respect reduced motion: no blinking caret at all */
+@media (prefers-reduced-motion: reduce) {
+    .typewriter-cursor {
+        animation: none;
+        display: none;
+    }
+}
+
