@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sagi Simhi</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📈</text></svg>">
-<meta name="description" content="Sagi Simhi — Economics & Management student pursuing capital markets, trading, and fintech roles. Portfolio dashboards, financial analysis, and behavioral fintech design.">
-
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="apple-touch-icon" href="favicon.svg">
+<meta name="description" content="Sagi Simhi - Economics & Management student pursuing capital markets, trading, and fintech roles. Portfolio dashboards, financial analysis, and behavioral fintech design.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -20,12 +20,14 @@
 <a class="skip-link" href="#main">Skip to content</a>
 
 <!-- ============ NAVBAR  ============ -->
-<header class="site-header">
+<header class="site-header" id="siteNav">
     <nav class="nav-container">
-        <a href="#" class="nav-logo">Sagi Simhi</a>
+        <a href="#top" class="nav-logo" id="navBrand">Sagi Simhi</a>
         <div class="nav-right">
             <div class="nav-links">
+                <a href="#about">About</a>
                 <a href="#projects">Projects</a>
+                <a href="#stack">Skills</a>
                 <a href="#experience">Experience</a>
                 <a href="#education">Education</a>
             </div>
@@ -34,11 +36,17 @@
     </nav>
 </header>
 
-<!-- ============ HERO ============ -->
-<section class="hero pt-24 md:pt-28" id="top">
+<main id="main">
 
-    <!-- background market graph — trading terminal & double-exposure style -->
+<!-- ============ HERO ============ -->
+<section class="hero" id="top">
+
+    <!-- Financial Intelligence Core - background visual layer.
+         core-canvas (rotating node-sphere) sits behind the animated
+         candlestick read-out, so the market data reads as though it
+         is streaming through the core. -->
     <div class="market-bg" aria-hidden="true">
+      <canvas class="core-canvas" id="coreCanvas"></canvas>
       <svg class="market-bg-svg" viewBox="0 0 560 620" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <linearGradient id="candleGlow" x1="0" y1="0" x2="0" y2="1">
@@ -160,7 +168,6 @@
     </div>
 
 <div class="hero-inner">
-  <!-- Status Badge עם הנקודה הירוקה המהבהבת -->
   <div class="hero-status-wrapper">
       <span class="status-badge">
           <span class="status-dot"></span>
@@ -192,6 +199,40 @@
     </div>
   </section>
 
+  <!-- ============ ABOUT ============ -->
+  <section class="section" id="about" aria-labelledby="aboutHeading">
+    <div class="section-inner">
+      <p class="section-eyebrow">Who I Am</p>
+      <h2 class="section-title" id="aboutHeading">About</h2>
+
+      <div class="about-grid">
+        <div class="about-copy-col">
+          <p class="about-copy">I'm currently pairing a B.A. in Economics &amp; Management at the Open University of Israel with self-directed work in portfolio construction and behavioral fintech design - the kind of projects nobody assigns you, that you build because you want to see the answer for yourself.</p>
+          <p class="about-copy">That habit comes from outside finance. Years spent supervising operational shifts and leading teams under pressure - first as a tactical operator, later coordinating international operations and running a SOC floor - taught me to read a situation quickly, trust the data over the narrative, and build a process rather than react to the next fire. I bring the same instincts to reading a portfolio or a chart: structure first, then the story.</p>
+          <p class="about-copy">Right now that means building small, honest tools - a portfolio dashboard, a technical-analysis lab - rather than talking about finance in the abstract.</p>
+        </div>
+        <div class="about-facts">
+          <div class="about-fact">
+            <span class="about-fact-label">Studying</span>
+            <span class="about-fact-value">B.A. in Economics &amp; Management, The Open University of Israel</span>
+          </div>
+          <div class="about-fact">
+            <span class="about-fact-label">Focus</span>
+            <span class="about-fact-value">Capital markets, portfolio construction, financial analysis, applied AI</span>
+          </div>
+          <div class="about-fact">
+            <span class="about-fact-label">Background</span>
+            <span class="about-fact-value">Operations &amp; team leadership across pharma, consulting, transport, and defense</span>
+          </div>
+          <div class="about-fact">
+            <span class="about-fact-label">Building</span>
+            <span class="about-fact-value">Self-directed dashboards and research tools - see Projects below</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ============ EDUCATION ============ -->
   <section class="section" id="education" aria-labelledby="educationHeading">
     <div class="section-inner">
@@ -208,18 +249,6 @@
           <p class="edu-org">The Open University of Israel</p>
         </article>
 
-        <article class="edu-card">
-          <div class="edu-card-head">
-            <h3>Pre-Academic Program</h3>
-            <span class="edu-period mono">Sep 2023 – Sep 2024</span>
-          </div>
-          <p class="edu-org">Levinsky–Wingate Academic Center</p>
-          <ul class="edu-scores">
-            <li><span class="score-label">Mathematics</span><span class="score-meta">4 units</span><span class="score-val mono">93</span></li>
-            <li><span class="score-label">English</span><span class="score-meta">5 units</span><span class="score-val mono">88</span></li>
-            <li><span class="score-label">Humanities</span><span class="score-meta">weighted avg</span><span class="score-val mono">90</span></li>
-          </ul>
-        </article>
 
         <article class="edu-card edu-card-wide">
           <div class="edu-card-head">
@@ -264,7 +293,15 @@
   <section class="section" id="stack" aria-labelledby="stackHeading">
     <div class="section-inner">
       <p class="section-eyebrow">Core Competencies</p>
-      <h2 class="section-title" id="stackHeading">Tech Stack &amp; Toolkit</h2>
+      <h2 class="section-title" id="stackHeading">Skills &amp; Toolkit</h2>
+
+      <div class="journey-strip" aria-hidden="true">
+        <span class="journey-step"><span class="journey-step-index mono">01</span> Finance &amp; Markets</span>
+        <span class="journey-arrow">→</span>
+        <span class="journey-step"><span class="journey-step-index mono">02</span> Data-Driven Methodology</span>
+        <span class="journey-arrow">→</span>
+        <span class="journey-step"><span class="journey-step-index mono">03</span> Technical &amp; Web Execution</span>
+      </div>
 
       <div class="stack-grid">
 
@@ -318,6 +355,20 @@
           <p class="project-desc">
             An interactive web dashboard built to track and visualize a long-term global investment portfolio (80% FTSE All-World, 20% Small-Cap Value) benchmarked against the S&amp;P 500 and MSCI ACWI.
           </p>
+          <div class="project-case">
+            <div class="project-case-row">
+              <span class="project-case-label">Question</span>
+              <span class="project-case-value">Does a small-cap value tilt on top of a global core actually earn its keep against plain benchmark indices - and is that easier to judge by watching it than reading about it?</span>
+            </div>
+            <div class="project-case-row">
+              <span class="project-case-label">Approach</span>
+              <span class="project-case-value">Modeled an 80/20 FTSE All-World / Small-Cap Value allocation and built a live dashboard to track it continuously against the S&amp;P 500 and MSCI ACWI, rather than reviewing it in a spreadsheet on a fixed schedule.</span>
+            </div>
+            <div class="project-case-row">
+              <span class="project-case-label">Reads</span>
+              <span class="project-case-value">CAGR, Sharpe ratio, and drawdown, tracked side-by-side against both benchmarks.</span>
+            </div>
+          </div>
           <div class="project-meta">
             <span class="tag tag-mono">CAGR</span>
             <span class="tag tag-mono">Sharpe Ratio</span>
@@ -336,6 +387,20 @@
           <p class="project-desc">
             A quantitative sandbox showcasing self-taught technical indicators (MA, EMA, RSI, MACD, Volume) implemented from first principles with live animated visual previews for market timing and trend confirmation.
           </p>
+          <div class="project-case">
+            <div class="project-case-row">
+              <span class="project-case-label">Question</span>
+              <span class="project-case-value">Understanding a technical indicator from a textbook definition is different from understanding what it does to a live chart - can building each one from scratch close that gap?</span>
+            </div>
+            <div class="project-case-row">
+              <span class="project-case-label">Approach</span>
+              <span class="project-case-value">Implemented MA, EMA, RSI, MACD, and Volume from first principles rather than importing a charting library, so each indicator's behavior is fully owned and inspectable.</span>
+            </div>
+            <div class="project-case-row">
+              <span class="project-case-label">Reads</span>
+              <span class="project-case-value">Live animated previews layered over price action, used for trend confirmation and market-timing signals.</span>
+            </div>
+          </div>
           <div class="project-meta">
             <span class="tag tag-mono">Quantitative</span>
             <span class="tag tag-mono">Technical Analysis</span>
