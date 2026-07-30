@@ -49,7 +49,7 @@
 
   /* ============================================================
      2. REGIME-BASED MULTI-FACTOR RETURN MODEL
-     96 months, Jul 2018 – Jun 2026. Monthly params.
+     240 synthetic months, Jan 2005 – Dec 2024. Monthly parameters.
      ============================================================ */
   var REGIMES = [
     { months:60, mktDrift: 0.0088, mktVol:0.032, valFactor:-0.0012 },
