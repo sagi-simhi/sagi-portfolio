@@ -169,7 +169,38 @@
   }
 
   /* ============================================================
-     5. CURRENT YEAR (optional footer nicety, safe no-op if absent)
+     5. SECTION ACTIVATION — each section "wakes up" once, quietly
+        Adds .is-active to a <section> the first time it enters the
+        viewport. The only visible effect lives in the eyebrow-signal
+        mark inside that section's own header (see style.css) — no
+        separate timeline UI, no repeated triggering.
+     ============================================================ */
+  var activatable = document.querySelectorAll("main .section");
+
+  if (!reduceMotion && "IntersectionObserver" in window && activatable.length) {
+    var activationObserver = new IntersectionObserver(function (entries, obs) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-active");
+          obs.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.2,
+      rootMargin: "0px 0px -35% 0px"
+    });
+
+    activatable.forEach(function (el) {
+      activationObserver.observe(el);
+    });
+  } else {
+    activatable.forEach(function (el) {
+      el.classList.add("is-active");
+    });
+  }
+
+  /* ============================================================
+     6. CURRENT YEAR (optional footer nicety, safe no-op if absent)
      ============================================================ */
   var yearEl = document.getElementById("currentYear");
   if (yearEl) {
@@ -292,11 +323,15 @@
             window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
         var accent = [83, 215, 166];   // #53D7A6
-        var gold = [201, 161, 90];     // secondary accent, used sparingly
+        var gold = [201, 161, 90];     // reserved for signal nodes only
+        var ringColor = [148, 163, 184]; // neutral instrument-boundary ring
 
         var nodes = [];
         var NODE_COUNT = 46;
-        var LINK_DISTANCE = 0.62; // in unit-sphere space
+        var LINK_DISTANCE = 0.5;  // sparser, more deliberate lattice
+        var SIGNAL_COUNT = 6;     // key data points the core hub connects to
+        var spokeIndices = [];
+        var pulses = [];
         var width = 0, height = 0, radius = 0, dpr = 1;
         var rotY = 0, rotX = 0.35;
         var rafId = null;
@@ -320,6 +355,23 @@
                     pulse: Math.random() * Math.PI * 2
                 });
             }
+
+            // Designate a small, evenly-spaced set of "signal nodes" —
+            // the key data points the core connects to directly by name.
+            // Everything else stays a quiet background node; only these
+            // carry the gold accent and receive an outbound flow pulse.
+            spokeIndices = [];
+            for (var s = 0; s < SIGNAL_COUNT; s++) {
+                spokeIndices.push(Math.floor((s * NODE_COUNT) / SIGNAL_COUNT));
+            }
+
+            pulses = spokeIndices.map(function (nodeIndex) {
+                return {
+                    nodeIndex: nodeIndex,
+                    t: Math.random(),               // staggered start, avoids synced blinking
+                    speed: 0.00007 + Math.random() * 0.00004
+                };
+            });
         }
 
         function resize() {
@@ -358,17 +410,26 @@
             ctx.clearRect(0, 0, width, height);
 
             var projected = nodes.map(project);
-
-            // Soft ambient glow at the core's center.
             var cx = width * 0.56, cy = height * 0.5;
+
+            // Soft ambient glow anchoring the whole system to the core.
             var glow = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius * 1.6);
             glow.addColorStop(0, 'rgba(' + accent.join(',') + ',0.10)');
             glow.addColorStop(1, 'rgba(' + accent.join(',') + ',0)');
             ctx.fillStyle = glow;
             ctx.fillRect(0, 0, width, height);
 
-            // Connections — only between near-enough neighbors, so the
-            // sphere reads as a structured lattice, not a tangle.
+            // Faint instrument-boundary ring — reads as a measurement
+            // scope / dashboard element rather than a floating planet.
+            ctx.beginPath();
+            ctx.arc(cx, cy, radius * 1.35, 0, Math.PI * 2);
+            ctx.strokeStyle = 'rgba(' + ringColor.join(',') + ',0.10)';
+            ctx.lineWidth = 1;
+            ctx.stroke();
+
+            // Background lattice — sparse, structured relationships
+            // between ordinary data nodes. Kept quiet so it reads as
+            // context/texture, not as the main subject.
             ctx.lineWidth = 1;
             for (var i = 0; i < nodes.length; i++) {
                 for (var j = i + 1; j < nodes.length; j++) {
@@ -378,7 +439,7 @@
                     if (dist > LINK_DISTANCE) continue;
                     var pa = projected[i], pb = projected[j];
                     var avgDepth = (pa.depth + pb.depth) / 2;
-                    var opacity = (1 - dist / LINK_DISTANCE) * avgDepth * 0.35;
+                    var opacity = (1 - dist / LINK_DISTANCE) * avgDepth * 0.20;
                     if (opacity <= 0.01) continue;
                     ctx.strokeStyle = 'rgba(' + accent.join(',') + ',' + opacity.toFixed(3) + ')';
                     ctx.beginPath();
@@ -388,7 +449,21 @@
                 }
             }
 
+            // Hub spokes — deliberate lines from the core straight to
+            // each signal node. This is what makes the shape read as a
+            // system radiating outward from a center, not a uniform mesh.
+            for (var sp = 0; sp < spokeIndices.length; sp++) {
+                var pTarget = projected[spokeIndices[sp]];
+                ctx.beginPath();
+                ctx.moveTo(cx, cy);
+                ctx.lineTo(pTarget.sx, pTarget.sy);
+                ctx.strokeStyle = 'rgba(' + accent.join(',') + ',' + (0.10 + pTarget.depth * 0.16).toFixed(3) + ')';
+                ctx.stroke();
+            }
+
             // Nodes — drawn back-to-front so nearer ones sit on top.
+            // Only the designated signal nodes carry the gold accent;
+            // every other node is a quiet, small teal data point.
             var order = projected.map(function (p, idx) { return idx; });
             order.sort(function (ia, ib) { return projected[ia].depth - projected[ib].depth; });
 
@@ -396,21 +471,66 @@
                 var idx = order[k];
                 var p = projected[idx];
                 var n = nodes[idx];
-                var pulse = prefersReducedMotion ? 0 : Math.sin((time || 0) * 0.0016 + n.pulse) * 0.5 + 0.5;
-                var size = (0.9 + p.depth * 1.6) * (0.85 + pulse * 0.3);
-                var isGold = idx % 11 === 0; // rare secondary-accent nodes
-                var c = isGold ? gold : accent;
-                var alpha = 0.35 + p.depth * 0.55;
+                var isSignal = spokeIndices.indexOf(idx) !== -1;
+                var pulse = prefersReducedMotion ? 0 : Math.sin((time || 0) * 0.0012 + n.pulse) * 0.5 + 0.5;
+                var size = (isSignal ? 1.3 : 0.8) + p.depth * (isSignal ? 1.8 : 1.2);
+                size *= 0.88 + pulse * 0.16;
+                var c = isSignal ? gold : accent;
+                var alpha = (isSignal ? 0.55 : 0.30) + p.depth * 0.45;
 
                 ctx.beginPath();
                 ctx.arc(p.sx, p.sy, size, 0, Math.PI * 2);
                 ctx.fillStyle = 'rgba(' + c.join(',') + ',' + alpha.toFixed(3) + ')';
                 ctx.fill();
 
-                if (p.depth > 0.7) {
+                if (isSignal && p.depth > 0.55) {
                     ctx.beginPath();
-                    ctx.arc(p.sx, p.sy, size * 2.4, 0, Math.PI * 2);
-                    ctx.fillStyle = 'rgba(' + c.join(',') + ',' + (0.05 * p.depth).toFixed(3) + ')';
+                    ctx.arc(p.sx, p.sy, size * 2.6, 0, Math.PI * 2);
+                    ctx.fillStyle = 'rgba(' + c.join(',') + ',' + (0.07 * p.depth).toFixed(3) + ')';
+                    ctx.fill();
+                }
+            }
+
+            // Central intelligence core — a layered, softly breathing
+            // nucleus. This is the visual anchor everything else radiates
+            // from; the "engine" the rest of the sphere represents data for.
+            var corePulse = prefersReducedMotion ? 0.5 : Math.sin((time || 0) * 0.0009) * 0.5 + 0.5;
+            var coreRadius = radius * (0.085 + corePulse * 0.012);
+
+            var coreGlow = ctx.createRadialGradient(cx, cy, 0, cx, cy, coreRadius * 3.2);
+            coreGlow.addColorStop(0, 'rgba(' + accent.join(',') + ',' + (0.26 + corePulse * 0.08).toFixed(3) + ')');
+            coreGlow.addColorStop(1, 'rgba(' + accent.join(',') + ',0)');
+            ctx.beginPath();
+            ctx.arc(cx, cy, coreRadius * 3.2, 0, Math.PI * 2);
+            ctx.fillStyle = coreGlow;
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.arc(cx, cy, coreRadius, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(' + accent.join(',') + ',0.92)';
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.arc(cx, cy, coreRadius * 1.8, 0, Math.PI * 2);
+            ctx.strokeStyle = 'rgba(' + accent.join(',') + ',0.32)';
+            ctx.lineWidth = 1;
+            ctx.stroke();
+
+            // Flow pulses — small points of light traveling outward
+            // along the spokes, communicating "information moving
+            // through the system" without relying on rotation alone.
+            if (!prefersReducedMotion) {
+                for (var pi = 0; pi < pulses.length; pi++) {
+                    var pulseObj = pulses[pi];
+                    var target = projected[pulseObj.nodeIndex];
+                    var t = pulseObj.t;
+                    var fade = t < 0.15 ? t / 0.15 : (t > 0.8 ? (1 - t) / 0.2 : 1);
+                    if (fade <= 0) continue;
+                    var px = cx + (target.sx - cx) * t;
+                    var py = cy + (target.sy - cy) * t;
+                    ctx.beginPath();
+                    ctx.arc(px, py, 1.8, 0, Math.PI * 2);
+                    ctx.fillStyle = 'rgba(' + accent.join(',') + ',' + (fade * 0.85).toFixed(3) + ')';
                     ctx.fill();
                 }
             }
@@ -420,7 +540,11 @@
             if (lastTime === null) lastTime = time;
             var dt = time - lastTime;
             lastTime = time;
-            rotY += dt * 0.00012; // slow, deliberate — not spinning like a toy
+            rotY += dt * 0.00007; // slower, controlled — institutional, not decorative
+            for (var pi = 0; pi < pulses.length; pi++) {
+                pulses[pi].t += dt * pulses[pi].speed;
+                if (pulses[pi].t > 1) pulses[pi].t -= 1;
+            }
             draw(time);
             rafId = window.requestAnimationFrame(frame);
         }
@@ -467,4 +591,4 @@
     } else {
         run();
     }
-})();
+})();
