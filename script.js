@@ -308,10 +308,9 @@
 
 /* ============================================================
    Financial Intelligence Core
-   A slow-rotating node-sphere rendered on <canvas id="coreCanvas">,
-   sitting behind the hero's candlestick read-out. Plain canvas 2D,
-   no dependencies. Respects prefers-reduced-motion by drawing one
-   static frame instead of looping.
+   A single persistent node-sphere rendered on <canvas id="coreCanvas">
+   at page level. Scroll-driven semantic states tune the same system
+   over time (no re-instantiation, no per-section duplicates).
    ============================================================ */
 (function initFinancialCore() {
     function run() {
@@ -336,6 +335,121 @@
         var rotY = 0, rotX = 0.35;
         var rafId = null;
         var lastTime = null;
+        var BASE_ROT_SPEED = 0.00007;
+        var BASE_LINK_DISTANCE = LINK_DISTANCE;
+
+        var CORE_STATES = {
+            INITIALIZATION: 'INITIALIZATION',
+            EXPLORATION: 'EXPLORATION',
+            EXPANSION: 'EXPANSION',
+            VALIDATION: 'VALIDATION',
+            CONVERGENCE: 'CONVERGENCE'
+        };
+
+        var stateProfiles = {};
+        stateProfiles[CORE_STATES.INITIALIZATION] = {
+            centerX: 0.60,
+            centerY: 0.50,
+            coreScale: 1.08,
+            presence: 1.00,
+            layerOpacity: 0.42,
+            ambientStrength: 0.58,
+            latticeIntensity: 0.32,
+            spokeIntensity: 0.50,
+            nodeIntensity: 0.66,
+            pulseStrength: 0.22,
+            pulseSpeed: 0.54,
+            rotationSpeed: 0.44,
+            coherence: 0.84,
+            coreBreath: 0.46
+        };
+        stateProfiles[CORE_STATES.EXPLORATION] = {
+            centerX: 0.56,
+            centerY: 0.52,
+            coreScale: 1.00,
+            presence: 0.90,
+            layerOpacity: 0.60,
+            ambientStrength: 0.68,
+            latticeIntensity: 0.68,
+            spokeIntensity: 0.78,
+            nodeIntensity: 0.84,
+            pulseStrength: 0.72,
+            pulseSpeed: 1.05,
+            rotationSpeed: 0.80,
+            coherence: 0.93,
+            coreBreath: 0.76
+        };
+        stateProfiles[CORE_STATES.EXPANSION] = {
+            centerX: 0.53,
+            centerY: 0.50,
+            coreScale: 1.12,
+            presence: 0.95,
+            layerOpacity: 0.72,
+            ambientStrength: 0.80,
+            latticeIntensity: 0.90,
+            spokeIntensity: 0.90,
+            nodeIntensity: 0.96,
+            pulseStrength: 0.74,
+            pulseSpeed: 0.96,
+            rotationSpeed: 0.74,
+            coherence: 1.12,
+            coreBreath: 0.78
+        };
+        stateProfiles[CORE_STATES.VALIDATION] = {
+            centerX: 0.57,
+            centerY: 0.48,
+            coreScale: 1.03,
+            presence: 0.95,
+            layerOpacity: 0.80,
+            ambientStrength: 0.86,
+            latticeIntensity: 0.84,
+            spokeIntensity: 0.96,
+            nodeIntensity: 1.00,
+            pulseStrength: 0.58,
+            pulseSpeed: 0.68,
+            rotationSpeed: 0.48,
+            coherence: 1.18,
+            coreBreath: 0.58
+        };
+        stateProfiles[CORE_STATES.CONVERGENCE] = {
+            centerX: 0.55,
+            centerY: 0.50,
+            coreScale: 1.09,
+            presence: 0.98,
+            layerOpacity: 0.88,
+            ambientStrength: 0.92,
+            latticeIntensity: 0.94,
+            spokeIntensity: 1.00,
+            nodeIntensity: 1.00,
+            pulseStrength: 0.60,
+            pulseSpeed: 0.74,
+            rotationSpeed: 0.54,
+            coherence: 1.14,
+            coreBreath: 0.60
+        };
+
+        function cloneProfile(profile) {
+            return {
+                centerX: profile.centerX,
+                centerY: profile.centerY,
+                coreScale: profile.coreScale,
+                presence: profile.presence,
+                layerOpacity: profile.layerOpacity,
+                ambientStrength: profile.ambientStrength,
+                latticeIntensity: profile.latticeIntensity,
+                spokeIntensity: profile.spokeIntensity,
+                nodeIntensity: profile.nodeIntensity,
+                pulseStrength: profile.pulseStrength,
+                pulseSpeed: profile.pulseSpeed,
+                rotationSpeed: profile.rotationSpeed,
+                coherence: profile.coherence,
+                coreBreath: profile.coreBreath
+            };
+        }
+
+        var activeState = CORE_STATES.INITIALIZATION;
+        var targetProfile = cloneProfile(stateProfiles[activeState]);
+        var currentProfile = cloneProfile(stateProfiles[activeState]);
 
         // Fibonacci sphere distribution — even spacing, no clustering
         // at the poles, which is what makes a node-sphere read as
@@ -369,7 +483,8 @@
                 return {
                     nodeIndex: nodeIndex,
                     t: Math.random(),               // staggered start, avoids synced blinking
-                    speed: 0.00007 + Math.random() * 0.00004
+                    speed: 0.00007 + Math.random() * 0.00004,
+                    phase: Math.random() * Math.PI * 2
                 };
             });
         }
@@ -386,7 +501,99 @@
             radius = Math.min(width, height) * 0.30;
         }
 
-        function project(node) {
+        function setCoreState(stateName) {
+            var nextProfile = stateProfiles[stateName];
+            if (!nextProfile) return;
+            activeState = stateName;
+            targetProfile = cloneProfile(nextProfile);
+            canvas.setAttribute('data-core-state', stateName);
+            if (prefersReducedMotion) {
+                currentProfile = cloneProfile(targetProfile);
+                draw(0);
+            }
+        }
+
+        function lerpNumber(current, target, amount) {
+            return current + (target - current) * amount;
+        }
+
+        function blendCurrentProfile(amount) {
+            currentProfile.centerX = lerpNumber(currentProfile.centerX, targetProfile.centerX, amount);
+            currentProfile.centerY = lerpNumber(currentProfile.centerY, targetProfile.centerY, amount);
+            currentProfile.coreScale = lerpNumber(currentProfile.coreScale, targetProfile.coreScale, amount);
+            currentProfile.presence = lerpNumber(currentProfile.presence, targetProfile.presence, amount);
+            currentProfile.layerOpacity = lerpNumber(currentProfile.layerOpacity, targetProfile.layerOpacity, amount);
+            currentProfile.ambientStrength = lerpNumber(currentProfile.ambientStrength, targetProfile.ambientStrength, amount);
+            currentProfile.latticeIntensity = lerpNumber(currentProfile.latticeIntensity, targetProfile.latticeIntensity, amount);
+            currentProfile.spokeIntensity = lerpNumber(currentProfile.spokeIntensity, targetProfile.spokeIntensity, amount);
+            currentProfile.nodeIntensity = lerpNumber(currentProfile.nodeIntensity, targetProfile.nodeIntensity, amount);
+            currentProfile.pulseStrength = lerpNumber(currentProfile.pulseStrength, targetProfile.pulseStrength, amount);
+            currentProfile.pulseSpeed = lerpNumber(currentProfile.pulseSpeed, targetProfile.pulseSpeed, amount);
+            currentProfile.rotationSpeed = lerpNumber(currentProfile.rotationSpeed, targetProfile.rotationSpeed, amount);
+            currentProfile.coherence = lerpNumber(currentProfile.coherence, targetProfile.coherence, amount);
+            currentProfile.coreBreath = lerpNumber(currentProfile.coreBreath, targetProfile.coreBreath, amount);
+        }
+
+        function setupStateController() {
+            var sectionStatePairs = [
+                { id: 'top', state: CORE_STATES.INITIALIZATION },
+                { id: 'about', state: CORE_STATES.INITIALIZATION },
+                { id: 'projects', state: CORE_STATES.EXPLORATION },
+                { id: 'stack', state: CORE_STATES.EXPANSION },
+                { id: 'education', state: CORE_STATES.EXPANSION },
+                { id: 'experience', state: CORE_STATES.VALIDATION },
+                { id: 'contact', state: CORE_STATES.CONVERGENCE }
+            ];
+
+            var trackedSections = [];
+            for (var i = 0; i < sectionStatePairs.length; i++) {
+                var element = document.getElementById(sectionStatePairs[i].id);
+                if (element) {
+                    trackedSections.push({
+                        element: element,
+                        state: sectionStatePairs[i].state
+                    });
+                }
+            }
+            if (!trackedSections.length) return;
+
+            var scrollTicking = false;
+
+            function updateStateFromViewport() {
+                var viewportAnchor = window.innerHeight * 0.45;
+                var nearestState = null;
+                var nearestDistance = Infinity;
+
+                for (var s = 0; s < trackedSections.length; s++) {
+                    var tracked = trackedSections[s];
+                    var rect = tracked.element.getBoundingClientRect();
+                    var sectionAnchor = rect.top + rect.height * 0.5;
+                    var distance = Math.abs(sectionAnchor - viewportAnchor);
+                    if (distance < nearestDistance) {
+                        nearestDistance = distance;
+                        nearestState = tracked.state;
+                    }
+                }
+
+                if (nearestState && nearestState !== activeState) {
+                    setCoreState(nearestState);
+                }
+            }
+
+            window.addEventListener('scroll', function () {
+                if (scrollTicking) return;
+                scrollTicking = true;
+                window.requestAnimationFrame(function () {
+                    updateStateFromViewport();
+                    scrollTicking = false;
+                });
+            }, { passive: true });
+
+            window.addEventListener('resize', updateStateFromViewport);
+            updateStateFromViewport();
+        }
+
+        function project(node, cx, cy, drawRadius) {
             // Rotate around Y then X.
             var cosY = Math.cos(rotY), sinY = Math.sin(rotY);
             var x1 = node.x * cosY - node.z * sinY;
@@ -398,8 +605,8 @@
 
             var perspective = 2.4 / (2.4 - z2); // z2 in [-1, 1]
             return {
-                sx: width * 0.56 + x1 * radius * perspective,
-                sy: height * 0.5 + y1 * radius * perspective,
+                sx: cx + x1 * drawRadius * perspective,
+                sy: cy + y1 * drawRadius * perspective,
                 depth: (z2 + 1) / 2, // 0 (far) .. 1 (near)
                 scale: perspective
             };
@@ -408,13 +615,19 @@
         function draw(time) {
             ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
             ctx.clearRect(0, 0, width, height);
+            ctx.globalAlpha = currentProfile.layerOpacity * currentProfile.presence;
 
-            var projected = nodes.map(project);
-            var cx = width * 0.56, cy = height * 0.5;
+            var cx = width * currentProfile.centerX;
+            var cy = height * currentProfile.centerY;
+            var drawRadius = radius * currentProfile.coreScale;
+            var projected = nodes.map(function (node) {
+                return project(node, cx, cy, drawRadius);
+            });
+            var dynamicLinkDistance = BASE_LINK_DISTANCE * currentProfile.coherence;
 
             // Soft ambient glow anchoring the whole system to the core.
-            var glow = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius * 1.6);
-            glow.addColorStop(0, 'rgba(' + accent.join(',') + ',0.10)');
+            var glow = ctx.createRadialGradient(cx, cy, 0, cx, cy, drawRadius * 1.6);
+            glow.addColorStop(0, 'rgba(' + accent.join(',') + ',' + (0.10 * currentProfile.ambientStrength).toFixed(3) + ')');
             glow.addColorStop(1, 'rgba(' + accent.join(',') + ',0)');
             ctx.fillStyle = glow;
             ctx.fillRect(0, 0, width, height);
@@ -422,8 +635,8 @@
             // Faint instrument-boundary ring — reads as a measurement
             // scope / dashboard element rather than a floating planet.
             ctx.beginPath();
-            ctx.arc(cx, cy, radius * 1.35, 0, Math.PI * 2);
-            ctx.strokeStyle = 'rgba(' + ringColor.join(',') + ',0.10)';
+            ctx.arc(cx, cy, drawRadius * (1.35 * currentProfile.coherence), 0, Math.PI * 2);
+            ctx.strokeStyle = 'rgba(' + ringColor.join(',') + ',' + (0.10 * currentProfile.ambientStrength).toFixed(3) + ')';
             ctx.lineWidth = 1;
             ctx.stroke();
 
@@ -436,10 +649,10 @@
                     var a = nodes[i], b = nodes[j];
                     var dx = a.x - b.x, dy = a.y - b.y, dz = a.z - b.z;
                     var dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
-                    if (dist > LINK_DISTANCE) continue;
+                    if (dist > dynamicLinkDistance) continue;
                     var pa = projected[i], pb = projected[j];
                     var avgDepth = (pa.depth + pb.depth) / 2;
-                    var opacity = (1 - dist / LINK_DISTANCE) * avgDepth * 0.20;
+                    var opacity = (1 - dist / dynamicLinkDistance) * avgDepth * 0.20 * currentProfile.latticeIntensity;
                     if (opacity <= 0.01) continue;
                     ctx.strokeStyle = 'rgba(' + accent.join(',') + ',' + opacity.toFixed(3) + ')';
                     ctx.beginPath();
@@ -457,7 +670,7 @@
                 ctx.beginPath();
                 ctx.moveTo(cx, cy);
                 ctx.lineTo(pTarget.sx, pTarget.sy);
-                ctx.strokeStyle = 'rgba(' + accent.join(',') + ',' + (0.10 + pTarget.depth * 0.16).toFixed(3) + ')';
+                ctx.strokeStyle = 'rgba(' + accent.join(',') + ',' + ((0.10 + pTarget.depth * 0.16) * currentProfile.spokeIntensity).toFixed(3) + ')';
                 ctx.stroke();
             }
 
@@ -472,11 +685,11 @@
                 var p = projected[idx];
                 var n = nodes[idx];
                 var isSignal = spokeIndices.indexOf(idx) !== -1;
-                var pulse = prefersReducedMotion ? 0 : Math.sin((time || 0) * 0.0012 + n.pulse) * 0.5 + 0.5;
+                var pulse = prefersReducedMotion ? 0 : Math.sin((time || 0) * 0.0012 + n.pulse + currentProfile.pulseStrength) * 0.5 + 0.5;
                 var size = (isSignal ? 1.3 : 0.8) + p.depth * (isSignal ? 1.8 : 1.2);
-                size *= 0.88 + pulse * 0.16;
+                size *= 0.88 + pulse * 0.16 * currentProfile.nodeIntensity;
                 var c = isSignal ? gold : accent;
-                var alpha = (isSignal ? 0.55 : 0.30) + p.depth * 0.45;
+                var alpha = ((isSignal ? 0.55 : 0.30) + p.depth * 0.45) * currentProfile.nodeIntensity;
 
                 ctx.beginPath();
                 ctx.arc(p.sx, p.sy, size, 0, Math.PI * 2);
@@ -486,7 +699,7 @@
                 if (isSignal && p.depth > 0.55) {
                     ctx.beginPath();
                     ctx.arc(p.sx, p.sy, size * 2.6, 0, Math.PI * 2);
-                    ctx.fillStyle = 'rgba(' + c.join(',') + ',' + (0.07 * p.depth).toFixed(3) + ')';
+                    ctx.fillStyle = 'rgba(' + c.join(',') + ',' + (0.07 * p.depth * currentProfile.spokeIntensity).toFixed(3) + ')';
                     ctx.fill();
                 }
             }
@@ -494,11 +707,11 @@
             // Central intelligence core — a layered, softly breathing
             // nucleus. This is the visual anchor everything else radiates
             // from; the "engine" the rest of the sphere represents data for.
-            var corePulse = prefersReducedMotion ? 0.5 : Math.sin((time || 0) * 0.0009) * 0.5 + 0.5;
-            var coreRadius = radius * (0.085 + corePulse * 0.012);
+            var corePulse = prefersReducedMotion ? 0.5 : Math.sin((time || 0) * 0.0009) * 0.5 * currentProfile.coreBreath + 0.5;
+            var coreRadius = drawRadius * (0.085 * currentProfile.coherence + corePulse * 0.012);
 
             var coreGlow = ctx.createRadialGradient(cx, cy, 0, cx, cy, coreRadius * 3.2);
-            coreGlow.addColorStop(0, 'rgba(' + accent.join(',') + ',' + (0.26 + corePulse * 0.08).toFixed(3) + ')');
+            coreGlow.addColorStop(0, 'rgba(' + accent.join(',') + ',' + ((0.26 + corePulse * 0.08) * currentProfile.ambientStrength).toFixed(3) + ')');
             coreGlow.addColorStop(1, 'rgba(' + accent.join(',') + ',0)');
             ctx.beginPath();
             ctx.arc(cx, cy, coreRadius * 3.2, 0, Math.PI * 2);
@@ -530,19 +743,23 @@
                     var py = cy + (target.sy - cy) * t;
                     ctx.beginPath();
                     ctx.arc(px, py, 1.8, 0, Math.PI * 2);
-                    ctx.fillStyle = 'rgba(' + accent.join(',') + ',' + (fade * 0.85).toFixed(3) + ')';
+                    ctx.fillStyle = 'rgba(' + accent.join(',') + ',' + (fade * 0.85 * currentProfile.pulseStrength).toFixed(3) + ')';
                     ctx.fill();
                 }
             }
+
+            ctx.globalAlpha = 1;
         }
 
         function frame(time) {
             if (lastTime === null) lastTime = time;
             var dt = time - lastTime;
             lastTime = time;
-            rotY += dt * 0.00007; // slower, controlled — institutional, not decorative
+            var blendAmount = Math.min(0.18, dt * 0.003);
+            blendCurrentProfile(blendAmount);
+            rotY += dt * BASE_ROT_SPEED * currentProfile.rotationSpeed;
             for (var pi = 0; pi < pulses.length; pi++) {
-                pulses[pi].t += dt * pulses[pi].speed;
+                pulses[pi].t += dt * pulses[pi].speed * currentProfile.pulseSpeed;
                 if (pulses[pi].t > 1) pulses[pi].t -= 1;
             }
             draw(time);
@@ -551,6 +768,8 @@
 
         buildNodes();
         resize();
+        setupStateController();
+        setCoreState(CORE_STATES.INITIALIZATION);
 
         if (prefersReducedMotion) {
             draw(0);
@@ -567,22 +786,16 @@
             }, 120);
         });
 
-        // Pause the animation loop when the hero scrolls out of view —
-        // keeps the effect cinematic without burning cycles once the
-        // person has scrolled past it.
-        if ('IntersectionObserver' in window && !prefersReducedMotion) {
-            var observer = new IntersectionObserver(function (entries) {
-                entries.forEach(function (entry) {
-                    if (entry.isIntersecting && rafId === null) {
-                        lastTime = null;
-                        rafId = window.requestAnimationFrame(frame);
-                    } else if (!entry.isIntersecting && rafId !== null) {
-                        window.cancelAnimationFrame(rafId);
-                        rafId = null;
-                    }
-                });
-            }, { threshold: 0.05 });
-            observer.observe(canvas.parentElement);
+        if (!prefersReducedMotion) {
+            document.addEventListener('visibilitychange', function () {
+                if (document.hidden && rafId !== null) {
+                    window.cancelAnimationFrame(rafId);
+                    rafId = null;
+                } else if (!document.hidden && rafId === null) {
+                    lastTime = null;
+                    rafId = window.requestAnimationFrame(frame);
+                }
+            });
         }
     }
 
