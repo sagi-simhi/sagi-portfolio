@@ -770,7 +770,7 @@ main,
 .site-footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
 @media (max-width: 480px) { .site-footer-inner { justify-content: center; text-align: center; } }
 
-.footer-social-link { display: inline-flex; align-items: center; justify-content: center; color: var(--ink-muted); line-height: 0; padding: 6px; margin: -6px; border-radius: 50%; transition: color 0.2s ease, background-color 0.2s ease; }
+.footer-social-link { display: inline-flex; align-items: center; justify-content: center; color: var(--ink-muted); line-height: 0; padding: 6px; margin: -6px; border-radius: 50%; transition: color var(--motion-fast) var(--motion-ease), background-color var(--motion-fast) var(--motion-ease), transform var(--motion-fast) var(--motion-ease); }
 .footer-social-link:hover { color: var(--ink); background-color: var(--navy-850); transform: translateY(-1px); }
 .footer-social-link:focus-visible { outline: 2px solid var(--ink-muted); outline-offset: 2px; }
 @media (prefers-reduced-motion: reduce) { .footer-social-link { transition: none; transform: none; } }
