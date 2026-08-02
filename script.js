@@ -664,13 +664,16 @@
             ctx.fillStyle = glow;
             ctx.fillRect(0, 0, width, height);
 
-            // Faint instrument-boundary ring — reads as a measurement
-            // scope / dashboard element rather than a floating planet.
-            ctx.beginPath();
-            ctx.arc(cx, cy, drawRadius * (1.35 * currentProfile.coherence), 0, Math.PI * 2);
-            ctx.strokeStyle = 'rgba(' + ringColor.join(',') + ',' + (0.10 * currentProfile.ambientStrength).toFixed(3) + ')';
-            ctx.lineWidth = 1;
-            ctx.stroke();
+            var fieldX = cx + Math.cos(rotY * 1.3) * drawRadius * 0.12 * currentProfile.coherence;
+            var fieldY = cy + Math.sin(rotY * 1.1) * drawRadius * 0.09 * currentProfile.coherence;
+
+            // Diffuse intelligence field — subtle spatial bias without
+            // introducing a hard center or instrument-like contour.
+            var fieldGlow = ctx.createRadialGradient(fieldX, fieldY, 0, fieldX, fieldY, drawRadius * 1.45);
+            fieldGlow.addColorStop(0, 'rgba(' + accent.join(',') + ',' + (0.05 * currentProfile.ambientStrength).toFixed(3) + ')');
+            fieldGlow.addColorStop(1, 'rgba(' + accent.join(',') + ',0)');
+            ctx.fillStyle = fieldGlow;
+            ctx.fillRect(0, 0, width, height);
 
             // Background lattice — sparse, structured relationships
             // between ordinary data nodes. Kept quiet so it reads as
@@ -694,15 +697,27 @@
                 }
             }
 
-            // Hub spokes — deliberate lines from the core straight to
-            // each signal node. This is what makes the shape read as a
-            // system radiating outward from a center, not a uniform mesh.
+            // Signal routes — a distributed network linking signal points
+            // to each other and to nearby data nodes.
+            var signalNetworkLinks = [];
             for (var sp = 0; sp < spokeIndices.length; sp++) {
-                var pTarget = projected[spokeIndices[sp]];
+                var signalIdx = spokeIndices[sp];
+                var nextSignalIdx = spokeIndices[(sp + 1) % spokeIndices.length];
+                var bridgeA = (signalIdx + 11) % NODE_COUNT;
+                var bridgeB = (signalIdx + 23) % NODE_COUNT;
+                signalNetworkLinks.push([signalIdx, nextSignalIdx]);
+                signalNetworkLinks.push([signalIdx, bridgeA]);
+                signalNetworkLinks.push([signalIdx, bridgeB]);
+            }
+            for (var sl = 0; sl < signalNetworkLinks.length; sl++) {
+                var link = signalNetworkLinks[sl];
+                var pFrom = projected[link[0]];
+                var pTo = projected[link[1]];
+                var signalDepth = (pFrom.depth + pTo.depth) * 0.5;
                 ctx.beginPath();
-                ctx.moveTo(cx, cy);
-                ctx.lineTo(pTarget.sx, pTarget.sy);
-                ctx.strokeStyle = 'rgba(' + accent.join(',') + ',' + ((0.10 + pTarget.depth * 0.16) * currentProfile.spokeIntensity).toFixed(3) + ')';
+                ctx.moveTo(pFrom.sx, pFrom.sy);
+                ctx.lineTo(pTo.sx, pTo.sy);
+                ctx.strokeStyle = 'rgba(' + accent.join(',') + ',' + ((0.06 + signalDepth * 0.14) * currentProfile.spokeIntensity).toFixed(3) + ')';
                 ctx.stroke();
             }
 
@@ -736,43 +751,39 @@
                 }
             }
 
-            // Central intelligence core — a layered, softly breathing
-            // nucleus. This is the visual anchor everything else radiates
-            // from; the "engine" the rest of the sphere represents data for.
-            var corePulse = prefersReducedMotion ? 0.5 : Math.sin((time || 0) * 0.0009) * 0.5 * currentProfile.coreBreath + 0.5;
-            var coreRadius = drawRadius * (0.085 * currentProfile.coherence + corePulse * 0.012);
+            // Distributed signal bloom — low-contrast halos around key
+            // data nodes so intelligence reads as a field, not an object.
+            for (var sg = 0; sg < spokeIndices.length; sg++) {
+                var signalProjection = projected[spokeIndices[sg]];
+                var signalPulse = prefersReducedMotion ? 0.5 : Math.sin((time || 0) * 0.001 + sg * 1.3) * 0.5 + 0.5;
+                var bloomRadius = drawRadius * (0.10 + signalPulse * 0.03) * currentProfile.coherence;
+                var signalGlow = ctx.createRadialGradient(
+                    signalProjection.sx, signalProjection.sy, 0,
+                    signalProjection.sx, signalProjection.sy, bloomRadius
+                );
+                signalGlow.addColorStop(0, 'rgba(' + accent.join(',') + ',' + ((0.12 + signalPulse * 0.08) * currentProfile.ambientStrength).toFixed(3) + ')');
+                signalGlow.addColorStop(1, 'rgba(' + accent.join(',') + ',0)');
+                ctx.beginPath();
+                ctx.arc(signalProjection.sx, signalProjection.sy, bloomRadius, 0, Math.PI * 2);
+                ctx.fillStyle = signalGlow;
+                ctx.fill();
+            }
 
-            var coreGlow = ctx.createRadialGradient(cx, cy, 0, cx, cy, coreRadius * 3.2);
-            coreGlow.addColorStop(0, 'rgba(' + accent.join(',') + ',' + ((0.26 + corePulse * 0.08) * currentProfile.ambientStrength).toFixed(3) + ')');
-            coreGlow.addColorStop(1, 'rgba(' + accent.join(',') + ',0)');
-            ctx.beginPath();
-            ctx.arc(cx, cy, coreRadius * 3.2, 0, Math.PI * 2);
-            ctx.fillStyle = coreGlow;
-            ctx.fill();
-
-            ctx.beginPath();
-            ctx.arc(cx, cy, coreRadius, 0, Math.PI * 2);
-            ctx.fillStyle = 'rgba(' + accent.join(',') + ',0.92)';
-            ctx.fill();
-
-            ctx.beginPath();
-            ctx.arc(cx, cy, coreRadius * 1.8, 0, Math.PI * 2);
-            ctx.strokeStyle = 'rgba(' + accent.join(',') + ',0.32)';
-            ctx.lineWidth = 1;
-            ctx.stroke();
-
-            // Flow pulses — small points of light traveling outward
-            // along the spokes, communicating "information moving
-            // through the system" without relying on rotation alone.
+            // Flow pulses — light packets traversing between signal nodes.
             if (!prefersReducedMotion) {
                 for (var pi = 0; pi < pulses.length; pi++) {
                     var pulseObj = pulses[pi];
-                    var target = projected[pulseObj.nodeIndex];
                     var t = pulseObj.t;
+                    var sourceIdx = spokeIndices[pi % spokeIndices.length];
+                    var targetIdx = spokeIndices[(pi + 1) % spokeIndices.length];
+                    var source = projected[sourceIdx];
+                    var target = projected[targetIdx];
+                    var forward = Math.sin((time || 0) * 0.0006 + pulseObj.phase) >= 0;
+                    var flowT = forward ? t : (1 - t);
                     var fade = t < 0.15 ? t / 0.15 : (t > 0.8 ? (1 - t) / 0.2 : 1);
                     if (fade <= 0) continue;
-                    var px = cx + (target.sx - cx) * t;
-                    var py = cy + (target.sy - cy) * t;
+                    var px = source.sx + (target.sx - source.sx) * flowT;
+                    var py = source.sy + (target.sy - source.sy) * flowT;
                     ctx.beginPath();
                     ctx.arc(px, py, 1.8, 0, Math.PI * 2);
                     ctx.fillStyle = 'rgba(' + accent.join(',') + ',' + (fade * 0.85 * currentProfile.pulseStrength).toFixed(3) + ')';
