@@ -48,6 +48,12 @@
   --radius-md: 10px;
   --radius-lg: 16px;
   --floating-nav-clearance: 96px;
+  --motion-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --motion-fast: 0.2s;
+  --motion-base: 0.28s;
+  --motion-slow: 0.45s;
+  --glass-blur: 22px;
+  --glass-saturation: 148%;
 }
 
 /* ============================================================
@@ -90,13 +96,13 @@ body::before {
   opacity: var(--bg-overlay-opacity);
   pointer-events: none;
   z-index: -1;
-  transition: opacity 0.35s ease;
+  transition: opacity var(--motion-base) var(--motion-ease);
 }
 
 h1, h2, h3, h4 { margin: 0; font-family: var(--font-display); color: var(--ink); font-weight: 600; }
 p { margin: 0; color: var(--ink-muted); }
 ul, ol { margin: 0; padding: 0; list-style: none; }
-a { color: inherit; text-decoration: none; transition: color 0.2s ease; }
+a { color: inherit; text-decoration: none; transition: color var(--motion-fast) var(--motion-ease), opacity var(--motion-fast) var(--motion-ease); }
 img { max-width: 100%; display: block; }
 
 .mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
@@ -137,7 +143,7 @@ a:focus-visible, button:focus-visible {
   border-radius: var(--radius-sm);
   font-weight: 500;
   font-size: 0.95rem;
-  transition: transform 0.2s ease, box-shadow 0.25s ease, background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  transition: transform var(--motion-base) var(--motion-ease), box-shadow var(--motion-base) var(--motion-ease), background var(--motion-base) var(--motion-ease), border-color var(--motion-base) var(--motion-ease), color var(--motion-base) var(--motion-ease), opacity var(--motion-base) var(--motion-ease);
   cursor: pointer;
   position: relative;
   overflow: hidden;
@@ -146,9 +152,9 @@ a:focus-visible, button:focus-visible {
   content: "";
   position: absolute;
   inset: -1px;
-  background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.2) 50%, transparent 100%);
+  background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.16) 48%, transparent 100%);
   transform: translateX(-120%);
-  transition: transform 0.45s ease;
+  transition: transform var(--motion-slow) var(--motion-ease);
   pointer-events: none;
 }
 .btn:hover::after { transform: translateX(120%); }
@@ -161,15 +167,15 @@ a:focus-visible, button:focus-visible {
 .btn-primary:hover {
   background: var(--accent-bright);
   border-color: var(--accent-bright);
-  transform: translateY(-2px);
-  box-shadow: 0 0 24px rgba(110, 231, 190, 0.38), 0 0 48px rgba(83, 215, 166, 0.22);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(83, 215, 166, 0.2), 0 0 34px rgba(83, 215, 166, 0.14);
 }
 
 .btn-ghost { background: transparent; color: var(--ink); border: 1px solid transparent; }
-.btn-ghost:hover { background: rgba(255, 255, 255, 0.06); box-shadow: 0 0 22px rgba(255, 255, 255, 0.08); }
+.btn-ghost:hover { background: rgba(255, 255, 255, 0.05); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.24), 0 0 18px rgba(255, 255, 255, 0.06); transform: translateY(-1px); }
 
 .btn-outline { background: transparent; color: var(--ink); border: 1px solid var(--border); }
-.btn-outline:hover { border-color: var(--accent); color: var(--accent); box-shadow: 0 0 20px rgba(83, 215, 166, 0.16); }
+.btn-outline:hover { border-color: var(--accent); color: var(--accent); box-shadow: 0 6px 22px rgba(83, 215, 166, 0.14); transform: translateY(-1px); }
 
 /* ============================================================
    NAVIGATION — floating liquid-glass control layer
@@ -183,7 +189,7 @@ a:focus-visible, button:focus-visible {
   width: auto;
   background: transparent;
   pointer-events: none;
-  transition: transform 0.28s ease, opacity 0.28s ease;
+  transition: transform var(--motion-base) var(--motion-ease), opacity var(--motion-base) var(--motion-ease);
 }
 
 .site-header.nav-scrolled {
@@ -201,34 +207,40 @@ a:focus-visible, button:focus-visible {
   gap: 0.72rem;
   justify-content: center;
   border-radius: 999px;
-  background: linear-gradient(
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.13) 0%, rgba(255, 255, 255, 0.02) 36%, transparent 64%),
+    linear-gradient(
     145deg,
-    rgba(14, 20, 33, 0.72) 0%,
-    rgba(11, 17, 29, 0.62) 100%
+    rgba(14, 20, 33, 0.7) 0%,
+    rgba(11, 17, 29, 0.58) 100%
   );
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.13);
   box-shadow:
-    0 12px 34px rgba(0, 0, 0, 0.42),
-    0 2px 10px rgba(83, 215, 166, 0.08);
-  backdrop-filter: blur(20px) saturate(140%);
-  -webkit-backdrop-filter: blur(20px) saturate(140%);
+    0 16px 36px rgba(0, 0, 0, 0.38),
+    0 2px 10px rgba(83, 215, 166, 0.07),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
   transition:
-    background 0.26s ease,
-    border-color 0.26s ease,
-    box-shadow 0.26s ease,
-    transform 0.26s ease;
+    background var(--motion-base) var(--motion-ease),
+    border-color var(--motion-base) var(--motion-ease),
+    box-shadow var(--motion-base) var(--motion-ease),
+    transform var(--motion-base) var(--motion-ease);
 }
 
 .site-header.nav-scrolled .nav-container {
-  background: linear-gradient(
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.015) 34%, transparent 64%),
+    linear-gradient(
     145deg,
-    rgba(12, 19, 31, 0.86) 0%,
-    rgba(8, 13, 22, 0.78) 100%
+    rgba(12, 19, 31, 0.84) 0%,
+    rgba(8, 13, 22, 0.74) 100%
   );
-  border-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.16);
   box-shadow:
-    0 14px 38px rgba(0, 0, 0, 0.5),
-    0 3px 12px rgba(83, 215, 166, 0.14);
+    0 18px 42px rgba(0, 0, 0, 0.44),
+    0 3px 12px rgba(83, 215, 166, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .nav-logo {
@@ -241,21 +253,22 @@ a:focus-visible, button:focus-visible {
   color: var(--ink);
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  transition: color 0.2s ease, opacity 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+  transition: color var(--motion-fast) var(--motion-ease), opacity var(--motion-fast) var(--motion-ease), background var(--motion-fast) var(--motion-ease), border-color var(--motion-fast) var(--motion-ease), box-shadow var(--motion-fast) var(--motion-ease);
 }
 .nav-logo:hover {
   color: var(--accent-bright);
-  background: rgba(83, 215, 166, 0.1);
-  border-color: rgba(83, 215, 166, 0.3);
+  background: rgba(83, 215, 166, 0.08);
+  border-color: rgba(83, 215, 166, 0.24);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07), 0 6px 16px rgba(0, 0, 0, 0.24);
 }
 
 .nav-logo-mark {
   width: 20px;
   height: 20px;
   color: var(--accent);
-  transition: color 0.2s ease;
+  transition: color var(--motion-fast) var(--motion-ease), transform var(--motion-fast) var(--motion-ease);
 }
-.nav-logo:hover .nav-logo-mark { color: var(--accent-bright); }
+.nav-logo:hover .nav-logo-mark { color: var(--accent-bright); transform: translateY(-0.5px); }
 
 .nav-right {
   display: flex;
@@ -279,14 +292,16 @@ a:focus-visible, button:focus-visible {
   border-radius: 999px;
   line-height: 1;
   transition:
-    color 0.2s ease,
-    background-color 0.2s ease,
-    box-shadow 0.2s ease,
-    transform 0.2s ease;
+    color var(--motion-fast) var(--motion-ease),
+    background-color var(--motion-fast) var(--motion-ease),
+    box-shadow var(--motion-fast) var(--motion-ease),
+    transform var(--motion-fast) var(--motion-ease),
+    opacity var(--motion-fast) var(--motion-ease);
 }
 .nav-links a:hover {
   color: #ffffff;
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.07);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
   transform: translateY(-1px);
 }
 
@@ -314,13 +329,14 @@ a:focus-visible, button:focus-visible {
   box-shadow:
     0 4px 14px rgba(83, 215, 166, 0.28),
     0 0 0 1px rgba(83, 215, 166, 0.18);
-  transition: opacity 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  transition: opacity var(--motion-fast) var(--motion-ease), transform var(--motion-fast) var(--motion-ease), box-shadow var(--motion-fast) var(--motion-ease), filter var(--motion-fast) var(--motion-ease);
 }
 .nav-contact-btn:hover {
   opacity: 0.96;
   transform: translateY(-1px);
+  filter: saturate(106%);
   box-shadow:
-    0 7px 18px rgba(83, 215, 166, 0.34),
+    0 8px 20px rgba(83, 215, 166, 0.31),
     0 0 0 1px rgba(83, 215, 166, 0.28);
 }
 
@@ -519,7 +535,7 @@ main,
 /* ============================================================
    SECTIONS (generic)
    ============================================================ */
-.section { padding: 100px 28px; position: relative; }
+.section { padding: 108px 28px 96px; position: relative; }
 .section-inner { max-width: var(--max-w); margin: 0 auto; }
 .section-eyebrow {
   display: flex;
@@ -569,7 +585,7 @@ main,
 @media (prefers-reduced-motion: reduce) {
   .eyebrow-signal, .eyebrow-signal::after { transition: none; }
 }
-.section-title { font-size: 2.2rem; margin-bottom: 48px; letter-spacing: -0.02em; }
+.section-title { font-size: 2.2rem; margin-bottom: 42px; letter-spacing: -0.02em; }
 
 /* ============================================================
    ABOUT
@@ -587,7 +603,7 @@ main,
   color: var(--ink);
   line-height: 1.55;
   max-width: 640px;
-  margin-bottom: 40px;
+  margin-bottom: 34px;
 }
 .about-copy { font-size: 1rem; margin-bottom: 16px; }
 .about-copy:last-child { margin-bottom: 0; }
@@ -621,20 +637,48 @@ main,
 /* ============================================================
    EDUCATION
    ============================================================ */
-.edu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; }
+.edu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 22px; }
 
 .edu-card, .project-card, .stack-group, .timeline-content {
-  background: rgba(255, 255, 255, 0.025);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.015) 34%, transparent 62%),
+    rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: var(--radius-lg);
-  transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+  box-shadow:
+    0 14px 34px rgba(0, 0, 0, 0.28),
+    0 1px 0 rgba(255, 255, 255, 0.08) inset;
+  transition: transform var(--motion-base) var(--motion-ease), border-color var(--motion-base) var(--motion-ease), background var(--motion-base) var(--motion-ease), box-shadow var(--motion-base) var(--motion-ease);
+}
+.edu-card::before, .project-card::before, .stack-group::before, .timeline-content::before {
+  content: "";
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  top: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.38) 50%, transparent 100%);
+  opacity: 0.45;
+  pointer-events: none;
+  transition: opacity var(--motion-base) var(--motion-ease);
 }
 .edu-card:hover, .project-card:hover, .stack-group:hover, .timeline-content:hover {
-  background: rgba(255, 255, 255, 0.045);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.018) 36%, transparent 62%),
+    rgba(255, 255, 255, 0.04);
   border-color: var(--accent-line);
-  transform: translateY(-3px);
+  transform: translateY(-4px);
+  box-shadow:
+    0 18px 38px rgba(0, 0, 0, 0.34),
+    0 2px 0 rgba(255, 255, 255, 0.1) inset,
+    0 0 0 1px rgba(83, 215, 166, 0.05);
+}
+.edu-card:hover::before, .project-card:hover::before, .stack-group:hover::before, .timeline-content:hover::before {
+  opacity: 0.75;
 }
 
 .edu-card { padding: 32px; }
@@ -668,7 +712,7 @@ main,
 .journey-step-index { color: var(--accent); }
 .journey-arrow { color: var(--slate-500); font-size: 0.9rem; }
 
-.stack-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; }
+.stack-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
 .stack-group { padding: 28px; }
 .stack-group-title { font-size: 1.1rem; color: var(--ink); margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border-soft); }
 .tag-row { display: flex; flex-wrap: wrap; gap: 10px; }
@@ -678,7 +722,7 @@ main,
 /* ============================================================
    PROJECTS — interactive case studies
    ============================================================ */
-.project-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem; }
+.project-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.75rem; }
 @media (max-width: 900px) { .project-grid { grid-template-columns: 1fr; } }
 
 .project-card { display: flex; flex-direction: column; padding: 32px; width: 100%; }
@@ -695,8 +739,8 @@ main,
 
 .project-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; align-items: center; }
 .project-link { font-weight: 500; color: var(--ink); display: inline-flex; align-items: center; gap: 8px; margin-top: auto; width: fit-content; }
-.project-link .arrow { transition: transform 0.2s ease; }
-.project-card:hover .project-link .arrow { transform: translateX(4px); color: var(--accent); }
+.project-link .arrow { transition: transform var(--motion-fast) var(--motion-ease), color var(--motion-fast) var(--motion-ease); }
+.project-card:hover .project-link .arrow { transform: translateX(3px); color: var(--accent); }
 
 /* ============================================================
    EXPERIENCE TIMELINE
@@ -727,14 +771,14 @@ main,
 @media (max-width: 480px) { .site-footer-inner { justify-content: center; text-align: center; } }
 
 .footer-social-link { display: inline-flex; align-items: center; justify-content: center; color: var(--ink-muted); line-height: 0; padding: 6px; margin: -6px; border-radius: 50%; transition: color 0.2s ease, background-color 0.2s ease; }
-.footer-social-link:hover { color: var(--ink); background-color: var(--navy-850); }
+.footer-social-link:hover { color: var(--ink); background-color: var(--navy-850); transform: translateY(-1px); }
 .footer-social-link:focus-visible { outline: 2px solid var(--ink-muted); outline-offset: 2px; }
-@media (prefers-reduced-motion: reduce) { .footer-social-link { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .footer-social-link { transition: none; transform: none; } }
 
 /* ============================================================
    SCROLL REVEAL (JS hook: IntersectionObserver adds .reveal-visible)
    ============================================================ */
-.reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+.reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.6s var(--motion-ease), transform 0.6s var(--motion-ease); }
 .reveal-visible { opacity: 1; transform: translateY(0); }
 
 /* ============================================================
@@ -742,6 +786,7 @@ main,
    ============================================================ */
 @media (max-width: 768px) {
   .hero { padding-top: 100px; min-height: auto; }
+  .section { padding: 94px 22px 86px; }
   .edu-card-head { flex-direction: column; }
   .project-card-top { flex-direction: column; align-items: flex-start; gap: 12px; }
   .timeline { padding-left: 20px; }
