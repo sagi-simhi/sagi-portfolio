@@ -13,6 +13,23 @@
      ============================================================ */
   var nav = document.getElementById("siteNav");
   var progressBar = document.getElementById("scrollProgressBar");
+  var navAnchors = document.querySelectorAll('.nav-links a[href^="#"]');
+  var navLinkMap = {};
+
+  navAnchors.forEach(function (a) {
+    var id = a.getAttribute("href").replace("#", "");
+    navLinkMap[id] = a;
+  });
+
+  function setActiveNavLink(id) {
+    var activeLink = id ? navLinkMap[id] : null;
+    navAnchors.forEach(function (a) {
+      a.classList.remove("nav-link-active");
+    });
+    if (activeLink) {
+      activeLink.classList.add("nav-link-active");
+    }
+  }
 
   function getNavOffset() {
     return nav ? nav.getBoundingClientRect().height + 8 : 0;
@@ -33,6 +50,7 @@
     var target = document.querySelector(href);
     if (!target) return;
     e.preventDefault();
+    setActiveNavLink(href.replace("#", ""));
     scrollToTarget(target);
     history.pushState(null, "", href);
     target.setAttribute("tabindex", "-1");
@@ -43,12 +61,12 @@
   if (navBrand) {
     navBrand.addEventListener("click", function (e) {
       e.preventDefault();
+      setActiveNavLink(null);
       window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
       history.pushState(null, "", "#top");
     });
   }
 
-  var navAnchors = document.querySelectorAll('.nav-links a[href^="#"]');
   navAnchors.forEach(function (a) {
     a.addEventListener("click", handleAnchorClick);
   });
@@ -108,25 +126,39 @@
      3. ACTIVE SECTION HIGHLIGHT — nav link matches section in view
      ============================================================ */
   var sections = document.querySelectorAll("main .section, .hero");
-  var navLinkMap = {};
-  navAnchors.forEach(function (a) {
-    var id = a.getAttribute("href").replace("#", "");
-    navLinkMap[id] = a;
-  });
 
   if ("IntersectionObserver" in window && sections.length) {
+    var sectionInView = {};
+    var sectionIdsInOrder = [];
+
+    sections.forEach(function (s) {
+      if (!s.id) return;
+      sectionIdsInOrder.push(s.id);
+      sectionInView[s.id] = false;
+    });
+
+    function resolveActiveSection() {
+      var activeId = null;
+      sectionIdsInOrder.forEach(function (id) {
+        if (sectionInView[id]) activeId = id;
+      });
+      setActiveNavLink(activeId);
+    }
+
+    function getSectionObserverRootMargin() {
+      var topOffset = Math.round(getNavOffset());
+      return "-" + topOffset + "px 0px -40% 0px";
+    }
+
     var sectionObserver = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         var id = entry.target.id;
-        var link = navLinkMap[id];
-        if (!link) return;
-        if (entry.isIntersecting) {
-          navAnchors.forEach(function (a) { a.classList.remove("nav-link-active"); });
-          link.classList.add("nav-link-active");
-        }
+        if (!id || !Object.prototype.hasOwnProperty.call(sectionInView, id)) return;
+        sectionInView[id] = entry.isIntersecting;
       });
+      resolveActiveSection();
     }, {
-      rootMargin: "-45% 0px -50% 0px",
+      rootMargin: getSectionObserverRootMargin(),
       threshold: 0
     });
 
