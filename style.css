@@ -961,3 +961,58 @@ body.project-modal-lock { overflow: hidden; }
   .project-modal { padding: 0; }
   .project-modal-window { max-width: none; border-radius: 0; }
 }
+
+/* ============================================================
+   PROJECTS — compact grid, local violet ambient accent
+   ============================================================ */
+:root {
+  --violet: #8B7CF6;
+  --violet-soft: rgba(139,124,246,0.14);
+  --violet-line: rgba(139,124,246,0.30);
+}
+
+#projects { position: relative; overflow: hidden; }
+#projects::before {
+  content: "";
+  position: absolute;
+  top: -10%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 900px;
+  height: 900px;
+  background: radial-gradient(circle, var(--violet-soft) 0%, transparent 62%);
+  pointer-events: none;
+  z-index: 0;
+}
+#projects .section-inner { position: relative; z-index: 1; }
+
+.project-grid-compact { grid-template-columns: repeat(auto-fill, minmax(215px, 1fr)); gap: 18px; }
+
+.project-card-compact { display: flex; flex-direction: column; padding: 0; overflow: hidden; }
+.project-card-compact:hover {
+  border-color: var(--violet-line);
+  box-shadow: 0 14px 32px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.12), 0 0 0 1px var(--violet-line);
+}
+
+.project-card-cover {
+  height: 104px;
+  display: flex;
+  align-items: flex-end;
+  padding: 12px 14px;
+  background:
+    radial-gradient(circle at 22% 18%, rgba(139,124,246,0.30), transparent 60%),
+    linear-gradient(150deg, rgba(255,255,255,0.05), transparent 60%),
+    var(--navy-850);
+  border-bottom: 1px solid var(--border-soft);
+}
+.project-card-cover-tag { font-size: 0.7rem; color: var(--violet); letter-spacing: 0.06em; }
+
+.project-card-compact-body { padding: 16px 16px 18px; display: flex; flex-direction: column; gap: 8px; }
+.project-title-compact { font-size: 1rem; font-weight: 600; color: var(--ink); line-height: 1.3; }
+.project-desc-compact {
+  font-size: 0.82rem; color: var(--ink-muted); line-height: 1.5;
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+}
+
+@media (max-width: 1100px) { .project-grid-compact { grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); } }
+@media (max-width: 640px)  { .project-grid-compact { grid-template-columns: repeat(auto-fill, minmax(160px,1fr)); gap: 12px; } }
