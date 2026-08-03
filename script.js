@@ -847,4 +847,83 @@
     } else {
         run();
     }
-})();
+})();
+
+/* ============================================================
+PROJECT MODAL — opens project links in an in-page iframe
+============================================================ */
+(function () {
+  "use strict";
+
+  function run() {
+    var modal = document.getElementById("projectModal");
+    if (!modal) return;
+
+    var frame = document.getElementById("projectModalFrame");
+    var titleEl = document.getElementById("projectModalTitle");
+    var newTabLink = document.getElementById("projectModalNewTab");
+    var lastFocused = null;
+
+    function openModal(url, title) {
+      lastFocused = document.activeElement;
+      frame.src = url;
+      titleEl.textContent = title || "Project";
+      newTabLink.href = url;
+      modal.classList.add("is-open");
+      modal.setAttribute("aria-hidden", "false");
+      document.body.classList.add("project-modal-lock");
+      document.addEventListener("keydown", onKeydown);
+    }
+
+    function closeModal() {
+      modal.classList.remove("is-open");
+      modal.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("project-modal-lock");
+      document.removeEventListener("keydown", onKeydown);
+
+      window.setTimeout(function () {
+        frame.src = "about:blank";
+      }, 250);
+
+      if (lastFocused) {
+        lastFocused.focus({ preventScroll: true });
+      }
+    }
+
+    function onKeydown(e) {
+      if (e.key === "Escape") {
+        closeModal();
+      }
+    }
+
+    document.querySelectorAll(".js-project-modal").forEach(function (link) {
+      link.addEventListener("click", function (e) {
+        if (
+          e.metaKey ||
+          e.ctrlKey ||
+          e.shiftKey ||
+          e.button === 1
+        ) {
+          return;
+        }
+
+        e.preventDefault();
+
+        openModal(
+          link.getAttribute("href"),
+          link.getAttribute("data-project-title")
+        );
+      });
+    });
+
+    modal.querySelectorAll("[data-modal-close]").forEach(function (el) {
+      el.addEventListener("click", closeModal);
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", run);
+  } else {
+    run();
+  }
+})();

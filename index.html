@@ -117,7 +117,7 @@
     </div>
   </section>
 
-  <!-- ============ PROJECTS ============ -->
+<!-- ============ PROJECTS ============ -->
   <section class="section" id="projects" aria-labelledby="projectsHeading">
     <div class="section-inner">
       <p class="section-eyebrow"><span class="eyebrow-signal" aria-hidden="true"></span>Selected Work</p>
@@ -154,7 +154,7 @@
             <span class="tag tag-mono">Sharpe Ratio</span>
             <span class="tag tag-mono">Drawdown</span>
           </div>
-          <a class="project-link" href="strategy-20-80/index.html" target="_blank" rel="noopener noreferrer">View Project <span class="arrow" aria-hidden="true">→</span></a>
+          <a class="project-link js-project-modal" href="strategy-20-80/index.html" data-project-title="Factor-Tilted Portfolio Dashboard">View Project <span class="arrow" aria-hidden="true">→</span></a>
         </article>
 
         <!-- Project 2: Financial Application -->
@@ -178,6 +178,7 @@
             <span class="tag tag-mono">Data</span>
             <span class="tag tag-mono">In Development</span>
           </div>
+          <a class="project-link js-project-modal" href="project-app/index.html" data-project-title="Financial Application">View Project <span class="arrow" aria-hidden="true">→</span></a>
         </article>
 
       </div>
@@ -415,6 +416,24 @@
 
 <script src="script.js"></script>
 <script src="scroll-progress.js"></script>
+<!-- ============ PROJECT MODAL ============ -->
+  <div class="project-modal" id="projectModal" aria-hidden="true">
+    <div class="project-modal-backdrop" data-modal-close></div>
+    <div class="project-modal-window" role="dialog" aria-modal="true" aria-labelledby="projectModalTitle">
+      <div class="project-modal-bar">
+        <span class="project-modal-title mono" id="projectModalTitle">Project</span>
+        <div class="project-modal-actions">
+          <a class="project-modal-newtab" id="projectModalNewTab" href="#" target="_blank" rel="noopener noreferrer" aria-label="Open in new tab">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14L21 3"/></svg>
+          </a>
+          <button class="project-modal-close" id="projectModalClose" type="button" aria-label="Close" data-modal-close>
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+          </button>
+        </div>
+      </div>
+      <iframe class="project-modal-frame" id="projectModalFrame" title="Project preview" loading="lazy"></iframe>
+    </div>
+  </div>
 
 </body>
 </html>
