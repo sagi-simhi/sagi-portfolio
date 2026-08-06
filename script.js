@@ -339,514 +339,282 @@
 })();
 
 /* ============================================================
-   Financial Intelligence Core
-   A single persistent node-sphere rendered on <canvas id="coreCanvas">
-   at page level. Scroll-driven semantic states tune the same system
-   over time (no re-instantiation, no per-section duplicates).
+   Financial Intelligence Core — Three.js Prototype (Phase 1)
+   A restrained mint-green particle system that evolves with scroll.
    ============================================================ */
 (function initFinancialCore() {
-    function run() {
-        var canvas = document.getElementById('coreCanvas');
-        if (!canvas || !canvas.getContext) return;
+    // Configuration
+    const CONFIG = {
+        PARTICLE_COUNT_DESKTOP: 150,
+        PARTICLE_COUNT_MOBILE: 50,
+        BREAKPOINT_MOBILE: 768,
+        // Scroll progress ranges from 0 (top) to 1 (bottom)
+        // We'll use it to lerp between dispersed and organized states
+    };
 
-        var ctx = canvas.getContext('2d');
-        var prefersReducedMotion = window.matchMedia &&
-            window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let scene, camera, renderer, points, clock;
+    let initialPositions = null;
+    let targetPositions = null;
+    let scrollProgress = 0;
+    let resizeObserver = null;
+    let animationFrameId = null;
+    let threeJsLoaded = false;
+    let loadingError = null;
+    let reducedMotion = false; // tracks prefers-reduced-motion state
 
-        var accent = [83, 215, 166];   // #53D7A6
-        var gold = [201, 161, 90];     // reserved for signal nodes only
-        var ringColor = [148, 163, 184]; // neutral instrument-boundary ring
-
-        var nodes = [];
-        var NODE_COUNT = 46;
-        var LINK_DISTANCE = 0.5;  // sparser, more deliberate lattice
-        var SIGNAL_COUNT = 6;     // key data points the core hub connects to
-        var spokeIndices = [];
-        var pulses = [];
-        var width = 0, height = 0, radius = 0, dpr = 1;
-        var rotY = 0, rotX = 0.35;
-        var rafId = null;
-        var lastTime = null;
-        var BASE_ROT_SPEED = 0.00007;
-        var BASE_LINK_DISTANCE = LINK_DISTANCE;
-
-        var CORE_STATES = {
-            INITIALIZATION: 'INITIALIZATION',
-            EXPLORATION: 'EXPLORATION',
-            EXPANSION: 'EXPANSION',
-            VALIDATION: 'VALIDATION',
-            CONVERGENCE: 'CONVERGENCE'
-        };
-
-        var stateProfiles = {};
-        stateProfiles[CORE_STATES.INITIALIZATION] = {
-            centerX: 0.60,
-            centerY: 0.50,
-            coreScale: 1.08,
-            presence: 1.00,
-            layerOpacity: 0.42,
-            ambientStrength: 0.58,
-            latticeIntensity: 0.32,
-            spokeIntensity: 0.50,
-            nodeIntensity: 0.66,
-            pulseStrength: 0.22,
-            pulseSpeed: 0.54,
-            rotationSpeed: 0.44,
-            coherence: 0.84,
-            coreBreath: 0.46
-        };
-        stateProfiles[CORE_STATES.EXPLORATION] = {
-            centerX: 0.56,
-            centerY: 0.52,
-            coreScale: 1.00,
-            presence: 0.90,
-            layerOpacity: 0.60,
-            ambientStrength: 0.68,
-            latticeIntensity: 0.68,
-            spokeIntensity: 0.78,
-            nodeIntensity: 0.84,
-            pulseStrength: 0.72,
-            pulseSpeed: 1.05,
-            rotationSpeed: 0.80,
-            coherence: 0.93,
-            coreBreath: 0.76
-        };
-        stateProfiles[CORE_STATES.EXPANSION] = {
-            centerX: 0.53,
-            centerY: 0.50,
-            coreScale: 1.12,
-            presence: 0.95,
-            layerOpacity: 0.72,
-            ambientStrength: 0.80,
-            latticeIntensity: 0.90,
-            spokeIntensity: 0.90,
-            nodeIntensity: 0.96,
-            pulseStrength: 0.74,
-            pulseSpeed: 0.96,
-            rotationSpeed: 0.74,
-            coherence: 1.12,
-            coreBreath: 0.78
-        };
-        stateProfiles[CORE_STATES.VALIDATION] = {
-            centerX: 0.57,
-            centerY: 0.48,
-            coreScale: 1.03,
-            presence: 0.95,
-            layerOpacity: 0.80,
-            ambientStrength: 0.86,
-            latticeIntensity: 0.84,
-            spokeIntensity: 0.96,
-            nodeIntensity: 1.00,
-            pulseStrength: 0.58,
-            pulseSpeed: 0.68,
-            rotationSpeed: 0.48,
-            coherence: 1.18,
-            coreBreath: 0.58
-        };
-        stateProfiles[CORE_STATES.CONVERGENCE] = {
-            centerX: 0.55,
-            centerY: 0.50,
-            coreScale: 1.09,
-            presence: 0.98,
-            layerOpacity: 0.88,
-            ambientStrength: 0.92,
-            latticeIntensity: 0.94,
-            spokeIntensity: 1.00,
-            nodeIntensity: 1.00,
-            pulseStrength: 0.60,
-            pulseSpeed: 0.74,
-            rotationSpeed: 0.54,
-            coherence: 1.14,
-            coreBreath: 0.60
-        };
-
-        function cloneProfile(profile) {
-            return {
-                centerX: profile.centerX,
-                centerY: profile.centerY,
-                coreScale: profile.coreScale,
-                presence: profile.presence,
-                layerOpacity: profile.layerOpacity,
-                ambientStrength: profile.ambientStrength,
-                latticeIntensity: profile.latticeIntensity,
-                spokeIntensity: profile.spokeIntensity,
-                nodeIntensity: profile.nodeIntensity,
-                pulseStrength: profile.pulseStrength,
-                pulseSpeed: profile.pulseSpeed,
-                rotationSpeed: profile.rotationSpeed,
-                coherence: profile.coherence,
-                coreBreath: profile.coreBreath
-            };
-        }
-
-        var activeState = CORE_STATES.INITIALIZATION;
-        var targetProfile = cloneProfile(stateProfiles[activeState]);
-        var currentProfile = cloneProfile(stateProfiles[activeState]);
-
-        // Fibonacci sphere distribution — even spacing, no clustering
-        // at the poles, which is what makes a node-sphere read as
-        // deliberate/structured rather than random "particles".
-        function buildNodes() {
-            nodes = [];
-            var offset = 2 / NODE_COUNT;
-            var increment = Math.PI * (3 - Math.sqrt(5)); // golden angle
-            for (var i = 0; i < NODE_COUNT; i++) {
-                var y = (i * offset - 1) + offset / 2;
-                var r = Math.sqrt(Math.max(0, 1 - y * y));
-                var phi = i * increment;
-                nodes.push({
-                    x: Math.cos(phi) * r,
-                    y: y,
-                    z: Math.sin(phi) * r,
-                    pulse: Math.random() * Math.PI * 2
-                });
+    // Wait for Three.js to load, then initialize
+    function loadThreeJs() {
+        return new Promise((resolve, reject) => {
+            if (window.THREE) {
+                resolve(window.THREE);
+                return;
             }
 
-            // Designate a small, evenly-spaced set of "signal nodes" —
-            // the key data points the core connects to directly by name.
-            // Everything else stays a quiet background node; only these
-            // carry the gold accent and receive an outbound flow pulse.
-            spokeIndices = [];
-            for (var s = 0; s < SIGNAL_COUNT; s++) {
-                spokeIndices.push(Math.floor((s * NODE_COUNT) / SIGNAL_COUNT));
-            }
+            const script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/three@0.162.0/build/three.min.js';
+            script.onload = () => resolve(window.THREE);
+            script.onerror = () => reject(new Error('Failed to load Three.js'));
+            document.head.appendChild(script);
+        });
+    }
 
-            pulses = spokeIndices.map(function (nodeIndex) {
-                return {
-                    nodeIndex: nodeIndex,
-                    t: Math.random(),               // staggered start, avoids synced blinking
-                    speed: 0.00007 + Math.random() * 0.00004,
-                    phase: Math.random() * Math.PI * 2
-                };
-            });
+    // Initialize Three.js scene
+    function initThreeJs() {
+        console.log('[Financial Intelligence Core] initThreeJs called');
+        const canvas = document.getElementById('coreCanvas');
+        if (!canvas) {
+            console.warn('coreCanvas not found');
+            return false;
         }
 
-        function resize() {
-            var rect = canvas.parentElement.getBoundingClientRect();
-            dpr = Math.min(window.devicePixelRatio || 1, 2);
-            width = rect.width;
-            height = rect.height;
-            canvas.width = Math.max(1, Math.floor(width * dpr));
-            canvas.height = Math.max(1, Math.floor(height * dpr));
-            canvas.style.width = width + 'px';
-            canvas.style.height = height + 'px';
-            radius = Math.min(width, height) * 0.30;
+        // Ensure canvas fills its parent element
+        const rect = canvas.parentElement.getBoundingClientRect();
+        canvas.style.width = '100%';
+        canvas.style.height = '100%';
+        // Get the THREE global
+        const THREE = window.THREE;
+        if (!THREE) {
+            console.warn('THREE not defined');
+            return false;
         }
 
-        function setCoreState(stateName) {
-            var nextProfile = stateProfiles[stateName];
-            if (!nextProfile) return;
-            activeState = stateName;
-            targetProfile = cloneProfile(nextProfile);
-            canvas.setAttribute('data-core-state', stateName);
-            if (prefersReducedMotion) {
-                currentProfile = cloneProfile(targetProfile);
-                draw(0);
-            }
+        // Create scene
+        scene = new THREE.Scene();
+
+        // Camera
+        camera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
+        camera.position.set(0, 0, 10);
+        camera.lookAt(0, 0, 0);
+
+        // Renderer
+        renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2)); // Limit DPR
+        renderer.setClearColor(0x000000, 0); // Transparent background
+        // We'll rely on the core-layer's CSS for atmospheric depth
+        renderer.setSize(rect.width, rect.height, false);
+
+        // Create particle geometry
+        const particleCount = window.innerWidth < CONFIG.BREAKPOINT_MOBILE
+            ? CONFIG.PARTICLE_COUNT_MOBILE
+            : CONFIG.PARTICLE_COUNT_DESKTOP;
+
+        const geometry = new THREE.BufferGeometry();
+        const positions = new Float32Array(particleCount * 3);
+        const colors = new Float32Array(particleCount * 3);
+
+        // Mint green color
+        const mintColor = new THREE.Color(0x53d7a6);
+
+        // Initialize random positions (dispersed state)
+        for (let i = 0; i < particleCount; i++) {
+            // Random position in a cube of size 10
+            positions[i * 3] = (Math.random() - 0.5) * 10;
+            positions[i * 3 + 1] = (Math.random() - 0.5) * 10;
+            positions[i * 3 + 2] = (Math.random() - 0.5) * 10;
+
+            // Color
+            colors[i * 3] = mintColor.r;
+            colors[i * 3 + 1] = mintColor.g;
+            colors[i * 3 + 2] = mintColor.b;
         }
 
-        function lerpNumber(current, target, amount) {
-            return current + (target - current) * amount;
-        }
+        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
-        function blendCurrentProfile(amount) {
-            currentProfile.centerX = lerpNumber(currentProfile.centerX, targetProfile.centerX, amount);
-            currentProfile.centerY = lerpNumber(currentProfile.centerY, targetProfile.centerY, amount);
-            currentProfile.coreScale = lerpNumber(currentProfile.coreScale, targetProfile.coreScale, amount);
-            currentProfile.presence = lerpNumber(currentProfile.presence, targetProfile.presence, amount);
-            currentProfile.layerOpacity = lerpNumber(currentProfile.layerOpacity, targetProfile.layerOpacity, amount);
-            currentProfile.ambientStrength = lerpNumber(currentProfile.ambientStrength, targetProfile.ambientStrength, amount);
-            currentProfile.latticeIntensity = lerpNumber(currentProfile.latticeIntensity, targetProfile.latticeIntensity, amount);
-            currentProfile.spokeIntensity = lerpNumber(currentProfile.spokeIntensity, targetProfile.spokeIntensity, amount);
-            currentProfile.nodeIntensity = lerpNumber(currentProfile.nodeIntensity, targetProfile.nodeIntensity, amount);
-            currentProfile.pulseStrength = lerpNumber(currentProfile.pulseStrength, targetProfile.pulseStrength, amount);
-            currentProfile.pulseSpeed = lerpNumber(currentProfile.pulseSpeed, targetProfile.pulseSpeed, amount);
-            currentProfile.rotationSpeed = lerpNumber(currentProfile.rotationSpeed, targetProfile.rotationSpeed, amount);
-            currentProfile.coherence = lerpNumber(currentProfile.coherence, targetProfile.coherence, amount);
-            currentProfile.coreBreath = lerpNumber(currentProfile.coreBreath, targetProfile.coreBreath, amount);
-        }
-
-        function setupStateController() {
-            var sectionStatePairs = [
-                { id: 'top', state: CORE_STATES.INITIALIZATION },
-                { id: 'about', state: CORE_STATES.INITIALIZATION },
-                { id: 'projects', state: CORE_STATES.EXPLORATION },
-                { id: 'stack', state: CORE_STATES.EXPANSION },
-                { id: 'education', state: CORE_STATES.EXPANSION },
-                { id: 'experience', state: CORE_STATES.VALIDATION },
-                { id: 'contact', state: CORE_STATES.CONVERGENCE }
-            ];
-
-            var trackedSections = [];
-            for (var i = 0; i < sectionStatePairs.length; i++) {
-                var element = document.getElementById(sectionStatePairs[i].id);
-                if (element) {
-                    trackedSections.push({
-                        element: element,
-                        state: sectionStatePairs[i].state
-                    });
+        // Material
+        const material = new THREE.ShaderMaterial({
+            vertexShader: `
+                attribute vec3 color;
+                varying vec3 vColor;
+                void main() {
+                    vColor = color;
+                    vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+                    gl_Position = projectionMatrix * mvPosition;
+                    gl_PointSize = 2.0 * (300.0 / -mvPosition.z);
                 }
-            }
-            if (!trackedSections.length) return;
-
-            var scrollTicking = false;
-
-            function updateStateFromViewport() {
-                var viewportAnchor = window.innerHeight * 0.45;
-                var nearestState = null;
-                var nearestDistance = Infinity;
-
-                for (var s = 0; s < trackedSections.length; s++) {
-                    var tracked = trackedSections[s];
-                    var rect = tracked.element.getBoundingClientRect();
-                    var sectionAnchor = rect.top + rect.height * 0.5;
-                    var distance = Math.abs(sectionAnchor - viewportAnchor);
-                    if (distance < nearestDistance) {
-                        nearestDistance = distance;
-                        nearestState = tracked.state;
-                    }
+            `,
+            fragmentShader: `
+                varying vec3 vColor;
+                void main() {
+                    gl_FragColor = vec4(vColor, 1.0);
                 }
-
-                if (nearestState && nearestState !== activeState) {
-                    setCoreState(nearestState);
-                }
-            }
-
-            window.addEventListener('scroll', function () {
-                if (scrollTicking) return;
-                scrollTicking = true;
-                window.requestAnimationFrame(function () {
-                    updateStateFromViewport();
-                    scrollTicking = false;
-                });
-            }, { passive: true });
-
-            window.addEventListener('resize', updateStateFromViewport);
-            updateStateFromViewport();
-        }
-
-        function project(node, cx, cy, drawRadius) {
-            // Rotate around Y then X.
-            var cosY = Math.cos(rotY), sinY = Math.sin(rotY);
-            var x1 = node.x * cosY - node.z * sinY;
-            var z1 = node.x * sinY + node.z * cosY;
-
-            var cosX = Math.cos(rotX), sinX = Math.sin(rotX);
-            var y1 = node.y * cosX - z1 * sinX;
-            var z2 = node.y * sinX + z1 * cosX;
-
-            var perspective = 2.4 / (2.4 - z2); // z2 in [-1, 1]
-            return {
-                sx: cx + x1 * drawRadius * perspective,
-                sy: cy + y1 * drawRadius * perspective,
-                depth: (z2 + 1) / 2, // 0 (far) .. 1 (near)
-                scale: perspective
-            };
-        }
-
-        function draw(time) {
-            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-            ctx.clearRect(0, 0, width, height);
-            ctx.globalAlpha = currentProfile.layerOpacity * currentProfile.presence;
-
-            var cx = width * currentProfile.centerX;
-            var cy = height * currentProfile.centerY;
-            var drawRadius = radius * currentProfile.coreScale;
-            var projected = nodes.map(function (node) {
-                return project(node, cx, cy, drawRadius);
-            });
-            var dynamicLinkDistance = BASE_LINK_DISTANCE * currentProfile.coherence;
-
-            // Soft ambient glow anchoring the whole system to the core.
-            var glow = ctx.createRadialGradient(cx, cy, 0, cx, cy, drawRadius * 1.6);
-            glow.addColorStop(0, 'rgba(' + accent.join(',') + ',' + (0.10 * currentProfile.ambientStrength).toFixed(3) + ')');
-            glow.addColorStop(1, 'rgba(' + accent.join(',') + ',0)');
-            ctx.fillStyle = glow;
-            ctx.fillRect(0, 0, width, height);
-
-            var fieldX = cx + Math.cos(rotY * 1.3) * drawRadius * 0.12 * currentProfile.coherence;
-            var fieldY = cy + Math.sin(rotY * 1.1) * drawRadius * 0.09 * currentProfile.coherence;
-
-            // Diffuse intelligence field — subtle spatial bias without
-            // introducing a hard center or instrument-like contour.
-            var fieldGlow = ctx.createRadialGradient(fieldX, fieldY, 0, fieldX, fieldY, drawRadius * 1.45);
-            fieldGlow.addColorStop(0, 'rgba(' + accent.join(',') + ',' + (0.05 * currentProfile.ambientStrength).toFixed(3) + ')');
-            fieldGlow.addColorStop(1, 'rgba(' + accent.join(',') + ',0)');
-            ctx.fillStyle = fieldGlow;
-            ctx.fillRect(0, 0, width, height);
-
-            // Background lattice — sparse, structured relationships
-            // between ordinary data nodes. Kept quiet so it reads as
-            // context/texture, not as the main subject.
-            ctx.lineWidth = 1;
-            for (var i = 0; i < nodes.length; i++) {
-                for (var j = i + 1; j < nodes.length; j++) {
-                    var a = nodes[i], b = nodes[j];
-                    var dx = a.x - b.x, dy = a.y - b.y, dz = a.z - b.z;
-                    var dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
-                    if (dist > dynamicLinkDistance) continue;
-                    var pa = projected[i], pb = projected[j];
-                    var avgDepth = (pa.depth + pb.depth) / 2;
-                    var opacity = (1 - dist / dynamicLinkDistance) * avgDepth * 0.20 * currentProfile.latticeIntensity;
-                    if (opacity <= 0.01) continue;
-                    ctx.strokeStyle = 'rgba(' + accent.join(',') + ',' + opacity.toFixed(3) + ')';
-                    ctx.beginPath();
-                    ctx.moveTo(pa.sx, pa.sy);
-                    ctx.lineTo(pb.sx, pb.sy);
-                    ctx.stroke();
-                }
-            }
-
-            // Signal routes — a distributed network linking signal points
-            // to each other and to nearby data nodes.
-            var signalNetworkLinks = [];
-            for (var sp = 0; sp < spokeIndices.length; sp++) {
-                var signalIdx = spokeIndices[sp];
-                var nextSignalIdx = spokeIndices[(sp + 1) % spokeIndices.length];
-                var bridgeA = (signalIdx + 11) % NODE_COUNT;
-                var bridgeB = (signalIdx + 23) % NODE_COUNT;
-                signalNetworkLinks.push([signalIdx, nextSignalIdx]);
-                signalNetworkLinks.push([signalIdx, bridgeA]);
-                signalNetworkLinks.push([signalIdx, bridgeB]);
-            }
-            for (var sl = 0; sl < signalNetworkLinks.length; sl++) {
-                var link = signalNetworkLinks[sl];
-                var pFrom = projected[link[0]];
-                var pTo = projected[link[1]];
-                var signalDepth = (pFrom.depth + pTo.depth) * 0.5;
-                ctx.beginPath();
-                ctx.moveTo(pFrom.sx, pFrom.sy);
-                ctx.lineTo(pTo.sx, pTo.sy);
-                ctx.strokeStyle = 'rgba(' + accent.join(',') + ',' + ((0.06 + signalDepth * 0.14) * currentProfile.spokeIntensity).toFixed(3) + ')';
-                ctx.stroke();
-            }
-
-            // Nodes — drawn back-to-front so nearer ones sit on top.
-            // Only the designated signal nodes carry the gold accent;
-            // every other node is a quiet, small teal data point.
-            var order = projected.map(function (p, idx) { return idx; });
-            order.sort(function (ia, ib) { return projected[ia].depth - projected[ib].depth; });
-
-            for (var k = 0; k < order.length; k++) {
-                var idx = order[k];
-                var p = projected[idx];
-                var n = nodes[idx];
-                var isSignal = spokeIndices.indexOf(idx) !== -1;
-                var pulse = prefersReducedMotion ? 0 : Math.sin((time || 0) * 0.0012 + n.pulse + currentProfile.pulseStrength) * 0.5 + 0.5;
-                var size = (isSignal ? 1.3 : 0.8) + p.depth * (isSignal ? 1.8 : 1.2);
-                size *= 0.88 + pulse * 0.16 * currentProfile.nodeIntensity;
-                var c = isSignal ? gold : accent;
-                var alpha = ((isSignal ? 0.55 : 0.30) + p.depth * 0.45) * currentProfile.nodeIntensity;
-
-                ctx.beginPath();
-                ctx.arc(p.sx, p.sy, size, 0, Math.PI * 2);
-                ctx.fillStyle = 'rgba(' + c.join(',') + ',' + alpha.toFixed(3) + ')';
-                ctx.fill();
-
-                if (isSignal && p.depth > 0.55) {
-                    ctx.beginPath();
-                    ctx.arc(p.sx, p.sy, size * 2.6, 0, Math.PI * 2);
-                    ctx.fillStyle = 'rgba(' + c.join(',') + ',' + (0.07 * p.depth * currentProfile.spokeIntensity).toFixed(3) + ')';
-                    ctx.fill();
-                }
-            }
-
-            // Distributed signal bloom — low-contrast halos around key
-            // data nodes so intelligence reads as a field, not an object.
-            for (var sg = 0; sg < spokeIndices.length; sg++) {
-                var signalProjection = projected[spokeIndices[sg]];
-                var signalPulse = prefersReducedMotion ? 0.5 : Math.sin((time || 0) * 0.001 + sg * 1.3) * 0.5 + 0.5;
-                var bloomRadius = drawRadius * (0.10 + signalPulse * 0.03) * currentProfile.coherence;
-                var signalGlow = ctx.createRadialGradient(
-                    signalProjection.sx, signalProjection.sy, 0,
-                    signalProjection.sx, signalProjection.sy, bloomRadius
-                );
-                signalGlow.addColorStop(0, 'rgba(' + accent.join(',') + ',' + ((0.12 + signalPulse * 0.08) * currentProfile.ambientStrength).toFixed(3) + ')');
-                signalGlow.addColorStop(1, 'rgba(' + accent.join(',') + ',0)');
-                ctx.beginPath();
-                ctx.arc(signalProjection.sx, signalProjection.sy, bloomRadius, 0, Math.PI * 2);
-                ctx.fillStyle = signalGlow;
-                ctx.fill();
-            }
-
-            // Flow pulses — light packets traversing between signal nodes.
-            if (!prefersReducedMotion) {
-                for (var pi = 0; pi < pulses.length; pi++) {
-                    var pulseObj = pulses[pi];
-                    var t = pulseObj.t;
-                    var sourceIdx = spokeIndices[pi % spokeIndices.length];
-                    var targetIdx = spokeIndices[(pi + 1) % spokeIndices.length];
-                    var source = projected[sourceIdx];
-                    var target = projected[targetIdx];
-                    var forward = Math.sin((time || 0) * 0.0006 + pulseObj.phase) >= 0;
-                    var flowT = forward ? t : (1 - t);
-                    var fade = t < 0.15 ? t / 0.15 : (t > 0.8 ? (1 - t) / 0.2 : 1);
-                    if (fade <= 0) continue;
-                    var px = source.sx + (target.sx - source.sx) * flowT;
-                    var py = source.sy + (target.sy - source.sy) * flowT;
-                    ctx.beginPath();
-                    ctx.arc(px, py, 1.8, 0, Math.PI * 2);
-                    ctx.fillStyle = 'rgba(' + accent.join(',') + ',' + (fade * 0.85 * currentProfile.pulseStrength).toFixed(3) + ')';
-                    ctx.fill();
-                }
-            }
-
-            ctx.globalAlpha = 1;
-        }
-
-        function frame(time) {
-            if (lastTime === null) lastTime = time;
-            var dt = time - lastTime;
-            lastTime = time;
-            var blendAmount = Math.min(0.18, dt * 0.003);
-            blendCurrentProfile(blendAmount);
-            rotY += dt * BASE_ROT_SPEED * currentProfile.rotationSpeed;
-            for (var pi = 0; pi < pulses.length; pi++) {
-                pulses[pi].t += dt * pulses[pi].speed * currentProfile.pulseSpeed;
-                if (pulses[pi].t > 1) pulses[pi].t -= 1;
-            }
-            draw(time);
-            rafId = window.requestAnimationFrame(frame);
-        }
-
-        buildNodes();
-        resize();
-        setupStateController();
-        setCoreState(CORE_STATES.INITIALIZATION);
-
-        if (prefersReducedMotion) {
-            draw(0);
-        } else {
-            rafId = window.requestAnimationFrame(frame);
-        }
-
-        var resizeTimer = null;
-        window.addEventListener('resize', function () {
-            window.clearTimeout(resizeTimer);
-            resizeTimer = window.setTimeout(function () {
-                resize();
-                if (prefersReducedMotion) draw(0);
-            }, 120);
+            `,
+            vertexColors: true,
+            transparent: true,
+            depthWrite: false
         });
 
-        if (!prefersReducedMotion) {
-            document.addEventListener('visibilitychange', function () {
-                if (document.hidden && rafId !== null) {
-                    window.cancelAnimationFrame(rafId);
-                    rafId = null;
-                } else if (!document.hidden && rafId === null) {
-                    lastTime = null;
-                    rafId = window.requestAnimationFrame(frame);
-                }
-            });
+        points = new THREE.Points(geometry, material);
+        scene.add(points);
+
+        // Store initial positions (already in geometry)
+        initialPositions = new Float32Array(positions);
+        // Target positions: organize into a sphere (radius 3)
+        targetPositions = new Float32Array(particleCount * 3);
+        for (let i = 0; i < particleCount; i++) {
+            // Distribute points on a sphere using Fibonacci sphere
+            const iPhi = Math.acos(-1 + (2 * i) / (particleCount - 1));
+            const iTheta = Math.sqrt(Math.PI * 2) * iPhi;
+            const radius = 3;
+            targetPositions[i * 3] = radius * Math.cos(iTheta) * Math.sin(iPhi);
+            targetPositions[i * 3 + 1] = radius * Math.sin(iTheta) * Math.sin(iPhi);
+            targetPositions[i * 3 + 2] = radius * Math.cos(iPhi);
+        }
+
+        // Set camera initial position
+        camera.position.z = 10;
+
+        // Clock for animation
+        clock = new THREE.Clock();
+
+        // Start rendering
+        animate();
+
+        threeJsLoaded = true;
+        return true;
+    }
+
+    // Animation loop
+    function animate() {
+        animationFrameId = requestAnimationFrame(animate);
+
+        const delta = clock.getDelta();
+
+        // Update particle positions based on scroll progress unless reduced motion
+        if (initialPositions && targetPositions && !reducedMotion) {
+            const positions = points.geometry.attributes.position.array;
+            for (let i = 0; i < initialPositions.length; i++) {
+                positions[i] = initialPositions[i] + (targetPositions[i] - initialPositions[i]) * scrollProgress;
+            }
+            points.geometry.attributes.position.needsUpdate = true;
+        }
+
+        renderer.render(scene, camera);
+    }
+
+    // Handle scroll
+    function onScroll() {
+        if (reducedMotion) {
+            // In reduced motion, show a static coherent state (organized sphere)
+            scrollProgress = 1.0;
+            return;
+        }
+        const maxScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+        scrollProgress = maxScroll === 0 ? 0 : window.scrollY / maxScroll;
+        // Clamp between 0 and 1
+        scrollProgress = Math.min(1, Math.max(0, scrollProgress));
+    }
+
+    // Handle resize
+    function onResize() {
+        const canvas = document.getElementById('coreCanvas');
+        if (!canvas || !renderer) return;
+
+        const rect = canvas.parentElement.getBoundingClientRect();
+        const width = rect.width;
+        const height = rect.height;
+
+        renderer.setSize(width, height, false);
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+
+        // Adjust particle count based on width
+        const particleCount = window.innerWidth < CONFIG.BREAKPOINT_MOBILE
+            ? CONFIG.PARTICLE_COUNT_MOBILE
+            : CONFIG.PARTICLE_COUNT_DESKTOP;
+
+        // If particle count changed, we need to recreate geometry
+        // For simplicity in Phase 1, we'll just update the existing geometry size if needed
+        // But to keep it simple, we'll not change particle count on resize in this prototype.
+        // We'll just update the renderer size.
+    }
+
+    // Handle visibility change
+    function onVisibilityChange() {
+        if (document.hidden) {
+            cancelAnimationFrame(animationFrameId);
+            animationFrameId = null;
+        } else if (animationFrameId === null) {
+            animate();
         }
     }
 
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', run);
-    } else {
-        run();
+    // Handle reduced motion change
+    function onReduceMotionChange(event) {
+        reducedMotion = event.matches;
+        // If reduced motion becomes true, we immediately set scrollProgress to show static state
+        if (reducedMotion) {
+            scrollProgress = 1.0;
+        }
+        // If reduced motion becomes false, scroll will be updated on next scroll event
     }
+
+    // Initialize
+    function init() {
+        loadThreeJs()
+            .then(initThreeJs)
+            .then(() => {
+                // Set up initial reduced motion state
+                const reduceMedia = window.matchMedia('(prefers-reduced-motion: reduce)');
+                reducedMotion = reduceMedia.matches;
+                if (reducedMotion) {
+                    scrollProgress = 1.0;
+                }
+                // Set up event listeners
+                window.addEventListener('scroll', onScroll, { passive: true });
+                window.addEventListener('resize', onResize);
+                document.addEventListener('visibilitychange', onVisibilityChange);
+                reduceMedia.addEventListener('change', onReduceMotionChange);
+                // Initial resize
+                onResize();
+            })
+            .catch((err) => {
+                loadingError = err;
+                console.warn('Three.js failed to load, falling back to background only:', err);
+                // If Three.js fails, we leave the core-layer as is (just the CSS background)
+                // No further action needed.
+            });
+    }
+
+    // Start
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+
+    // Return a cleanup function for potential future use (not needed now)
+    return function cleanup() {
+        if (animationFrameId) {
+            cancelAnimationFrame(animationFrameId);
+        }
+        if (resizeObserver) {
+            resizeObserver.disconnect();
+        }
+        window.removeEventListener('scroll', onScroll);
+        window.removeEventListener('resize', onResize);
+        document.removeEventListener('visibilitychange', onVisibilityChange);
+    };
 })();
 
 /* ============================================================
