@@ -6,7 +6,7 @@
 
 :root {
   /* Palette */
-  --navy-950: #5A645A; /* page background */
+  --navy-950: #6A746A; /* page background */
   --navy-900: #2B2F2B; /* secondary background */
   --navy-850: #333833; /* slightly lighter */
   --navy-800: #3C443C;
@@ -713,33 +713,33 @@ main,
   background:
     linear-gradient(
       180deg,
-      rgba(255, 255, 255, 0.063) 0%,
-      rgba(255, 255, 255, 0.015) 39%,
+      rgba(var(--off-white-rgb),0.063) 0%,
+      rgba(var(--off-white-rgb),0.015) 39%,
       transparent 73%
     ),
     rgba(9, 15, 25, 0.15);
-  border-color: rgba(255, 255, 255, 0.12);
+  border-color: rgba(var(--off-white-rgb),0.12);
   transform: translateY(-2px);
   box-shadow:
     0 13px 30px rgba(0, 0, 0, 0.16),
-    inset 0 1px 0 rgba(255, 255, 255, 0.11);
+    inset 0 1px 0 rgba(var(--off-white-rgb),0.11);
 }
 
 .project-card:hover {
   background:
     linear-gradient(
       180deg,
-      rgba(255, 255, 255, 0.08) 0%,
-      rgba(255, 255, 255, 0.019) 40%,
-      rgba(255, 255, 255, 0.005) 65%,
+      rgba(var(--off-white-rgb),0.08) 0%,
+      rgba(var(--off-white-rgb),0.019) 40%,
+      rgba(var(--off-white-rgb),0.005) 65%,
       transparent 78%
     ),
     rgba(9, 15, 25, 0.17);
-  border-color: rgba(255, 255, 255, 0.13);
+  border-color: rgba(var(--off-white-rgb),0.13);
   transform: translateY(-2px);
   box-shadow:
     0 14px 32px rgba(0, 0, 0, 0.17),
-    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    inset 0 1px 0 rgba(var(--off-white-rgb),0.12);
 }
 
 .edu-card:hover::before, .project-card:hover::before, .stack-group:hover::before, .timeline-content:hover::before {
@@ -749,7 +749,7 @@ main,
 .edu-card { padding: 32px; }
 .edu-card-primary {
   background:
-    linear-gradient(145deg, rgba(83, 215, 166, 0.048) 0%, rgba(255, 255, 255, 0.018) 54%, transparent 100%),
+    linear-gradient(145deg, rgba(83, 215, 166, 0.048) 0%, rgba(var(--off-white-rgb),0.018) 54%, transparent 100%),
     rgba(9, 15, 25, 0.15);
   border-color: rgba(83, 215, 166, 0.14);
   box-shadow:
@@ -1060,8 +1060,8 @@ body.project-modal-lock { overflow: hidden; }
 .stack-group,
 .timeline-content,
 .section-contact {
-  background: rgba(255,255,255,0.02);
-  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
   position: relative;
   overflow: hidden;
   isolation: isolate;
