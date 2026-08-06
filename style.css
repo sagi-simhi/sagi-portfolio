@@ -6,7 +6,7 @@
 
 :root {
   /* Palette */
-  --navy-950: #2D312D; /* page background */
+  --navy-950: #3A3F3A; /* page background */
   --navy-900: #2B2F2B; /* secondary background */
   --navy-850: #333833; /* slightly lighter */
   --navy-800: #3C443C;
@@ -24,7 +24,7 @@
   --accent: #53D7A6;         /* brand accent — signal green / data-growth */
   --accent-bright: #6EE7BE;
   --accent-dim: #3FB88F;
-  --accent-soft: rgba(83, 215, 166, 0.18);
+  --accent-soft: rgba(83, 215, 166, 0.25);
   --accent-line: rgba(83, 215, 166, 0.28);
   --accent-glow: rgba(83, 215, 166, 0.55);
 
@@ -386,8 +386,8 @@ a:focus-visible, button:focus-visible {
     font-size: 0.78rem;
   }
   .hero {
-    padding-top: 80px;
-    padding-bottom: 40px;
+    padding-top: 40px;
+    padding-bottom: 20px;
   }
 }
 
@@ -431,7 +431,7 @@ a:focus-visible, button:focus-visible {
   position: relative;
   z-index: 0;
   overflow: hidden;
-  padding: 100px 2rem 60px;
+  padding: 60px 2rem 40px;
   min-height: calc(100vh - var(--floating-nav-clearance));
   display: flex;
   align-items: flex-start;
@@ -1056,7 +1056,7 @@ body.project-modal-lock { overflow: hidden; }
 .stack-group,
 .timeline-content,
 .section-contact {
-  background: rgba(255,255,255,0.09);
+  background: rgba(255,255,255,0.12);
   border: 1px solid rgba(255,255,255,0.18);
   position: relative;
   overflow: hidden;
@@ -1073,7 +1073,7 @@ body.project-modal-lock { overflow: hidden; }
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, rgba(83,215,166,0.25) 0%, transparent 8%);
+  background: linear-gradient(to bottom, rgba(83,215,166,0.3) 0%, transparent 8%);
   pointer-events: none;
   z-index: 0;
 }
@@ -1084,6 +1084,6 @@ body.project-modal-lock { overflow: hidden; }
 .stack-group:hover::before,
 .timeline-content:hover::before,
 .section-contact:hover::before {
-  background: linear-gradient(to bottom, rgba(83,215,166,0.35) 0%, transparent 8%);
+  background: linear-gradient(to bottom, rgba(83,215,166,0.4) 0%, transparent 8%);
 }
 
