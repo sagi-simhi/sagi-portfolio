@@ -6,7 +6,7 @@
 
 :root {
   /* Palette */
-  --navy-950: #4A524A; /* page background */
+  --navy-950: #5A645A; /* page background */
   --navy-900: #2B2F2B; /* secondary background */
   --navy-850: #333833; /* slightly lighter */
   --navy-800: #3C443C;
@@ -1056,8 +1056,8 @@ body.project-modal-lock { overflow: hidden; }
 .stack-group,
 .timeline-content,
 .section-contact {
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.1);
   position: relative;
   overflow: hidden;
   isolation: isolate;
@@ -1075,7 +1075,7 @@ body.project-modal-lock { overflow: hidden; }
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, rgba(83,215,166,0.15) 0%, transparent 8%);
+  background: linear-gradient(to bottom, rgba(83,215,166,0.05) 0%, transparent 8%);
   pointer-events: none;
   z-index: 1;
   border-radius: inherit;
@@ -1087,6 +1087,6 @@ body.project-modal-lock { overflow: hidden; }
 .stack-group:hover::before,
 .timeline-content:hover::before,
 .section-contact:hover::before {
-  background: linear-gradient(to bottom, rgba(83,215,166,0.2) 0%, transparent 8%);
+  background: linear-gradient(to bottom, rgba(83,215,166,0.08) 0%, transparent 8%);
 }
 
