@@ -6,7 +6,7 @@
 
 :root {
   /* Palette */
-  --navy-950: #6A746A; /* page background */
+  --navy-950: #7A847A; /* page background */
   --navy-900: #2B2F2B; /* secondary background */
   --navy-850: #333833; /* slightly lighter */
   --navy-800: #3C443C;
@@ -1060,14 +1060,14 @@ body.project-modal-lock { overflow: hidden; }
 .stack-group,
 .timeline-content,
 .section-contact {
-  background: rgba(255,255,255,0.02);
-  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.01);
+  border: 1px solid rgba(255,255,255,0.04);
   position: relative;
   overflow: hidden;
   isolation: isolate;
   border-radius: var(--radius-md);
-  backdrop-filter: blur(8px) saturate(50%);
-  -webkit-backdrop-filter: blur(8px) saturate(50%);
+  backdrop-filter: blur(8px) saturate(25%);
+  -webkit-backdrop-filter: blur(8px) saturate(25%);
 }
 .nav-container::before,
 .about-facts::before,
@@ -1079,7 +1079,7 @@ body.project-modal-lock { overflow: hidden; }
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, rgba(83,215,166,0.02) 0%, transparent 8%);
+  background: linear-gradient(to bottom, rgba(83,215,166,0.01) 0%, transparent 8%);
   pointer-events: none;
   z-index: 1;
   border-radius: inherit;
@@ -1091,6 +1091,6 @@ body.project-modal-lock { overflow: hidden; }
 .stack-group:hover::before,
 .timeline-content:hover::before,
 .section-contact:hover::before {
-  background: linear-gradient(to bottom, rgba(83,215,166,0.03) 0%, transparent 8%);
+  background: linear-gradient(to bottom, rgba(83,215,166,0.015) 0%, transparent 8%);
 }
 
