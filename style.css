@@ -754,11 +754,11 @@ main,
   border-color: rgba(83, 215, 166, 0.14);
   box-shadow:
     0 10px 26px rgba(0, 0, 0, 0.14),
-    inset 0 1px 0 rgba(255, 255, 255, 0.10);
+    inset 0 1px 0 rgba(var(--off-white-rgb), 0.10);
 }
 .edu-card-primary:hover {
   background:
-    linear-gradient(145deg, rgba(83, 215, 166, 0.056) 0%, rgba(255, 255, 255, 0.02) 54%, transparent 100%),
+    linear-gradient(145deg, rgba(83, 215, 166, 0.056) 0%, rgba(var(--off-white-rgb), 0.02) 54%, transparent 100%),
     rgba(9, 15, 25, 0.16);
   border-color: rgba(83, 215, 166, 0.19);
 }
@@ -1066,8 +1066,8 @@ body.project-modal-lock { overflow: hidden; }
   overflow: hidden;
   isolation: isolate;
   border-radius: var(--radius-md);
-  backdrop-filter: blur(12px) saturate(116%);
-  -webkit-backdrop-filter: blur(12px) saturate(116%);
+  backdrop-filter: blur(8px) saturate(100%);
+  -webkit-backdrop-filter: blur(8px) saturate(100%);
 }
 .nav-container::before,
 .about-facts::before,
