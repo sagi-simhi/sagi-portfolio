@@ -17,7 +17,7 @@
   --border: rgba(241, 245, 242, 0.18);
   --border-soft: rgba(241, 245, 242, 0.10);
 
-  --ink: #F1F5F2;
+  --ink: #F0F4F0;
   --ink-muted: #B8C1BB;
   --ink-faint: #89938C;
 
@@ -40,7 +40,11 @@
   --bg-overlay-opacity: 0.02;
 
   --nav-glass-bg: rgba(8, 13, 22, 0.55);
-  --nav-glass-border: rgba(255, 255, 255, 0.08);
+  --nav-glass-border: rgba(240, 244, 240, 0.08); /* off-white for glass border */
+
+  /* Off-white for softening bright elements */
+  --off-white: #F0F4F0;
+  --off-white-rgb: 240, 244, 240;
 
   /* Type */
   --font-display: 'Inter', system-ui, sans-serif;
@@ -179,7 +183,7 @@ a:focus-visible, button:focus-visible {
 }
 
 .btn-ghost { background: transparent; color: var(--ink); border: 1px solid transparent; }
-.btn-ghost:hover { background: rgba(255, 255, 255, 0.05); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.24), 0 0 18px rgba(255, 255, 255, 0.06); transform: translateY(-1px); }
+.btn-ghost:hover { background: rgba(var(--off-white-rgb), 0.05); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.24), 0 0 18px rgba(var(--off-white-rgb), 0.03); transform: translateY(-1px); }
 
 .btn-outline { background: transparent; color: var(--ink); border: 1px solid var(--border); }
 .btn-outline:hover { border-color: var(--accent); color: var(--accent); box-shadow: 0 6px 22px rgba(83, 215, 166, 0.14); transform: translateY(-1px); }
@@ -217,17 +221,17 @@ a:focus-visible, button:focus-visible {
   background:
     linear-gradient(
       180deg,
-      rgba(255, 255, 255, 0.10) 0%,
-      rgba(255, 255, 255, 0.032) 34%,
-      rgba(255, 255, 255, 0.01) 58%,
+      rgba(var(--off-white-rgb), 0.10) 0%,
+      rgba(var(--off-white-rgb), 0.032) 34%,
+      rgba(var(--off-white-rgb), 0.01) 58%,
       transparent 78%
     ),
     rgba(10, 16, 27, 0.24);
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(var(--off-white-rgb), 0.16);
   box-shadow:
     0 10px 24px rgba(0, 0, 0, 0.16),
-    inset 0 1px 0 rgba(255, 255, 255, 0.16),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.04);
+    inset 0 1px 0 rgba(var(--off-white-rgb), 0.16),
+    inset 0 -1px 0 rgba(var(--off-white-rgb), 0.04);
   backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
   -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
   transition:
@@ -240,17 +244,17 @@ a:focus-visible, button:focus-visible {
   background:
     linear-gradient(
       180deg,
-      rgba(255, 255, 255, 0.11) 0%,
-      rgba(255, 255, 255, 0.034) 34%,
-      rgba(255, 255, 255, 0.01) 58%,
+      rgba(var(--off-white-rgb), 0.11) 0%,
+      rgba(var(--off-white-rgb), 0.034) 34%,
+      rgba(var(--off-white-rgb), 0.01) 58%,
       transparent 78%
     ),
     rgba(8, 13, 22, 0.30);
-  border-color: rgba(255, 255, 255, 0.18);
+  border-color: rgba(var(--off-white-rgb), 0.18);
   box-shadow:
     0 12px 28px rgba(0, 0, 0, 0.19),
-    inset 0 1px 0 rgba(255, 255, 255, 0.17),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.045);
+    inset 0 1px 0 rgba(var(--off-white-rgb), 0.17),
+    inset 0 -1px 0 rgba(var(--off-white-rgb), 0.045);
 }
 .nav-logo {
   display: inline-flex;
@@ -260,16 +264,16 @@ a:focus-visible, button:focus-visible {
   height: 34px;
   border-radius: 999px;
   color: var(--ink);
-  background: rgba(255, 255, 255, 0.018);
-  border: 1px solid rgba(255, 255, 255, 0.11);
+  background: rgba(var(--off-white-rgb), 0.018);
+  border: 1px solid rgba(var(--off-white-rgb), 0.11);
   transition: color var(--motion-fast) var(--motion-ease), opacity var(--motion-fast) var(--motion-ease), background var(--motion-fast) var(--motion-ease), border-color var(--motion-fast) var(--motion-ease), box-shadow var(--motion-fast) var(--motion-ease);
 }
 .nav-logo:hover {
   color: var(--accent-bright);
-  background: rgba(255, 255, 255, 0.045);
-  border-color: rgba(255, 255, 255, 0.16);
+  background: rgba(var(--off-white-rgb), 0.045);
+  border-color: rgba(var(--off-white-rgb), 0.16);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.11),
+    inset 0 1px 0 rgba(var(--off-white-rgb), 0.11),
     0 4px 12px rgba(0, 0, 0, 0.12);
 }
 
@@ -310,18 +314,18 @@ a:focus-visible, button:focus-visible {
     opacity var(--motion-fast) var(--motion-ease);
 }
 .nav-links a:hover {
-  color: #ffffff;
-  background: rgba(255, 255, 255, 0.045);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.11);
+  color: var(--ink);
+  background: rgba(var(--off-white-rgb), 0.045);
+  box-shadow: inset 0 1px 0 rgba(var(--off-white-rgb), 0.11);
   transform: translateY(-1px);
 }
 
 /* Toggled by the scroll-spy IntersectionObserver in script.js */
 .nav-links a.nav-link-active {
   color: var(--accent-bright);
-  background: rgba(255, 255, 255, 0.058);
+  background: rgba(var(--off-white-rgb), 0.058);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.13),
+    inset 0 1px 0 rgba(var(--off-white-rgb), 0.13),
     inset 0 0 0 1px rgba(83, 215, 166, 0.14);
 }
 .nav-links a.nav-link-active::after {
@@ -481,7 +485,7 @@ a:focus-visible, button:focus-visible {
   width: 2px;
   height: 1em;
   margin-left: 1px;
-  background-color: rgba(255, 255, 255, 0.85);
+  background-color: rgba(var(--off-white-rgb), 0.85);
   vertical-align: text-bottom;
   animation: caret-blink 1s steps(1, start) infinite;
 }
@@ -1056,8 +1060,8 @@ body.project-modal-lock { overflow: hidden; }
 .stack-group,
 .timeline-content,
 .section-contact {
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.08);
   position: relative;
   overflow: hidden;
   isolation: isolate;
@@ -1075,7 +1079,7 @@ body.project-modal-lock { overflow: hidden; }
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, rgba(83,215,166,0.05) 0%, transparent 8%);
+  background: linear-gradient(to bottom, rgba(83,215,166,0.03) 0%, transparent 8%);
   pointer-events: none;
   z-index: 1;
   border-radius: inherit;
@@ -1087,6 +1091,6 @@ body.project-modal-lock { overflow: hidden; }
 .stack-group:hover::before,
 .timeline-content:hover::before,
 .section-contact:hover::before {
-  background: linear-gradient(to bottom, rgba(83,215,166,0.08) 0%, transparent 8%);
+  background: linear-gradient(to bottom, rgba(83,215,166,0.05) 0%, transparent 8%);
 }
 
