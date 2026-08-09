@@ -758,7 +758,7 @@ main,
 .edu-card-wide { grid-column: 1 / -1; }
 
 .course-list { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
-.course-list li { background: var(--surface-0); padding: 6px 12px; border-radius: 20px; font-size: 0.9rem; color: var(--ink-muted); border: 1px solid var(--border-soft); }
+.course-list li { background: var(--surface-0); padding: 4px 8px; border-radius: 20px; font-size: 0.9rem; color: var(--ink-muted); border: 1px solid var(--border-soft); }
 
 .language-list { display: flex; flex-direction: column; gap: 12px; }
 .language-list li { display: flex; align-items: baseline; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border-soft); }
