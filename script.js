@@ -147,7 +147,7 @@
 
     function getSectionObserverRootMargin() {
       var topOffset = Math.round(getNavOffset());
-      return "-" + topOffset + "px 0px -40% 0px";
+      return "-" + topOffset + "px 0px -40px 0px";
     }
 
     var sectionObserver = new IntersectionObserver(function (entries) {
