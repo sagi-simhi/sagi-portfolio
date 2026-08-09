@@ -732,8 +732,7 @@ main,
 .edu-card { padding: 32px; }
 .edu-card-primary {
   background:
-    linear-gradient(145deg, rgba(83, 215, 166, 0.048) 0%, rgba(var(--off-white-rgb),0.018) 54%, transparent 100%),
-    rgba(9, 15, 25, 0.15);
+    linear-gradient(145deg, rgba(83, 215, 166, 0.048) 0%, rgba(var(--off-white-rgb),0.018) 54%, transparent 100%);
   border-color: rgba(83, 215, 166, 0.14);
   box-shadow:
     0 10px 26px rgba(0, 0, 0, 0.14),
@@ -741,8 +740,7 @@ main,
 }
 .edu-card-primary:hover {
   background:
-    linear-gradient(145deg, rgba(83, 215, 166, 0.056) 0%, rgba(var(--off-white-rgb), 0.02) 54%, transparent 100%),
-    rgba(9, 15, 25, 0.16);
+    linear-gradient(145deg, rgba(83, 215, 166, 0.056) 0%, rgba(var(--off-white-rgb), 0.02) 54%, transparent 100%);
   border-color: rgba(83, 215, 166, 0.19);
 }
 .edu-card-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; gap: 16px; }
