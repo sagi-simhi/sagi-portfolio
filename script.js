@@ -21,6 +21,11 @@
     navLinkMap[id] = a;
   });
 
+  // Alias map for sections that should highlight an existing nav link
+  var navAliasMap = {
+    approach: "about"
+  };
+
   function setActiveNavLink(id) {
     var activeLink = id ? navLinkMap[id] : null;
     navAnchors.forEach(function (a) {
@@ -147,7 +152,7 @@
           activeId = id;
         }
       });
-      setActiveNavLink(activeId);
+      setActiveNavLink(navAliasMap[activeId] || activeId);
     }
 
     function getSectionObserverRootMargin() {
