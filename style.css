@@ -748,6 +748,13 @@ main,
 .edu-card-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; gap: 16px; }
 .edu-card-head h3 { font-size: 1.2rem; }
 .edu-period { font-size: 0.85rem; color: var(--slate-400); white-space: nowrap; }
+.course-provider {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--ink-faint);
+  margin-top: 0.25rem;
+  white-space: nowrap;
+}
 .edu-org { font-size: 0.95rem; margin-bottom: 24px; }
 .edu-scores { border-top: 1px solid var(--border-soft); padding-top: 16px; }
 .edu-scores li { display: flex; align-items: center; font-size: 0.9rem; padding: 8px 0; border-bottom: 1px dashed var(--border-soft); }
