@@ -134,13 +134,18 @@
     sections.forEach(function (s) {
       if (!s.id) return;
       sectionIdsInOrder.push(s.id);
-      sectionInView[s.id] = false;
+      sectionInView[s.id] = 0;
     });
 
     function resolveActiveSection() {
       var activeId = null;
+      var maxRatio = 0;
       sectionIdsInOrder.forEach(function (id) {
-        if (sectionInView[id]) activeId = id;
+        var ratio = sectionInView[id];
+        if (ratio > maxRatio) {
+          maxRatio = ratio;
+          activeId = id;
+        }
       });
       setActiveNavLink(activeId);
     }
@@ -154,7 +159,7 @@
       entries.forEach(function (entry) {
         var id = entry.target.id;
         if (!id || !Object.prototype.hasOwnProperty.call(sectionInView, id)) return;
-        sectionInView[id] = entry.isIntersecting;
+        sectionInView[id] = entry.intersectionRatio;
       });
       resolveActiveSection();
     }, {
