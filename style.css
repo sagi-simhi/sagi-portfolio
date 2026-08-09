@@ -32,8 +32,8 @@
   --violet-line: rgba(139, 124, 246, 0.30);
 
   /* Driven by script.js on scroll — ambient background lightening */
-  --bg-ambient-a: 0.06;
-  --bg-ambient-b: 0.04;
+  --bg-ambient-a: 0.12;
+  --bg-ambient-b: 0.08;
   --bg-overlay-opacity: 0.02;
 
   /* Glass effect */
