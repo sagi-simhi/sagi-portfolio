@@ -59,7 +59,7 @@
   --max-w: 1180px;
   --radius-sm: 6px;
   --radius-md: 10px;
-  --radius-lg: 16px;
+  --radius-lg: 24px;
   --floating-nav-clearance: 96px;
   --motion-ease: cubic-bezier(0.22, 1, 0.36, 1);
   --motion-fast: 0.2s;
@@ -618,7 +618,7 @@ main,
   flex-direction: column;
   gap: 0;
   border: 1px solid var(--border);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   background: var(--glass-bg);
   position: relative;
   overflow: hidden;
@@ -672,6 +672,7 @@ main,
   position: relative;
   overflow: hidden;
   padding: 14px;
+  border-radius: var(--radius-lg);
   backdrop-filter: blur(12px) saturate(116%);
   -webkit-backdrop-filter: blur(12px) saturate(116%);
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -772,7 +773,7 @@ main,
   backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
   -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
   padding: 4px 8px;
-  border-radius: 20px;
+  border-radius: var(--radius-lg);
   font-size: 0.9rem;
   color: var(--ink-muted);
 }
@@ -949,6 +950,7 @@ main,
   padding: 12px 16px;
   border-bottom: 1px solid var(--border-soft);
   background: var(--glass-bg);
+  border-radius: var(--radius-lg);
   position: relative;
   overflow: hidden;
   isolation: isolate;
@@ -976,6 +978,7 @@ main,
   width: 100%;
   border: 0;
   background: var(--glass-bg);
+  border-radius: var(--radius-lg);
   position: relative;
   overflow: hidden;
   isolation: isolate;
