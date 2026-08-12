@@ -101,9 +101,9 @@
 
       var maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
       var progress = clamp(window.pageYOffset / maxScroll, 0, 1);
-      var ambientA = (0.10 + progress * 0.02).toFixed(3);
-      var ambientB = (0.08 + progress * 0.02).toFixed(3);
-      var overlayOpacity = (0.02 + progress * 0.04).toFixed(3);
+      var ambientA = (0.10 + progress * 0.01).toFixed(3);
+      var ambientB = (0.08 + progress * 0.01).toFixed(3);
+      var overlayOpacity = (0.02 + progress * 0.01).toFixed(3);
 
       document.documentElement.style.setProperty("--bg-ambient-a", ambientA);
       document.documentElement.style.setProperty("--bg-ambient-b", ambientB);
