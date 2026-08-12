@@ -30,8 +30,8 @@
   --gold: #C9A15A;           /* secondary accent, used sparingly */
 
   --violet: #8B7CF6;         /* ambient atmosphere only — never UI/text color */
-  --violet-soft: rgba(139, 124, 246, 0.14);
-  --violet-line: rgba(139, 124, 246, 0.30);
+  --violet-soft: rgba(var(--violet-rgb), 0.14);
+  --violet-line: rgba(var(--violet-rgb), 0.30);
 
   /* Driven by script.js on scroll — ambient background lightening */
   --bg-ambient-a: 0.12;
@@ -96,7 +96,7 @@ body {
   background:
     radial-gradient(1200px 600px at 15% -10%, rgba(83,215,166,var(--bg-ambient-a)), transparent 60%),
     radial-gradient(900px 500px at 90% 0%, rgba(201,161,90,var(--bg-ambient-b)), transparent 55%),
-    radial-gradient(1000px 700px at 50% 55%, rgba(139,124,246,0.05), transparent 60%),
+    radial-gradient(1000px 700px at 50% 55%, rgba(var(--violet-rgb), 0.05), transparent 60%),
     repeating-linear-gradient(90deg, rgba(83,215,166,0.06) 0px, rgba(83,215,166,0.06) 1px, transparent 1px, transparent 28px),
     repeating-linear-gradient(0deg, rgba(83,215,166,0.06) 0px, rgba(83,215,166,0.06) 1px, transparent 1px, transparent 28px),
     var(--bg-base);
@@ -573,7 +573,7 @@ main,
   top: -6%;
   width: 720px;
   height: 720px;
-  background: radial-gradient(circle, rgba(139,124,246,0.10) 0%, transparent 64%);
+  background: radial-gradient(circle, rgba(var(--violet-rgb), 0.10) 0%, transparent 64%);
   pointer-events: none;
   z-index: 0;
 }
