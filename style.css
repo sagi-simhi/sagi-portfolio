@@ -30,6 +30,7 @@
   --gold: #C9A15A;           /* secondary accent, used sparingly */
 
   --violet: #8B7CF6;         /* ambient atmosphere only — never UI/text color */
+  --violet-rgb: 139, 124, 246;
   --violet-soft: rgba(var(--violet-rgb), 0.14);
   --violet-line: rgba(var(--violet-rgb), 0.30);
 
