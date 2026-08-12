@@ -6,19 +6,19 @@
 
 :root {
   /* Palette */
-  --bg-base: #F8FAF9; /* page background */
+  --bg-base: #1B211F; /* page background */
   --bg-muted: #F0F4F2; /* secondary background */
-  --surface-0: #FFFFFF;
+  --surface-0: #242A28;
   --surface-1: #F8FAF9;
   --surface-2: #F0F4F2;
   --surface-3: #E0E0E0;
   --surface-4: #D0D0D0;
 
-  --ink: #1A1A1A;
-  --ink-muted: #4A4A4A;
-  --ink-faint: #7A7A7A;
-  --slate-500: #4A4A4A;
-  --slate-400: #4A4A4A;
+  --ink: #F2F4F8;
+  --ink-muted: #A7B0C0;
+  --ink-faint: #5C6A80;
+  --slate-500: #5C6A80;
+  --slate-400: #5C6A80;
 
   --accent: #53D7A6;         /* brand accent — signal green / data-growth */
   --accent-bright: #6EE7BE;
@@ -39,15 +39,15 @@
   --bg-overlay-opacity: 0.02;
 
   /* Glass effect */
-  --glass-bg: rgba(255,255,255,0.65);
-  --glass-border: rgba(200,200,200,0.15);
+  --glass-bg: rgba(36, 42, 40, 0.5);
+  --glass-border: rgba(83, 215, 166, 0.12);
   --glass-blur: 12px;
   --glass-saturation: 130%;
-  --glass-highlight: rgba(255,255,255,0.18);
+  --glass-highlight: rgba(255, 255, 255, 0.10);
 
   /* Border */
-  --border: rgba(0, 0, 0, 0.08);
-  --border-soft: rgba(0, 0, 0, 0.04);
+  --border: rgba(255, 255, 255, 0.08);
+  --border-soft: rgba(255, 255, 255, 0.04);
 
   /* Off-white for softening bright elements */
   --off-white: #FFFFFF;
@@ -97,6 +97,8 @@ body {
     radial-gradient(1200px 600px at 15% -10%, rgba(83,215,166,var(--bg-ambient-a)), transparent 60%),
     radial-gradient(900px 500px at 90% 0%, rgba(201,161,90,var(--bg-ambient-b)), transparent 55%),
     radial-gradient(1000px 700px at 50% 55%, rgba(139,124,246,0.05), transparent 60%),
+    repeating-linear-gradient(90deg, rgba(83,215,166,0.06) 0px, rgba(83,215,166,0.06) 1px, transparent 1px, transparent 28px),
+    repeating-linear-gradient(0deg, rgba(83,215,166,0.06) 0px, rgba(83,215,166,0.06) 1px, transparent 1px, transparent 28px),
     var(--bg-base);
   background-attachment: fixed;
   color: var(--ink);
@@ -1024,7 +1026,7 @@ body.project-modal-lock { overflow: hidden; }
 @media (max-width: 480px) { .site-footer-inner { justify-content: center; text-align: center; } }
 
 .footer-social-link { display: inline-flex; align-items: center; justify-content: center; color: var(--ink-muted); line-height: 0; padding: 6px; margin: -6px; border-radius: 50%; transition: color var(--motion-fast) var(--motion-ease), background-color var(--motion-fast) var(--motion-ease), transform var(--motion-fast) var(--motion-ease); }
-.footer-social-link:hover { color: var(--ink); background-color: var(--surface-0); transform: translateY(-1px); }
+.footer-social-link:hover { color: var(--ink); background-color: rgba(var(--off-white-rgb), 0.08); transform: translateY(-1px); }
 .footer-social-link:focus-visible { outline: 2px solid var(--ink-muted); outline-offset: 2px; }
 @media (prefers-reduced-motion: reduce) { .footer-social-link { transition: none; transform: none; } }
 
