@@ -46,6 +46,16 @@
   --glass-saturation: 130%;
   --glass-highlight: rgba(255, 255, 255, 0.10);
 
+  /* New theme variables */
+  --card-hover-overlay: rgba(9, 15, 25, 0.15);
+  --card-hover-overlay-strong: rgba(9, 15, 25, 0.17);
+  --project-case-bg: rgba(0, 0, 0, 0.15);
+  --modal-backdrop-bg: rgba(5, 8, 14, 0.78);
+  --glass-fallback-bg: rgba(12, 19, 31, 0.62);
+  --glass-fallback-bg-strong: rgba(12, 19, 31, 0.64);
+  --nav-fallback-bg: rgba(10, 16, 27, 0.70);
+  --nav-fallback-bg-scrolled: rgba(8, 13, 22, 0.75);
+
   /* Border */
   --border: rgba(255, 255, 255, 0.08);
   --border-soft: rgba(255, 255, 255, 0.04);
@@ -71,6 +81,26 @@
   /* Glass highlight position */
   --glass-highlight-x: 0%;
   --glass-highlight-y: 0%;
+}
+
+[data-theme="light"] {
+  --bg-base: #F0F4F2;
+  --surface-0: #FFFFFF;
+  --ink: #1B211F;
+  --ink-muted: #4A5568;
+  --ink-faint: #718096;
+  --glass-bg: rgba(255, 255, 255, 0.65);
+  --glass-border: rgba(83, 215, 166, 0.18);
+  --border: rgba(0, 0, 0, 0.08);
+  --border-soft: rgba(0, 0, 0, 0.04);
+  --card-hover-overlay: rgba(0, 0, 0, 0.04);
+  --card-hover-overlay-strong: rgba(0, 0, 0, 0.05);
+  --project-case-bg: rgba(0, 0, 0, 0.03);
+  --modal-backdrop-bg: rgba(240, 244, 242, 0.85);
+  --glass-fallback-bg: rgba(255, 255, 255, 0.75);
+  --glass-fallback-bg-strong: rgba(255, 255, 255, 0.80);
+  --nav-fallback-bg: rgba(255, 255, 255, 0.75);
+  --nav-fallback-bg-scrolled: rgba(255, 255, 255, 0.82);
 }
 
 /* ============================================================
@@ -709,7 +739,7 @@ main,
       rgba(var(--off-white-rgb),0.015) 39%,
       transparent 73%
     ),
-    rgba(9, 15, 25, 0.15);
+    var(--card-hover-overlay);
   border-color: rgba(var(--off-white-rgb),0.12);
   transform: translateY(-2px);
   box-shadow:
@@ -725,7 +755,7 @@ main,
       rgba(var(--off-white-rgb),0.05) 65%,
       transparent 78%
     ),
-    rgba(9, 15, 25, 0.17);
+    var(--card-hover-overlay-strong);
   border-color: rgba(var(--off-white-rgb),0.13);
   transform: translateY(-2px);
   box-shadow:
@@ -846,7 +876,7 @@ main,
 .project-title { font-size: 1.4rem; margin-bottom: 14px; }
 .project-desc { font-size: 0.95rem; margin-bottom: 20px; }
 
-.project-case { display: flex; flex-direction: column; gap: 14px; margin-bottom: 24px; padding: 18px 20px; border: 1px solid var(--border-soft); border-radius: var(--radius-md); background: rgba(0, 0, 0, 0.15); }
+.project-case { display: flex; flex-direction: column; gap: 14px; margin-bottom: 24px; padding: 18px 20px; border: 1px solid var(--border-soft); border-radius: var(--radius-md); background: var(--project-case-bg); }
 .project-case-row { display: flex; gap: 14px; align-items: baseline; }
 .project-case-label { flex: none; width: 96px; font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.07em; color: var(--accent); }
 .project-case-value { font-size: 0.9rem; color: var(--ink-muted); line-height: 1.55; }
@@ -922,7 +952,7 @@ main,
 .project-modal-backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(5, 8, 14, 0.78);
+  background: var(--modal-backdrop-bg);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
 }
@@ -1074,20 +1104,20 @@ body.project-modal-lock { overflow: hidden; }
    LIQUID GLASS FALLBACKS
    ============================================================ */
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .nav-container { background: rgba(10, 16, 27, 0.70); }
-  .site-header.nav-scrolled .nav-container { background: rgba(8, 13, 22, 0.75); }
-  .edu-card, .project-card, .stack-group, .timeline-content { background: rgba(12, 19, 31, 0.62); }
+  .nav-container { background: var(--nav-fallback-bg); }
+  .site-header.nav-scrolled .nav-container { background: var(--nav-fallback-bg-scrolled); }
+  .edu-card, .project-card, .stack-group, .timeline-content { background: var(--glass-fallback-bg); }
   .edu-card-primary {
     background:
       linear-gradient(145deg, rgba(83, 215, 166, 0.04), transparent 65%),
-      rgba(12, 19, 31, 0.64);
+      var(--glass-fallback-bg-strong);
   }
-  .about-facts { background: rgba(12, 19, 31, 0.62); }
-  .section-contact { background: rgba(12, 19, 31, 0.62); }
-  .project-modal-window { background: rgba(12, 19, 31, 0.62); }
-  .project-modal-bar { background: rgba(12, 19, 31, 0.62); }
-  .project-modal-frame { background: rgba(12, 19, 31, 0.62); }
-  .journey-step { background: rgba(12, 19, 31, 0.62); }
+  .about-facts { background: var(--glass-fallback-bg); }
+  .section-contact { background: var(--glass-fallback-bg); }
+  .project-modal-window { background: var(--glass-fallback-bg); }
+  .project-modal-bar { background: var(--glass-fallback-bg); }
+  .project-modal-frame { background: var(--glass-fallback-bg); }
+  .journey-step { background: var(--glass-fallback-bg); }
 }
 
 /* ============================================================
