@@ -3,27 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Financial Intelligence Platform — Sagi Simhi</title>
-<meta name="description" content="Financial Intelligence Platform — an AI-powered investment intelligence product concept by Sagi Simhi.">
+<title>Financial Intelligence Platform - Sagi Simhi</title>
+<meta name="description" content="Financial Intelligence Platform, a portfolio case study exploring structured investment research, portfolio context, and responsible AI assistance.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
 <a class="skip-link" href="#appMain">Skip to content</a>
-
 <div class="app-shell">
-
-  <!-- ============ SIDEBAR ============ -->
-  <aside class="app-sidebar" id="appSidebar">
+  <aside class="app-sidebar" id="appSidebar" aria-label="Financial Intelligence Platform navigation">
     <div class="app-sidebar-top">
       <a href="../index.html" class="app-back" aria-label="Back to portfolio">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
         <span>Portfolio</span>
       </a>
-
       <div class="app-brand">
         <span class="app-brand-mark" aria-hidden="true"></span>
         <span class="app-brand-text">
@@ -32,101 +27,94 @@
         </span>
       </div>
     </div>
-
-    <nav class="app-nav" aria-label="Application">
+    <nav class="app-nav" aria-label="Application views">
       <ul class="app-nav-list">
-        <li><a href="#dashboard" data-view="dashboard" class="app-nav-link">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="7" height="9" rx="1.2"/><rect x="14" y="3" width="7" height="5" rx="1.2"/><rect x="14" y="12" width="7" height="9" rx="1.2"/><rect x="3" y="16" width="7" height="5" rx="1.2"/></svg>
-          <span>Dashboard</span>
-        </a></li>
-        <li><a href="#portfolio" data-view="portfolio" class="app-nav-link">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/></svg>
-          <span>Portfolio</span>
-        </a></li>
-        <li><a href="#research" data-view="research" class="app-nav-link">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
-          <span>Research</span>
-        </a></li>
-        <li><a href="#assistant" data-view="assistant" class="app-nav-link">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3a5 5 0 0 1 5 5v3a5 5 0 0 1-10 0V8a5 5 0 0 1 5-5z"/><path d="M6 20c0-2.8 2.7-5 6-5s6 2.2 6 5"/></svg>
-          <span>AI Assistant</span>
-        </a></li>
-        <li><a href="#learning" data-view="learning" class="app-nav-link">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M7 9.5V16c0 1.5 2.2 3 5 3s5-1.5 5-3V9.5"/></svg>
-          <span>Learning</span>
-        </a></li>
-        <li><a href="#insights" data-view="insights" class="app-nav-link">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 17l5-5 4 4 8-9"/><path d="M14 7h6v6"/></svg>
-          <span>Insights</span>
-        </a></li>
+        <li><a href="#dashboard" data-view="dashboard" class="app-nav-link"><span>Dashboard</span></a></li>
+        <li><a href="#portfolio" data-view="portfolio" class="app-nav-link"><span>Portfolio</span></a></li>
+        <li><a href="#research" data-view="research" class="app-nav-link"><span>Research</span></a></li>
+        <li><a href="#assistant" data-view="assistant" class="app-nav-link"><span>AI Assistant</span></a></li>
+        <li><a href="#learning" data-view="learning" class="app-nav-link"><span>Learning</span></a></li>
+        <li><a href="#insights" data-view="insights" class="app-nav-link"><span>Insights</span></a></li>
       </ul>
     </nav>
-
     <div class="app-sidebar-bottom">
-      <span class="app-status-pill">
-        <span class="app-status-dot" aria-hidden="true"></span>
-        Concept build
-      </span>
+      <span class="app-status-pill"><span class="app-status-dot" aria-hidden="true"></span>Concept build</span>
     </div>
   </aside>
 
-  <!-- ============ MAIN ============ -->
   <div class="app-content">
-
     <header class="app-topbar">
       <h1 class="app-topbar-title" id="appViewTitle">Dashboard</h1>
-      <p class="app-topbar-sub" id="appViewSub">Portfolio overview, market context, and AI-surfaced signals.</p>
+      <p class="app-topbar-sub" id="appViewSub">A transparent case study for organizing portfolio context and investment research.</p>
     </header>
 
     <main id="appMain" class="app-main">
-
-      <section class="app-view" id="view-dashboard" data-view-panel="dashboard">
-        <div class="app-placeholder">
-          <span class="app-placeholder-eyebrow mono">Coming next</span>
-          <p class="app-placeholder-text">The Dashboard view — portfolio overview, risk indicators, and AI insights — is being built as its own feature.</p>
+      <section class="app-view" id="view-dashboard" data-view-panel="dashboard" aria-labelledby="dashboardHeading">
+        <div class="case-hero glass-panel">
+          <div>
+            <p class="case-eyebrow mono">Product case study · In development</p>
+            <h2 id="dashboardHeading">Turning scattered investment information into a structured decision workspace</h2>
+            <p class="case-summary">This concept explores how portfolio data, research notes, risk context, and AI explanations could live in one transparent interface without presenting automated trading advice.</p>
+          </div>
+          <span class="case-status mono">Concept, not a live product</span>
         </div>
+
+        <div class="case-grid">
+          <article class="case-card glass-panel">
+            <span class="case-index mono">01 · Problem</span>
+            <h3>Information is fragmented</h3>
+            <p>Portfolio positions, market context, research notes, and learning resources often sit in separate tools, making comparison and reflection harder.</p>
+          </article>
+          <article class="case-card glass-panel">
+            <span class="case-index mono">02 · Approach</span>
+            <h3>Design around decisions</h3>
+            <p>Organize the experience around questions: what is owned, why it is owned, what changed, and which assumptions require review.</p>
+          </article>
+          <article class="case-card glass-panel">
+            <span class="case-index mono">03 · System</span>
+            <h3>Modular workspace</h3>
+            <p>Separate portfolio monitoring, structured research, educational context, and AI assistance into focused but connected views.</p>
+          </article>
+          <article class="case-card glass-panel">
+            <span class="case-index mono">04 · Guardrails</span>
+            <h3>Explain, do not prescribe</h3>
+            <p>AI is framed as a research explainer. Sources, assumptions, uncertainty, and product limitations should remain visible.</p>
+          </article>
+        </div>
+
+        <section class="case-section glass-panel" aria-labelledby="workflowHeading">
+          <div class="case-section-head">
+            <p class="case-eyebrow mono">Proposed workflow</p>
+            <h2 id="workflowHeading">From signal to review</h2>
+          </div>
+          <ol class="workflow-list">
+            <li><span class="workflow-number mono">01</span><div><h3>Observe</h3><p>Surface portfolio changes and relevant context without implying a recommendation.</p></div></li>
+            <li><span class="workflow-number mono">02</span><div><h3>Investigate</h3><p>Connect an observation to structured company, ETF, or portfolio research.</p></div></li>
+            <li><span class="workflow-number mono">03</span><div><h3>Explain</h3><p>Use plain-language assistance to clarify concepts, assumptions, and trade-offs.</p></div></li>
+            <li><span class="workflow-number mono">04</span><div><h3>Reflect</h3><p>Record the reasoning behind a decision and revisit it as evidence changes.</p></div></li>
+          </ol>
+        </section>
+
+        <section class="case-section glass-panel" aria-labelledby="scopeHeading">
+          <div class="case-section-head">
+            <p class="case-eyebrow mono">Current scope</p>
+            <h2 id="scopeHeading">What is real today</h2>
+          </div>
+          <div class="scope-grid">
+            <div><h3>Implemented</h3><ul><li>Responsive application shell</li><li>Hash-based view navigation</li><li>Accessible active-view state</li><li>Shared visual system</li></ul></div>
+            <div><h3>Conceptual</h3><ul><li>Portfolio analytics</li><li>Research data integration</li><li>AI-generated explanations</li><li>Behavioral insight tracking</li></ul></div>
+          </div>
+        </section>
       </section>
 
-      <section class="app-view" id="view-portfolio" data-view-panel="portfolio" hidden>
-        <div class="app-placeholder">
-          <span class="app-placeholder-eyebrow mono">Coming next</span>
-          <p class="app-placeholder-text">Portfolio Intelligence — allocation, risk profile, diversification, and performance attribution.</p>
-        </div>
-      </section>
-
-      <section class="app-view" id="view-research" data-view-panel="research" hidden>
-        <div class="app-placeholder">
-          <span class="app-placeholder-eyebrow mono">Coming next</span>
-          <p class="app-placeholder-text">Research Workspace — structured company and ETF research, built over time.</p>
-        </div>
-      </section>
-
-      <section class="app-view" id="view-assistant" data-view-panel="assistant" hidden>
-        <div class="app-placeholder">
-          <span class="app-placeholder-eyebrow mono">Coming next</span>
-          <p class="app-placeholder-text">AI Assistant — a context-aware research and portfolio explainer, not a trading signal.</p>
-        </div>
-      </section>
-
-      <section class="app-view" id="view-learning" data-view-panel="learning" hidden>
-        <div class="app-placeholder">
-          <span class="app-placeholder-eyebrow mono">Coming next</span>
-          <p class="app-placeholder-text">Learning — structured lessons on ETFs, risk, valuation, and behavioral finance.</p>
-        </div>
-      </section>
-
-      <section class="app-view" id="view-insights" data-view-panel="insights" hidden>
-        <div class="app-placeholder">
-          <span class="app-placeholder-eyebrow mono">Coming next</span>
-          <p class="app-placeholder-text">Insights — behavioral finance patterns and decision reflection over time.</p>
-        </div>
-      </section>
-
+      <section class="app-view" id="view-portfolio" data-view-panel="portfolio" hidden><div class="app-placeholder"><span class="app-placeholder-eyebrow mono">Concept view</span><h2>Portfolio Intelligence</h2><p class="app-placeholder-text">Future exploration of allocation, diversification, risk context, and performance attribution. No live portfolio data is connected.</p></div></section>
+      <section class="app-view" id="view-research" data-view-panel="research" hidden><div class="app-placeholder"><span class="app-placeholder-eyebrow mono">Concept view</span><h2>Research Workspace</h2><p class="app-placeholder-text">Planned structure for company and ETF research, assumptions, evidence, and review notes.</p></div></section>
+      <section class="app-view" id="view-assistant" data-view-panel="assistant" hidden><div class="app-placeholder"><span class="app-placeholder-eyebrow mono">Concept view</span><h2>AI Assistant</h2><p class="app-placeholder-text">A future research explainer designed to clarify context and uncertainty, not generate trading signals.</p></div></section>
+      <section class="app-view" id="view-learning" data-view-panel="learning" hidden><div class="app-placeholder"><span class="app-placeholder-eyebrow mono">Concept view</span><h2>Learning</h2><p class="app-placeholder-text">Planned educational paths covering ETFs, risk, valuation, and behavioral finance.</p></div></section>
+      <section class="app-view" id="view-insights" data-view-panel="insights" hidden><div class="app-placeholder"><span class="app-placeholder-eyebrow mono">Concept view</span><h2>Insights</h2><p class="app-placeholder-text">A future reflection layer for reviewing decision patterns over time. No behavioral analysis is currently performed.</p></div></section>
     </main>
   </div>
-
 </div>
-
 <script src="script.js"></script>
 </body>
 </html>
