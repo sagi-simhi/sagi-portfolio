@@ -705,3 +705,47 @@ PROJECT MODAL — opens project links in an in-page iframe
     run();
   }
 })();
+
+/* ============================================================
+   THEME TOGGLE — light/dark switch with system preference sync
+   ============================================================ */
+(function initThemeToggle() {
+  const toggle = document.getElementById('themeToggle');
+  if (!toggle) return;
+
+  // Determine initial theme
+  const getInitialTheme = () => {
+    const storedTheme = localStorage.getItem('theme');
+    if (storedTheme === 'light' || storedTheme === 'dark') {
+      return storedTheme;
+    }
+    // Fallback to system preference
+    return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+  };
+
+  // Apply theme
+  const applyTheme = (theme) => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+  };
+
+  // Initialize
+  const init = () => {
+    const initialTheme = getInitialTheme();
+    applyTheme(initialTheme);
+  };
+
+  // Toggle handler
+  toggle.addEventListener('click', () => {
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+    applyTheme(newTheme);
+  });
+
+  // Start
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
