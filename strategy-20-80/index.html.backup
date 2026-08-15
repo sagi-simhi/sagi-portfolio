@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Strategy 20-80 — Factor Tilt Analysis Case Study</title>
-<meta name="description" content="Analytical case study evaluating the impact of small-cap value factor tilts on portfolio construction through simulation-based research.">
+<title>Strategy 20-80 — Portfolio Construction Research</title>
+<meta name="description" content="A portfolio construction research project: a globally diversified core combined with an academically researched small-cap value factor tilt.">
 
 <!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -67,67 +67,67 @@
 
   <main class="main-content">
 
-    <!-- 1. PROBLEM STATEMENT -->
-    <section class="hero-card panel" aria-labelledby="problemHeading">
+    <!-- 1. INVESTMENT THESIS / HERO -->
+    <section class="hero-card panel" aria-labelledby="thesisHeading">
       <div class="hero-copy">
-        <p class="eyebrow">Research Problem · Prepared by Sagi Simhi</p>
-        <h2 id="problemHeading" class="hero-title">How does incorporating a small-cap value factor tilt impact the risk-return characteristics of a globally diversified equity portfolio?</h2>
-        <p>This case study examines the construction of an 80/20 core-satellite portfolio combining broad global equity exposure with a targeted small-cap value factor tilt. The analysis evaluates whether this factor-based approach alters portfolio characteristics in meaningful ways compared to traditional market-capitalization weighted approaches.</p>
+        <p class="eyebrow">Portfolio Research · Prepared by Sagi Simhi</p>
+        <h2 id="thesisHeading" class="hero-title">Building a globally diversified equity portfolio with an academically researched factor tilt.</h2>
+        <p>This project examines a core-satellite portfolio construction: broad global equity exposure combined with a targeted allocation to small-cap value factors. The methodology draws on decades of academic factor research and is presented here as a portfolio construction exercise — not a performance guarantee or a recommendation to trade.</p>
         <div class="hero-pills">
-          <span class="pill">Factor-Based Investing</span>
-          <span class="pill">Risk-Return Analysis</span>
-          <span class="pill">Methodological Evaluation</span>
+          <span class="pill">Global Diversification</span>
+          <span class="pill">Factor Investing</span>
+          <span class="pill">Long-Term Discipline</span>
         </div>
       </div>
       <div class="hero-summary">
         <div class="hero-stat">
-          <span class="eyebrow">Analytical Focus</span>
-          <strong>Factor Tilt Impact Assessment</strong>
+          <span class="eyebrow">Core Allocation</span>
+          <strong>80% Global Equity</strong>
         </div>
         <div class="hero-stat">
-          <span class="eyebrow">Methodology</span>
-          <strong>Simulation-Based Research</strong>
+          <span class="eyebrow">Factor Tilt</span>
+          <strong>20% Small-Cap Value</strong>
         </div>
       </div>
     </section>
 
-    <!-- 2. RESEARCH BACKGROUND -->
-    <section class="panel section-block" aria-labelledby="backgroundHeading">
+    <!-- 2. PORTFOLIO CONSTRUCTION -->
+    <section class="panel section-block" aria-labelledby="constructionHeading">
       <div class="section-block-head">
-        <p class="eyebrow">Research Context</p>
-        <h2 id="backgroundHeading">Why Factor-Based portfolio construction?</h2>
-        <p>Decades of academic research in financial economics have identified systematic factors that help explain differences in security returns. The Fama-French three-factor model, extending the traditional Capital Asset Pricing Model (CAPM), demonstrates that size (SMB) and value (HML) factors, alongside the market factor, provide a more complete explanation of equity returns than market beta alone. This research builds upon that foundation to evaluate how incorporating these insights impacts portfolio construction.</p>
+        <p class="eyebrow">Methodology</p>
+        <h2 id="constructionHeading">Portfolio Construction</h2>
+        <p>The portfolio follows a <strong>core + factor tilt</strong> approach. Eighty percent is allocated to a broad global equity core, providing diversification across thousands of companies in developed and emerging markets with automatic market-capitalization weighting. The remaining twenty percent is directed to a small-cap value factor tilt, designed to increase exposure to segments of the market with historically different long-term return characteristics.</p>
       </div>
       <div class="construction-grid">
         <div class="construction-copy">
           <div class="allocation-row-detail">
             <span class="dot steel"></span>
             <div>
-              <strong>Research Foundation</strong>
-              <p>This analysis is grounded in the Fama-French factor framework, which has shown that size and value factors have historically provided explanatory power for equity returns beyond market exposure alone.</p>
+              <strong>Core — FTSE All-World <span class="ticker-chip">FWRA · TASE 1209220</span></strong>
+              <p>Global diversification across developed and emerging markets, automatically weighted by market capitalization.</p>
             </div>
           </div>
           <div class="allocation-row-detail">
             <span class="dot gold"></span>
             <div>
-              <strong>Factor Definition</strong>
-              <p>The small-cap value factor targets companies with smaller market capitalizations and lower valuations relative to fundamentals, based on the size (SMB) and value (HML) factors from the Fama-French model.</p>
+              <strong>Factor Tilt — AVGS Small Cap Value <span class="ticker-chip">AVGS.L</span></strong>
+              <p>Targeted exposure to the size and value factors identified in academic equity research.</p>
             </div>
           </div>
-          <p>To evaluate the impact of these factors, this study employs a simulated approach due to limited historical data availability for the specific ETFs used as proxies (FTSE All-World and AVGS).</p>
+          <p>FTSE All-World (Invesco) and AVGS are relatively recent ETFs without sufficient real trading history to cover the full analysis window, so this simulation uses a calibrated regime-based model instead of live historical returns.</p>
         </div>
         <div class="allocation-panel-inner">
-          <p class="eyebrow mb-1">Analytical Components</p>
+          <p class="eyebrow mb-1">Composition by weight</p>
           <div class="donut-wrap">
-            <canvas id="donutChart" role="img" aria-label="Donut chart of factor allocation"></canvas>
+            <canvas id="donutChart" role="img" aria-label="Donut chart of portfolio allocation"></canvas>
           </div>
           <div class="allocation-breakdown">
             <div class="allocation-row">
-              <span class="flex items-center text-[var(--ink-muted)]"><span class="dot steel"></span>Global Equity Core (FWRA)</span>
+              <span class="flex items-center text-[var(--ink-muted)]"><span class="dot steel"></span>FTSE All-World</span>
               <span class="mono font-medium" id="donutBasePct">80%</span>
             </div>
             <div class="allocation-row">
-              <span class="flex items-center text-[var(--ink-muted)]"><span class="dot gold"></span>Small-Cap Value Tilt (AVGS)</span>
+              <span class="flex items-center text-[var(--ink-muted)]"><span class="dot gold"></span>AVGS Small Cap Value</span>
               <span class="mono font-medium" id="donutTiltPct">20%</span>
             </div>
           </div>
@@ -135,83 +135,70 @@
       </div>
     </section>
 
-    <!-- 3. METHODOLOGY -->
-    <section class="panel section-block" aria-labelledby="methodologyHeading">
+    <!-- 3. ACADEMIC FOUNDATION -->
+    <section class="panel section-block" aria-labelledby="academicHeading">
       <div class="section-block-head">
-        <p class="eyebrow">Analytical Approach</p>
-        <h2 id="methodologyHeading">Regime-Based Return Modeling</h2>
-        <p>To evaluate factor tilt impact given limited historical ETF data, this study employs a calibrated regime-based return model that simulates 240 months (Jan 2005 – Dec 2024) of monthly returns across asset classes. The approach captures varying market conditions through distinct regimes, allowing analysis of how factor performance changes across different market environments.</p>
+        <p class="eyebrow">Academic Foundation</p>
+        <h2 id="academicHeading">Fama-French Factor Research</h2>
+        <p>The Fama-French factor models expanded on the traditional Capital Asset Pricing Model (CAPM) by identifying additional factors historically associated with differences in equity returns. This project's factor tilt is grounded in that research.</p>
       </div>
       <div class="academic-grid">
         <div class="academic-card">
           <span class="factor-chip">Market</span>
-          <h3>Market Factor Exposure</h3>
-          <p>Beta coefficient measuring sensitivity to overall market returns, representing systematic risk exposure common to all equities.</p>
+          <h3>Market Factor</h3>
+          <p>Broad exposure to the global equity market as a whole — the primary long-run driver of diversified equity returns.</p>
         </div>
         <div class="academic-card">
           <span class="factor-chip">SMB</span>
-          <h3>Size Factor Exposure</h3>
-          <p>Beta coefficient measuring sensitivity to returns of small-cap versus large-cap stocks, capturing the size premium documented in financial literature.</p>
+          <h3>Size Factor</h3>
+          <p>Historical evidence suggests smaller companies have exhibited return characteristics that differ from those of larger companies over long periods.</p>
         </div>
         <div class="academic-card">
           <span class="factor-chip">HML</span>
-          <h3>Value Factor Exposure</h3>
-          <p>Beta coefficient measuring sensitivity to returns of high book-to-market (value) versus low book-to-market (growth) stocks, capturing the value premium.</p>
+          <h3>Value Factor</h3>
+          <p>Companies priced lower relative to their fundamentals have historically shown return characteristics distinct from higher-priced growth companies.</p>
         </div>
       </div>
-      <div class="disclaimer-note">The model uses synthetic returns calibrated to approximate realistic long-term equity characteristics. Results illustrate potential behavior under modeled conditions and do not represent actual historical performance of any tradable security.</div>
+      <div class="disclaimer-note">These are historically observed factor premiums — not proven, market-beating, or guaranteed sources of return. Factor premiums can underperform for extended periods and may weaken or disappear in the future.</div>
     </section>
 
-    <!-- 4. DATA ASSUMPTIONS -->
-    <section class="panel section-block" aria-labelledby="dataAssumptionsHeading">
-      <div class="section-block-head">
-        <p class="eyebrow">Model Assumptions</p>
-        <h2 id="dataAssumptionsHeading">Return Model Parameters</h2>
-        <p>To evaluate factor performance across different market conditions, this analysis uses a regime-based return model that captures varying market environments. The model consists of five distinct regimes representing different economic periods, each with specific market drift, volatility, and factor premium assumptions.</p>
+    <!-- 4. FACTOR ALLOCATION SIMULATOR -->
+    <section class="panel control-panel" aria-labelledby="simulatorHeading">
+      <div class="flex items-center justify-between mb-1">
+        <h2 id="simulatorHeading">Factor Allocation Simulator</h2>
+        <span class="ticker-chip">AVGS.L</span>
       </div>
-      <div class="construction-grid">
-        <div class="construction-copy">
-          <div class="allocation-row-detail">
-            <span class="dot steel"></span>
-            <div>
-              <strong>Market Regimes</strong>
-              <p>The model incorporates five regimes: Bull markets (low volatility), Bear markets (high volatility), Recovery periods, Stagflation environments, and Moderate growth periods, each calibrated to historical equity market characteristics.</p>
-            </div>
-          </div>
-          <div class="allocation-row-detail">
-            <span class="dot gold"></span>
-            <div>
-              <strong>Asset Sensitivities</strong>
-              <p>Each asset class (Global Equity Core, MSCI ACWI, S&P 500, Small-Cap Value) is defined by its beta (market sensitivity), beta-value (factor sensitivity), alpha (excess return), and idiosyncratic volatility parameters.</p>
-            </div>
-          </div>
-          <p>The simulation uses a fixed seed for reproducibility and generates 240 monthly returns (20 years) to ensure consistent analysis across different factor tilt allocations.</p>
+      <p>Explore how increasing or decreasing the small-cap value factor tilt changes portfolio characteristics such as return, volatility, and drawdown. This tool is for exploring sensitivity — it does not identify an optimal or recommended allocation.</p>
+
+      <div class="slider-labels">
+        <div class="flex items-center text-[.78rem] text-[var(--ink-muted)]">
+          <span class="dot steel"></span> Core Asset (All-World)
+          <span class="mono ml-2 text-[var(--ink)] font-medium" id="baseValue">80%</span>
         </div>
-        <div class="allocation-panel-inner">
-          <p class="eyebrow mb-1">Factor Exposure Definition</p>
-          <div class="donut-wrap">
-            <canvas id="donutChart" role="img" aria-label="Donut chart showing factor exposure decomposition"></canvas>
-          </div>
-          <div class="allocation-breakdown">
-            <div class="allocation-row">
-              <span class="flex items-center text-[var(--ink-muted)]"><span class="dot steel"></span>Market Factor (Beta)</span>
-              <span class="mono font-medium" id="donutBasePct">100%</span>
-            </div>
-            <div class="allocation-row">
-              <span class="flex items-center text-[var(--ink-muted)]"><span class="dot gold"></span>Value Factor Exposure</span>
-              <span class="mono font-medium" id="donutTiltPct">0%</span>
-            </div>
-          </div>
+        <div class="flex items-center text-[.78rem] text-[var(--ink-muted)]">
+          <span class="mono mr-2 text-[var(--accent)] font-medium" id="tiltValue">20%</span>
+          Factor Tilt (AVGS)
+          <span class="dot gold ml-2"></span>
         </div>
+      </div>
+
+      <input type="range" min="0" max="50" step="1" value="20" id="tiltSlider" class="tilt-slider" aria-label="Factor Tilt Weight percentage" aria-valuemin="0" aria-valuemax="50" aria-valuenow="20">
+      <div class="tick-row">
+        <span>0%</span><span>10%</span><span>20%</span><span>30%</span><span>40%</span><span>50%</span>
+      </div>
+
+      <div class="insight-box">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        <p id="insightText">—</p>
       </div>
     </section>
 
-    <!-- 5. ANALYTICAL FRAMEWORK -->
-    <section class="panel section-block" aria-labelledby="frameworkHeading">
+    <!-- 5. STRUCTURAL COMPARISON -->
+    <section class="panel section-block" aria-labelledby="structuralHeading">
       <div class="section-block-head">
-        <p class="eyebrow">Analytical Framework</p>
-        <h2 id="frameworkHeading">How Factor Exposure Is Measured</h2>
-        <p>To evaluate the impact of factor tilts, this analysis measures portfolio sensitivity to three key dimensions: market exposure (beta), size factor exposure (SMB beta), and value factor exposure (HML beta). This multi-factor approach allows decomposition of returns into systematic components driven by each underlying factor.</p>
+        <p class="eyebrow">Structural Comparison</p>
+        <h2 id="structuralHeading">How Portfolio Characteristics Differ</h2>
+        <p>This comparison highlights structural differences between Strategy 20-80 and two widely followed benchmarks — it is not a claim that one has outperformed or will outperform the others.</p>
       </div>
       <div class="overflow-x-auto">
         <table class="compare structural-table min-w-[640px]">
