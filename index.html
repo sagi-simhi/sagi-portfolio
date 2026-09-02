@@ -9,7 +9,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
 <link rel="stylesheet" href="style.css">
 
 </head>
@@ -50,13 +49,13 @@
 </header>
 
 <div class="core-layer" aria-hidden="true">
-  <canvas class="core-canvas" id="coreCanvas"></canvas>
+  <canvas class="core-canvas" id="liquid-glass-canvas"></canvas>
 </div>
 
 <main id="main">
 
 <!-- ============ HERO ============ -->
-<section class="hero ambient-violet side-right" id="top">
+<section class="hero" id="top">
 
 <div class="hero-inner">
   <div class="hero-status-wrapper">
@@ -179,7 +178,7 @@
   </section>
 
   <!-- ============ SKILLS / STACK ============ -->
-  <section class="section ambient-violet side-left" id="stack" aria-labelledby="stackHeading">
+  <section class="section" id="stack" aria-labelledby="stackHeading">
     <div class="section-inner">
       <p class="section-eyebrow"><span class="eyebrow-signal" aria-hidden="true"></span>Core Competencies</p>
       <h2 class="section-title" id="stackHeading">Skills &amp; Toolkit</h2>
@@ -254,35 +253,12 @@
             <li><a href="https://verify.skilljar.com/c/xjxct3buwzqo" target="_blank" rel="noopener noreferrer">Claude 101 &#8599;</a> <span class="course-provider">Anthropic Academy</span></li>
           </ul>
         </article>
-        <article class="edu-card edu-card-languages">
-  <div class="edu-card-head">
-    <h3>Languages</h3>
-  </div>
-
-  <ul class="language-list">
-    <li>
-      <span class="language-name">Hebrew</span>
-      <span class="language-level mono">Native</span>
-    </li>
-
-    <li>
-      <span class="language-name">English</span>
-      <span class="language-level mono">Professional Working Proficiency</span>
-    </li>
-
-    <li>
-      <span class="language-name">French</span>
-      <span class="language-level mono">Elementary (A2)</span>
-    </li>
-  </ul>
-</article>
-
       </div>
     </div>
   </section>
 
   <!-- ============ EXPERIENCE ============ -->
-  <section class="section ambient-violet side-right" id="experience" aria-labelledby="experienceHeading">
+  <section class="section" id="experience" aria-labelledby="experienceHeading">
     <div class="section-inner">
       <p class="section-eyebrow"><span class="eyebrow-signal" aria-hidden="true"></span>Track Record</p>
       <h2 class="section-title" id="experienceHeading">Experience</h2>
@@ -355,7 +331,7 @@
   </section>
 
   <!-- ============ CONTACT ============ -->
-  <section class="section section-contact ambient-violet side-left" id="contact" aria-labelledby="contactHeading">
+  <section class="section section-contact" id="contact" aria-labelledby="contactHeading">
     <div class="section-inner">
       <p class="section-eyebrow"><span class="eyebrow-signal" aria-hidden="true"></span>Let's Connect</p>
       <h2 class="section-title" id="contactHeading">Get in Touch</h2>
@@ -425,6 +401,8 @@
   </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="spatial-engine.js"></script>
 <script src="script.js"></script>
 
 </body>

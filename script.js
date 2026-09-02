@@ -257,7 +257,7 @@
   function getInitialTheme() {
     var storedTheme = localStorage.getItem("theme");
     if (storedTheme === "light" || storedTheme === "dark") return storedTheme;
-    return window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+    return "dark";
   }
 
   function applyTheme(theme, persist) {
@@ -273,5 +273,165 @@
   toggle.addEventListener("click", function () {
     var currentTheme = document.documentElement.getAttribute("data-theme");
     applyTheme(currentTheme === "light" ? "dark" : "light", true);
+  });
+})();
+
+(function initLiquidGlassEngine() {
+  if (typeof LiquidGlassEngine !== 'undefined') {
+    try {
+      LiquidGlassEngine.init();
+    } catch(e) {
+      console.warn('[LiquidGlass] Engine init failed:', e.message);
+    }
+  }
+})();
+
+/* Initialize Three.js Hero Scene and WebGL Glass Effects */
+(function initThreeJSEffects() {
+  "use strict";
+
+  // Check if we should attempt to use WebGL
+  async function initThreeJSEffectsAsync() {
+    try {
+      // Import the threejs modules dynamically
+      const { shouldUseWebGL, loadThreeJS } = await import('./threejs/utils.js');
+
+      if (!shouldUseWebGL()) {
+        console.log('WebGL not available or disabled; using CSS-only effects.');
+        return;
+      }
+
+      // Load Three.js
+      await loadThreeJS();
+
+      // Import and initialize HeroScene
+      const { HeroScene } = await import('./threejs/hero/HeroScene.js');
+      const { init: initGLGlass, dispose: disposeGLGlass } = await import('./threejs/init.js');
+
+      // Get the core canvas for the hero trajectory
+      const coreCanvas = document.querySelector('.core-canvas');
+      if (coreCanvas) {
+        // Create the hero scene
+        const heroScene = new HeroScene(coreCanvas, {
+          backgroundColor: 0x1b211f // dark background to match the site
+        });
+
+        // Store reference for potential cleanup
+        coreCanvas.heroScene = heroScene;
+      }
+
+      // Initialize WebGL glass highlight effect
+      initGLGlass();
+
+    } catch (error) {
+      console.warn('Failed to initialize Three.js effects:', error);
+      // Fallback to CSS-only effects will be used
+    }
+  }
+
+  // Initialize if not reduced motion
+  if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    initThreeJSEffectsAsync();
+  }
+})();
+
+/* CSS-only card tilt/specular effect - replaces WebGL-dependent hover logic */
+(function initCardTiltEffect() {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  if (window.matchMedia("(pointer: coarse)").matches) return;
+
+  var selectors = [
+    '.about-facts',
+    '.edu-card',
+    '.project-card',
+    '.stack-group',
+    '.timeline-content',
+    '.approach-step'
+  ];
+
+  var cards = Array.prototype.slice.call(document.querySelectorAll(selectors.join(',')));
+  if (!cards.length) return;
+
+  var activeCard = null;
+  var ticking = false;
+
+  function updateCardTransform(event) {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(function () {
+      applyCardTransform(activeCard, event);
+      ticking = false;
+    });
+  }
+
+  function applyCardTransform(card, event) {
+    var rect = card.getBoundingClientRect();
+    var relX = event.clientX - rect.left - rect.width / 2;
+    var relY = event.clientY - rect.top - rect.height / 2;
+
+    var normX = Math.max(-1, Math.min(1, relX / (rect.width / 2)));
+    var normY = Math.max(-1, Math.min(1, relY / (rect.height / 2)));
+
+    var tiltRange = 12;
+    var rotateX = normY * -tiltRange;
+    var rotateY = normX * tiltRange;
+
+    // Apply smooth transform with easing
+    if (!card.userData) card.userData = {};
+    if (!card.userData.currentRotateX) card.userData.currentRotateX = 0;
+    if (!card.userData.currentRotateY) card.userData.currentRotateY = 0;
+
+    var easing = 0.1;
+    card.userData.currentRotateX += (rotateX - card.userData.currentRotateX) * easing;
+    card.userData.currentRotateY += (rotateY - card.userData.currentRotateY) * easing;
+
+    card.style.transform =
+      "perspective(1400px) rotateX(" + card.userData.currentRotateX.toFixed(2) + "deg) rotateY(" +
+      card.userData.currentRotateY.toFixed(2) + "deg) translateZ(16px)";
+
+    // Update CSS custom properties for specular highlight
+    var percentX = 50 + (normX * 38);
+    var percentY = 50 + (normY * 38);
+    var opacity = 0.82;
+
+    card.style.setProperty('--mouse-x', percentX + '%');
+    card.style.setProperty('--mouse-y', percentY + '%');
+    card.style.setProperty('--highlight-opacity', opacity.toString());
+  }
+
+  function resetCardTransform(card) {
+    if (!card.userData) card.userData = {};
+
+    var easing = 0.12;
+    card.userData.currentRotateX *= (1 - easing);
+    card.userData.currentRotateY *= (1 - easing);
+
+    if (Math.abs(card.userData.currentRotateX) < 0.01) card.userData.currentRotateX = 0;
+    if (Math.abs(card.userData.currentRotateY) < 0.01) card.userData.currentRotateY = 0;
+
+    card.style.transform =
+      "perspective(1400px) rotateX(" + card.userData.currentRotateX.toFixed(2) + "deg) rotateY(" +
+      card.userData.currentRotateY.toFixed(2) + "deg) translateZ(0px)";
+
+    card.style.setProperty('--mouse-x', '50%');
+    card.style.setProperty('--mouse-y', '50%');
+    card.style.setProperty('--highlight-opacity', '0');
+  }
+
+  cards.forEach(function(card) {
+    card.addEventListener('mousemove', function(event) {
+      activeCard = card;
+      updateCardTransform(event);
+    });
+
+    card.addEventListener('mouseleave', function() {
+      resetCardTransform(card);
+      activeCard = null;
+    });
+
+    card.addEventListener('pointerleave', function() {
+      resetCardTransform(card);
+      activeCard = null;
+    });
   });
 })();
