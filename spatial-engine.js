@@ -137,23 +137,23 @@ function WebGLLiquidGlassEngine(canvasElement) {
     var isLight = document.documentElement.getAttribute('data-theme') === 'light';
     if (isLight) {
       return {
-        primary: 0x2e9e75,
-        secondary: 0x627a73,
-        gold: 0xc9a15a,
-        light: 0x8fd6b5,
-        line: 0x567166,
-        glow: 0x7ed5b0,
-        bg: 0xf5f7f6
+        primary: 0x0071E3,
+        secondary: 0xAEAEB2,
+        steel: 0xC7C7CC,
+        light: 0x409CFF,
+        line: 0xD1D1D6,
+        glow: 0x0071E3,
+        bg: 0xf5f5f7
       };
     }
     return {
-      primary: 0x53d7a6,
-      secondary: 0xc9a15a,
-      gold: 0xc9a15a,
-      light: 0x8be8d0,
-      line: 0x90a39d,
-      glow: 0x8be8d0,
-      bg: 0x0c100e
+      primary: 0x0A84FF,
+      secondary: 0x636366,
+      steel: 0x8E8E93,
+      light: 0x409CFF,
+      line: 0x545458,
+      glow: 0x0A84FF,
+      bg: 0x000000
     };
   }
 
@@ -213,7 +213,7 @@ function WebGLLiquidGlassEngine(canvasElement) {
     gradient.addColorStop(0, '#ffffff');
     gradient.addColorStop(0.2, '#' + palette.primary.toString(16).padStart(6, '0'));
     gradient.addColorStop(0.5, '#' + palette.secondary.toString(16).padStart(6, '0'));
-    gradient.addColorStop(1, '#' + palette.gold.toString(16).padStart(6, '0'));
+    gradient.addColorStop(1, '#' + palette.steel.toString(16).padStart(6, '0'));
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, 256, 256);
     envMap = new THREE.CanvasTexture(textureCanvas);
@@ -225,12 +225,12 @@ function WebGLLiquidGlassEngine(canvasElement) {
     scene.add(ambientLight);
     lights.push(ambientLight);
 
-    pointLightMain = new THREE.PointLight(0x53d7a6, 1.8, 60, 2.0);
+    pointLightMain = new THREE.PointLight(getThemePalette().glow, 1.8, 60, 2.0);
     pointLightMain.position.set(8, 10, 14);
     scene.add(pointLightMain);
     lights.push(pointLightMain);
 
-    rimLight = new THREE.PointLight(0xc9a15a, 0.65, 60, 2.0);
+    rimLight = new THREE.PointLight(getThemePalette().steel, 0.65, 60, 2.0);
     rimLight.position.set(-8, -8, -10);
     scene.add(rimLight);
     lights.push(rimLight);
@@ -252,7 +252,7 @@ function WebGLLiquidGlassEngine(canvasElement) {
         var pz = (Math.cos(x * 0.85) * 1.4) + (Math.sin(y * 0.8) * 1.1);
 
         var material = new THREE.MeshPhysicalMaterial({
-          color: (x + y) % 2 === 0 ? palette.primary : palette.gold,
+          color: (x + y) % 2 === 0 ? palette.primary : palette.steel,
           metalness: 0.05,
           roughness: 0.02,
           transmission: 0.96,
@@ -311,7 +311,7 @@ function WebGLLiquidGlassEngine(canvasElement) {
     if (!scene || isDestroyed || !nodes.length) return;
     var palette = getThemePalette();
     nodes.forEach(function(mesh, index) {
-      var color = index % 2 === 0 ? palette.primary : palette.gold;
+      var color = index % 2 === 0 ? palette.primary : palette.steel;
       if (mesh.material && mesh.material.color) {
         mesh.material.color.setHex(color);
       }
@@ -328,7 +328,7 @@ function WebGLLiquidGlassEngine(canvasElement) {
       pointLightMain.intensity = 1.7;
     }
     if (rimLight) {
-      rimLight.color.setHex(palette.gold);
+      rimLight.color.setHex(palette.steel);
     }
   };
 
