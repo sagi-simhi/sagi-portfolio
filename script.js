@@ -167,6 +167,13 @@
 
   var yearElement = document.getElementById("currentYear");
   if (yearElement) yearElement.textContent = new Date().getFullYear();
+
+  var updatedElement = document.getElementById("lastUpdated");
+  if (updatedElement) {
+    updatedElement.textContent = "Updated " + new Date().toLocaleString("en-US", {
+      month: "long", year: "numeric"
+    });
+  }
 })();
 
 (function initProjectModal() {
