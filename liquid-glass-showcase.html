@@ -1,0 +1,529 @@
+<!-- ============================================================
+     LIQUID GLASS SHOWCASE - Scoped Section Component
+     Reuses existing design tokens (--accent, --gold, --glass-*)
+     Uses existing fonts (Inter / IBM Plex Mono)
+     Background orbs are CONTAINED via overflow: hidden
+     Cards inherit the global tilt/specular system from script.js
+     ============================================================ -->
+<style>
+  /* ----- Scoped to .lgs (Liquid Glass Showcase) — no global leakage ----- */
+  .lgs {
+    position: relative;
+    overflow: hidden;            /* hard-contain orbs inside the section */
+    isolation: isolate;          /* fresh stacking context for the backdrop */
+    padding: 96px 24px 88px;
+    border-top: 1px solid var(--border-soft);
+    border-bottom: 1px solid var(--border-soft);
+  }
+
+  /* Local backdrop tint — uses accent + gold (site palette) at low alpha.
+     Distinct from the global body background so orbs read clearly, but
+     still inherits the --bg-base tone. */
+  .lgs::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(700px 400px at 80% 10%, rgba(83, 215, 166, 0.10), transparent 60%),
+      radial-gradient(600px 380px at 10% 90%, rgba(201, 161, 90, 0.08), transparent 62%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 40%);
+  }
+
+  /* Scoped animated orbs — clipped by the section. Site's own .bg-orb
+     classes are global + fixed; these are LOCAL: position:absolute inside
+     the section so they can never escape and overlap the header. */
+  .lgs-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(110px);
+    pointer-events: none;
+    will-change: transform;
+    z-index: 0;
+  }
+  .lgs-orb-a {
+    width: 520px; height: 520px;
+    top: -120px; right: -80px;
+    opacity: .55;
+    background: radial-gradient(circle, var(--accent-bright) 0%, var(--accent) 50%, transparent 72%);
+    animation: lgsOrbit 22s ease-in-out infinite alternate;
+  }
+  .lgs-orb-b {
+    width: 460px; height: 460px;
+    bottom: -140px; left: -60px;
+    opacity: .50;
+    background: radial-gradient(circle, var(--gold) 0%, var(--accent-dim) 55%, transparent 72%);
+    animation: lgsOrbit 26s ease-in-out infinite alternate-reverse;
+  }
+  .lgs-orb-c {
+    width: 360px; height: 360px;
+    top: 45%; left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: .40;
+    background: radial-gradient(circle, var(--accent) 0%, var(--gold) 60%, transparent 72%);
+    animation: lgsOrbit 30s ease-in-out infinite alternate;
+  }
+  @keyframes lgsOrbit {
+    from { transform: translate(0, 0) scale(1); }
+    to   { transform: translate(28px, -22px) scale(1.08); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .lgs-orb { animation: none; }
+  }
+
+  /* Inner container stays on top of orbs. */
+  .lgs-inner {
+    position: relative;
+    z-index: 1;
+    max-width: var(--max-w);
+    margin: 0 auto;
+  }
+
+  /* Reuse existing eyebrow + title styles by copying the structure
+     (avoids selector-coupling so this stays self-contained). */
+  .lgs-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 12px;
+    color: var(--gold);
+    font: 500 .85rem var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: .05em;
+  }
+  .lgs-eyebrow::before {
+    content: "";
+    width: 14px; height: 1px;
+    background: var(--border);
+  }
+  .lgs-title {
+    margin: 0 0 14px;
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-size: clamp(1.9rem, 4vw, 2.6rem);
+    font-weight: 600;
+    letter-spacing: -.025em;
+  }
+  .lgs-lede {
+    max-width: 680px;
+    margin: 0 0 44px;
+    color: var(--ink);
+    font-size: 1.1rem;
+    line-height: 1.6;
+  }
+
+  /* ---- 3-column glass grid ---- */
+  .lgs-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 22px;
+  }
+
+  /* The cards re-use the exact visual language of .project-card /
+     .edu-card / .stack-group but stay independent so this section
+     can be removed without breaking the rest of the site. */
+  .lgs-card {
+    position: relative;
+    overflow: hidden;
+    padding: 24px 22px 22px;
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+    box-shadow:
+      inset 0 1px 1px var(--glass-highlight),
+      inset 0 -6px 14px var(--glass-glow-inner),
+      0 4px 28px var(--glass-glow-outer);
+    transform-style: preserve-3d;
+    will-change: transform;
+    perspective: 1400px;
+    transition:
+      transform .28s cubic-bezier(.18,.89,.32,1.02),
+      box-shadow .32s var(--motion-ease),
+      border-color .28s ease;
+  }
+
+  /* Specular highlight layer (the cursor-following light spot) */
+  .lgs-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+        rgba(255, 255, 255, 0.32) 0%, rgba(255, 255, 255, 0.10) 22%, transparent 52%),
+      linear-gradient(90deg, var(--glass-chromatic-r) 0%, transparent 30%,
+                      transparent 72%, var(--glass-chromatic-b) 100%);
+    opacity: var(--highlight-opacity, 0);
+    transition: opacity var(--motion-fast) var(--motion-ease);
+    border-radius: inherit;
+    mix-blend-mode: screen;
+  }
+
+  /* Top edge sheen (matches existing glass card pattern) */
+  .lgs-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(135deg,
+      var(--glass-edge-top) 0%, transparent 36%,
+      transparent 68%, var(--glass-edge-bottom) 100%);
+    opacity: .8;
+    border-radius: inherit;
+    mix-blend-mode: overlay;
+  }
+
+  .lgs-card:hover {
+    border-color: var(--accent-line);
+    box-shadow:
+      inset 0 1px 0 var(--glass-highlight),
+      inset 0 -8px 18px var(--glass-glow-inner),
+      0 22px 54px rgba(83, 215, 166, 0.18),
+      0 0 0 1px var(--accent-line);
+    backdrop-filter: blur(calc(var(--glass-blur) + 2px)) saturate(230%);
+    -webkit-backdrop-filter: blur(calc(var(--glass-blur) + 2px)) saturate(230%);
+  }
+  .lgs-card:hover::after { opacity: .9; }
+  .lgs-card:hover::before { opacity: 1; }
+
+  /* Card internals — use translateZ so they sit on a "raised" plane
+     relative to the card surface (consistent with existing cards). */
+  .lgs-card-head {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .lgs-icon {
+    width: 42px; height: 42px;
+    display: grid; place-items: center;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--accent);
+    background: rgba(83, 215, 166, 0.06);
+    transform: translateZ(28px) scale(1.02);
+    will-change: transform;
+  }
+  .lgs-icon svg { width: 20px; height: 20px; }
+
+  .lgs-badge {
+    padding: 4px 9px;
+    border: 1px solid var(--border-soft);
+    border-radius: 999px;
+    color: var(--ink-faint);
+    font: 500 .68rem var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    background: var(--surface-0);
+    transform: translateZ(20px);
+  }
+  .lgs-badge.is-live {
+    color: var(--accent);
+    border-color: var(--accent-line);
+    background: rgba(83, 215, 166, 0.06);
+  }
+
+  .lgs-card-title {
+    position: relative;
+    z-index: 3;
+    margin: 0 0 8px;
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-size: 1.12rem;
+    font-weight: 600;
+    letter-spacing: -.01em;
+    transform: translateZ(16px);
+  }
+
+  .lgs-card-desc {
+    position: relative;
+    z-index: 2;
+    margin: 0 0 16px;
+    color: var(--ink-muted);
+    font-size: .92rem;
+    line-height: 1.55;
+    transform: translateZ(10px);
+  }
+
+  /* Mini stat row at the bottom — gives the card a "telemetry" feel
+     that fits a fintech / data-tools site. */
+  .lgs-stats {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border-soft);
+    transform: translateZ(12px);
+  }
+  .lgs-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .lgs-stat-value {
+    color: var(--ink);
+    font: 600 1rem var(--font-mono);
+    letter-spacing: -.01em;
+  }
+  .lgs-stat-label {
+    color: var(--ink-faint);
+    font: 500 .68rem var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: .06em;
+  }
+  .lgs-stat.is-up   .lgs-stat-value { color: var(--accent-bright); }
+  .lgs-stat.is-gold .lgs-stat-value { color: var(--gold); }
+
+  /* Tiny inline sparkline drawn in SVG — purely visual, fits the data
+     theme without depending on JS. */
+  .lgs-spark {
+    position: absolute;
+    right: 18px;
+    bottom: 18px;
+    width: 70px;
+    height: 26px;
+    z-index: 2;
+    opacity: .85;
+    transform: translateZ(14px);
+  }
+  .lgs-spark path { fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* ---- Responsive (matches existing breakpoints) ---- */
+  @media (max-width: 900px) {
+    .lgs-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 640px) {
+    .lgs { padding: 80px 20px 72px; }
+    .lgs-grid { grid-template-columns: 1fr; }
+    .lgs-card { will-change: auto; backdrop-filter: blur(28px) saturate(210%); }
+  }
+  @media (hover: none) {
+    .lgs-card::after { display: none; }
+    .lgs-card:active {
+      box-shadow:
+        inset 0 2px 4px var(--glass-edge-top),
+        inset 0 -3px 12px var(--glass-glow-inner),
+        0 18px 48px var(--glass-glow-outer);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .lgs-card { transform: none !important; will-change: auto !important; perspective: none; }
+    .lgs-card::after { opacity: 0 !important; }
+  }
+</style>
+
+<section class="section lgs" id="capabilities" aria-labelledby="capabilitiesHeading">
+  <!-- Scoped background orbs (clipped by .lgs { overflow: hidden }) -->
+  <div class="lgs-orb lgs-orb-a" aria-hidden="true"></div>
+  <div class="lgs-orb lgs-orb-b" aria-hidden="true"></div>
+  <div class="lgs-orb lgs-orb-c" aria-hidden="true"></div>
+
+  <div class="lgs-inner">
+    <p class="lgs-eyebrow">What I Build With</p>
+    <h2 class="lgs-title" id="capabilitiesHeading">Capabilities, in one glance</h2>
+    <p class="lgs-lede">
+      A snapshot of the lenses I use when I look at a market, a dataset, or a
+      product — factor thinking, structured data work, and the operational
+      discipline to ship something honest at the end of it.
+    </p>
+
+    <div class="lgs-grid">
+
+      <!-- 1. Factor Investing -->
+      <article class="lgs-card">
+        <div class="lgs-card-head">
+          <span class="lgs-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 17l5-5 4 4 8-9"/>
+              <path d="M14 7h6v6"/>
+            </svg>
+          </span>
+          <span class="lgs-badge is-live">Live</span>
+        </div>
+        <h3 class="lgs-card-title">Factor-Tilted Portfolios</h3>
+        <p class="lgs-card-desc">
+          Building and tracking an 80/20 FTSE All-World / Small-Cap Value book
+          against S&amp;P 500 and MSCI ACWI benchmarks.
+        </p>
+        <div class="lgs-stats">
+          <div class="lgs-stat is-up">
+            <span class="lgs-stat-value">80 / 20</span>
+            <span class="lgs-stat-label">Allocation</span>
+          </div>
+          <div class="lgs-stat">
+            <span class="lgs-stat-value">3</span>
+            <span class="lgs-stat-label">Benchmarks</span>
+          </div>
+        </div>
+        <svg class="lgs-spark" viewBox="0 0 70 26" aria-hidden="true">
+          <path d="M0 20 L10 16 L20 18 L30 11 L40 13 L50 6 L60 9 L70 3" stroke="var(--accent-bright)"/>
+        </svg>
+      </article>
+
+      <!-- 2. Financial Analysis -->
+      <article class="lgs-card">
+        <div class="lgs-card-head">
+          <span class="lgs-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 19V5"/>
+              <path d="M4 19h16"/>
+              <rect x="7" y="11" width="3" height="6"/>
+              <rect x="12" y="8" width="3" height="9"/>
+              <rect x="17" y="13" width="3" height="4"/>
+            </svg>
+          </span>
+          <span class="lgs-badge">Analysis</span>
+        </div>
+        <h3 class="lgs-card-title">Financial Statement Analysis</h3>
+        <p class="lgs-card-desc">
+          Reading income statements, balance sheets, and cash flow with the
+          same skepticism I bring to a noisy operational log.
+        </p>
+        <div class="lgs-stats">
+          <div class="lgs-stat is-gold">
+            <span class="lgs-stat-value">3</span>
+            <span class="lgs-stat-label">Statements</span>
+          </div>
+          <div class="lgs-stat">
+            <span class="lgs-stat-value">campusIL</span>
+            <span class="lgs-stat-label">Coursework</span>
+          </div>
+        </div>
+        <svg class="lgs-spark" viewBox="0 0 70 26" aria-hidden="true">
+          <path d="M0 18 L10 14 L20 16 L30 10 L40 12 L50 7 L60 11 L70 5" stroke="var(--gold)"/>
+        </svg>
+      </article>
+
+      <!-- 3. Behavioral Finance -->
+      <article class="lgs-card">
+        <div class="lgs-card-head">
+          <span class="lgs-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="9"/>
+              <path d="M12 7v5l3 2"/>
+            </svg>
+          </span>
+          <span class="lgs-badge">Behavior</span>
+        </div>
+        <h3 class="lgs-card-title">Behavioral Fintech Design</h3>
+        <p class="lgs-card-desc">
+          Designing products that surface signals, not noise — nudging
+          decisions toward structure without hiding the trade-offs.
+        </p>
+        <div class="lgs-stats">
+          <div class="lgs-stat">
+            <span class="lgs-stat-value">Loss Aversion</span>
+            <span class="lgs-stat-label">Lens</span>
+          </div>
+        </div>
+        <svg class="lgs-spark" viewBox="0 0 70 26" aria-hidden="true">
+          <path d="M0 12 L10 10 L20 14 L30 8 L40 11 L50 5 L60 9 L70 4" stroke="var(--accent)"/>
+        </svg>
+      </article>
+
+      <!-- 4. Data-Driven Method -->
+      <article class="lgs-card">
+        <div class="lgs-card-head">
+          <span class="lgs-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <ellipse cx="12" cy="5" rx="8" ry="3"/>
+              <path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/>
+              <path d="M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/>
+            </svg>
+          </span>
+          <span class="lgs-badge">Method</span>
+        </div>
+        <h3 class="lgs-card-title">Data-Driven Decision Making</h3>
+        <p class="lgs-card-desc">
+          Trust the data over the narrative — read the structure first, then
+          the story. Same instinct I use running a SOC floor.
+        </p>
+        <div class="lgs-stats">
+          <div class="lgs-stat is-up">
+            <span class="lgs-stat-value">SOC</span>
+            <span class="lgs-stat-label">Background</span>
+          </div>
+          <div class="lgs-stat">
+            <span class="lgs-stat-value">Live</span>
+            <span class="lgs-stat-label">Status</span>
+          </div>
+        </div>
+        <svg class="lgs-spark" viewBox="0 0 70 26" aria-hidden="true">
+          <path d="M0 17 L10 13 L20 15 L30 9 L40 12 L50 6 L60 10 L70 4" stroke="var(--accent-bright)"/>
+        </svg>
+      </article>
+
+      <!-- 5. Web / Tooling -->
+      <article class="lgs-card">
+        <div class="lgs-card-head">
+          <span class="lgs-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="16 18 22 12 16 6"/>
+              <polyline points="8 6 2 12 8 18"/>
+            </svg>
+          </span>
+          <span class="lgs-badge">Stack</span>
+        </div>
+        <h3 class="lgs-card-title">Web &amp; Deployment</h3>
+        <p class="lgs-card-desc">
+          Shipping dashboards and small tools end-to-end — semantic HTML,
+          CSS architecture, vanilla JS, and Netlify deploys.
+        </p>
+        <div class="lgs-stats">
+          <div class="lgs-stat">
+            <span class="lgs-stat-value">HTML · CSS · JS</span>
+            <span class="lgs-stat-label">Core</span>
+          </div>
+          <div class="lgs-stat is-gold">
+            <span class="lgs-stat-value">Netlify</span>
+            <span class="lgs-stat-label">Host</span>
+          </div>
+        </div>
+        <svg class="lgs-spark" viewBox="0 0 70 26" aria-hidden="true">
+          <path d="M0 14 L10 12 L20 15 L30 10 L40 13 L50 8 L60 11 L70 6" stroke="var(--gold)"/>
+        </svg>
+      </article>
+
+      <!-- 6. AI / Applied ML -->
+      <article class="lgs-card">
+        <div class="lgs-card-head">
+          <span class="lgs-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+              <circle cx="12" cy="12" r="4"/>
+            </svg>
+          </span>
+          <span class="lgs-badge is-live">Active</span>
+        </div>
+        <h3 class="lgs-card-title">Applied AI for Finance</h3>
+        <p class="lgs-card-desc">
+          Building toward an AI-powered investment intelligence product —
+          small, honest models that answer a specific question.
+        </p>
+        <div class="lgs-stats">
+          <div class="lgs-stat is-up">
+            <span class="lgs-stat-value">02</span>
+            <span class="lgs-stat-label">Project</span>
+          </div>
+          <div class="lgs-stat">
+            <span class="lgs-stat-value">WIP</span>
+            <span class="lgs-stat-label">Phase</span>
+          </div>
+        </div>
+        <svg class="lgs-spark" viewBox="0 0 70 26" aria-hidden="true">
+          <path d="M0 16 L10 11 L20 14 L30 7 L40 10 L50 4 L60 8 L70 2" stroke="var(--accent-bright)"/>
+        </svg>
+      </article>
+
+    </div>
+  </div>
+</section>
