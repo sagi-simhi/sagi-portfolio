@@ -118,7 +118,7 @@
   }
 
   var revealTargets = document.querySelectorAll(
-    ".edu-card, .project-card, .timeline-item, .stack-group"
+    ".edu-card, .project-card, .timeline-item, .stack-group, .lgs-card"
   );
 
   if (!reduceMotion && "IntersectionObserver" in window) {
@@ -288,7 +288,8 @@
     '.project-card',
     '.stack-group',
     '.timeline-content',
-    '.approach-step'
+    '.approach-step',
+    '.lgs-card'
   ];
 
   var cards = Array.prototype.slice.call(document.querySelectorAll(selectors.join(',')));

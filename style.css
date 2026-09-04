@@ -17,13 +17,13 @@
  --gold:#c9a15a;
  --border:rgba(255, 255, 255, 0.09);
  --border-soft:rgba(255, 255, 255, 0.05);
- --glass-bg:rgba(255, 255, 255, 0.04);
- --glass-border:rgba(83, 215, 166, 0.18);
- --glass-blur:30px;
- --glass-saturation:210%;
- --glass-highlight:rgba(255, 255, 255, 0.18);
+ --glass-bg:rgba(255, 255, 255, 0.035);   /* was 0.05 in Round 1 — more transparent, more orb color shows through */
+ --glass-border:rgba(255, 255, 255, 0.15);
+ --glass-blur:25px;
+ --glass-saturation:240%;                 /* was 220% in Round 1 — stronger color pop now there's real color behind it */
+ --glass-highlight:rgba(255, 255, 255, 0.25);
  --glass-glow-inner:rgba(83, 215, 166, 0.12);
- --glass-glow-outer:rgba(0, 0, 0, 0.28);
+ --glass-glow-outer:rgba(0, 0, 0, 0.2);
  --glass-edge-top:rgba(255, 255, 255, 0.22);
  --glass-edge-bottom:rgba(0, 0, 0, 0.18);
  --glass-chromatic-r:rgba(83, 215, 166, 0.08);
@@ -74,6 +74,41 @@
  --glass-chromatic-b:rgba(100, 116, 120, 0.08);
  --modal-backdrop-bg:rgba(245, 247, 246, 0.88);
 }
+.bg-orb {
+  position: fixed;
+  z-index: 0;
+  pointer-events: none;
+  border-radius: 50%;
+  filter: blur(120px);
+}
+.bg-orb-a {
+  width: 900px; height: 900px;
+  top: -10%; right: -10%;
+  opacity: .6;
+  background: radial-gradient(circle, var(--accent-bright) 0%, var(--accent) 45%, transparent 72%);
+  animation: orbDrift 24s ease-in-out infinite alternate;
+}
+.bg-orb-b {
+  width: 800px; height: 800px;
+  bottom: -15%; left: -10%;
+  opacity: .55;
+  background: radial-gradient(circle, var(--gold) 0%, var(--accent-dim) 55%, transparent 72%);
+  animation: orbDrift 28s ease-in-out infinite alternate-reverse;
+}
+.bg-orb-c {
+  width: 600px; height: 600px;
+  top: 40%; left: 50%;
+  opacity: .4;
+  background: radial-gradient(circle, var(--accent) 0%, var(--gold) 60%, transparent 72%);
+  animation: orbDrift 32s ease-in-out infinite alternate;
+}
+@keyframes orbDrift {
+  from { transform: translate(0, 0) scale(1); }
+  to   { transform: translate(30px, -30px) scale(1.1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bg-orb { animation: none; }
+}
 *,*::before,*::after{box-sizing:border-box}
 html{scroll-behavior:smooth}
 html,body{min-height:100%;margin:0;padding:0}
@@ -118,7 +153,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--accent-bright);outl
 .eyebrow-signal{width:14px;height:1px;background:var(--border);position:relative}.eyebrow-signal::after{content:"";position:absolute;right:0;top:50%;width:4px;height:4px;border-radius:50%;background:var(--ink-faint);transform:translate(50%,-50%)}.section.is-active .eyebrow-signal{width:20px;background:var(--accent-line)}.section.is-active .eyebrow-signal::after{background:var(--accent);box-shadow:0 0 8px rgba(83,215,166,.55)}
 
 /* Glass cards - Advanced Liquid Glass with Multi-Tier Parallax */
-.about-facts,.edu-card,.project-card,.stack-group,.timeline-content,.approach-step{position:relative;overflow:hidden;border:1px solid var(--glass-border);border-radius:var(--radius-lg);background:var(--glass-bg);backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-saturation));-webkit-backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-saturation));box-shadow:inset 0 1px 0 var(--glass-highlight),inset 0 -6px 12px var(--glass-glow-inner),0 12px 30px var(--glass-glow-outer);transition:transform .28s cubic-bezier(.18,.89,.32,1.02),box-shadow .32s var(--motion-ease),border-color .28s ease,backdrop-filter .2s ease;transform-style:preserve-3d;will-change:transform,backdrop-filter,box-shadow;perspective:1400px}
+.about-facts,.edu-card,.project-card,.stack-group,.timeline-content,.approach-step{position:relative;overflow:hidden;border:1px solid var(--glass-border);border-radius:var(--radius-lg);background:var(--glass-bg);backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-saturation));-webkit-backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-saturation));box-shadow:inset 0 1px 1px var(--glass-highlight),inset 0 -6px 12px var(--glass-glow-inner),0 4px 30px var(--glass-glow-outer);transition:transform .28s cubic-bezier(.18,.89,.32,1.02),box-shadow .32s var(--motion-ease),border-color .28s ease,backdrop-filter .2s ease;transform-style:preserve-3d;will-change:transform,backdrop-filter,box-shadow;perspective:1400px}
 .about-facts::before,.edu-card::before,.project-card::before,.stack-group::before,.timeline-content::before,.approach-step::before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(135deg,var(--glass-edge-top) 0%,transparent 36%,transparent 68%,var(--glass-edge-bottom) 100%);opacity:.8;border-radius:inherit;mix-blend-mode:overlay;transition:opacity .28s var(--motion-ease)}
 .about-facts::after,.edu-card::after,.project-card::after,.stack-group::after,.timeline-content::after,.approach-step::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at var(--mouse-x,50%) var(--mouse-y,50%),rgba(255,255,255,.34) 0%,rgba(255,255,255,.12) 22%,transparent 52%),linear-gradient(90deg,var(--glass-chromatic-r) 0%,transparent 30%,transparent 72%,var(--glass-chromatic-b) 100%);opacity:var(--highlight-opacity,0);transition:opacity var(--motion-fast) var(--motion-ease);border-radius:inherit;mix-blend-mode:screen}
 .edu-card:hover,.project-card:hover,.stack-group:hover,.timeline-content:hover,.approach-step:hover{border-color:var(--accent-line);box-shadow:inset 0 1px 0 var(--glass-highlight),inset 0 -8px 18px var(--glass-glow-inner),0 22px 54px rgba(83,215,166,.18),0 0 0 1px var(--accent-line);backdrop-filter:blur(calc(var(--glass-blur) + 2px)) saturate(230%);-webkit-backdrop-filter:blur(calc(var(--glass-blur) + 2px)) saturate(230%)}
