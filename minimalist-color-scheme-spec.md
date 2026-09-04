@@ -179,6 +179,76 @@ left exactly as-is.
 
 ---
 
+## 8. Motion Tokens (`:root`)
+
+| Token | Value | Usage |
+|---|---|---|
+| `--motion-ease` | `cubic-bezier(.22,1,.36,1)` | All transitions and keyframe animations — Apple-style spring feel |
+| `--motion-fast` | `0.2s` | Micro-interactions: hover glows, button transforms |
+| `--motion-base` | `0.28s` | Component-level transitions: card reveals, modal open, theme toggle |
+
+All transitions apply `--motion-ease` as the timing function. When adding a new
+transition, prefer `--motion-fast` for hover-only interactions and `--motion-base`
+for structural changes. Never hardcode a duration value — always use a token so
+the whole page speeds up or slows down together.
+
+All `@keyframes` animations reference `--motion-ease`. Custom `@keyframes` added
+later should follow the same pattern.
+
+Reduced motion: all CSS animations are wrapped in `@media (prefers-reduced-motion: reduce)`
+blocks. `script.js` also gates JavaScript-driven reveal animations via a `reduceMotion`
+check that skips `IntersectionObserver`-based reveal on that preference.
+
+## 9. Type + Spacing Tokens (`:root`)
+
+### Font Stacks
+
+| Token | Value | Usage |
+|---|---|---|
+| `--font-display` | `'Inter', system-ui, sans-serif` | All headings, body copy, UI labels |
+| `--font-mono` | `'IBM Plex Mono', ui-monospace, monospace` | Eyebrow labels, badges, code snippets, timestamps |
+
+IBM Plex Mono signals "data" / "technical" — used consistently for: eyebrow labels,
+badge text, section eyebrows, timeline periods, skill tags, chart labels/tooltips,
+and all `.mono` utility instances.
+
+### Body
+
+- Base: `16px / 1.6`, `--font-display`
+
+### Type Scale
+
+| Element | Value | Notes |
+|---|---|---|
+| Hero title | `clamp(2.35rem, 5.5vw, 4.5rem)` | Most prominent; `letter-spacing: -0.04em` |
+| Section title | `clamp(1.9rem, 4vw, 2.6rem)` | `letter-spacing: -0.025em` |
+| Card title | `1.08rem` | Consistent across all glass card variants |
+| Body / lede | `1.1–1.12rem` | Regular weight |
+
+Heading weight: `--font-display` at `600` (semibold) for all `h1–h4`.
+Body weight: `--font-display` at `400` (regular).
+
+### Radius Tokens
+
+| Token | Value | Usage |
+|---|---|---|
+| `--radius-sm` | `8px` | Buttons, tags, small badges |
+| `--radius-md` | `14px` | KPI tiles, compact cards |
+| `--radius-lg` | `20px` | Glass cards, hero containers |
+
+### Spacing
+
+| Token / Pattern | Value | Usage |
+|---|---|---|
+| `--max-w` | `1180px` | `.section-inner`, `.hero-inner`, `.path-inner` |
+| Section padding | `72px 24px 64px` | Top / sides / bottom |
+| Grid gap | `28px` | Cards, approach steps |
+
+To add a new spacing value, prefer the existing radius tokens or add a new
+named token rather than a one-off pixel value — keeps the system coherent.
+
+---
+
 ## Suggested Claude Code invocation
 Run this in a **Sonnet** manual session (planning is already done here, no
 need for Opus):
