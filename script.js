@@ -276,64 +276,6 @@
   });
 })();
 
-(function initLiquidGlassEngine() {
-  if (typeof LiquidGlassEngine !== 'undefined') {
-    try {
-      LiquidGlassEngine.init();
-    } catch(e) {
-      console.warn('[LiquidGlass] Engine init failed:', e.message);
-    }
-  }
-})();
-
-/* Initialize Three.js Hero Scene and WebGL Glass Effects */
-(function initThreeJSEffects() {
-  "use strict";
-
-  // Check if we should attempt to use WebGL
-  async function initThreeJSEffectsAsync() {
-    try {
-      // Import the threejs modules dynamically
-      const { shouldUseWebGL, loadThreeJS } = await import('./threejs/utils.js');
-
-      if (!shouldUseWebGL()) {
-        console.log('WebGL not available or disabled; using CSS-only effects.');
-        return;
-      }
-
-      // Load Three.js
-      await loadThreeJS();
-
-      // Import and initialize HeroScene
-      const { HeroScene } = await import('./threejs/hero/HeroScene.js');
-      const { init: initGLGlass, dispose: disposeGLGlass } = await import('./threejs/init.js');
-
-      // Get the core canvas for the hero trajectory
-      const coreCanvas = document.querySelector('.core-canvas');
-      if (coreCanvas) {
-        // Create the hero scene
-        const heroScene = new HeroScene(coreCanvas, {
-          backgroundColor: 0x1b211f // dark background to match the site
-        });
-
-        // Store reference for potential cleanup
-        coreCanvas.heroScene = heroScene;
-      }
-
-      // Initialize WebGL glass highlight effect
-      initGLGlass();
-
-    } catch (error) {
-      console.warn('Failed to initialize Three.js effects:', error);
-      // Fallback to CSS-only effects will be used
-    }
-  }
-
-  // Initialize if not reduced motion
-  if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    initThreeJSEffectsAsync();
-  }
-})();
 
 /* CSS-only card tilt/specular effect - replaces WebGL-dependent hover logic */
 (function initCardTiltEffect() {
