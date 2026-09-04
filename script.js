@@ -332,13 +332,9 @@
       "perspective(1400px) rotateX(" + card.userData.currentRotateX.toFixed(2) + "deg) rotateY(" +
       card.userData.currentRotateY.toFixed(2) + "deg) translateZ(16px)";
 
-    // Update CSS custom properties for specular highlight
-    var percentX = 50 + (normX * 38);
-    var percentY = 50 + (normY * 38);
+    // Update CSS custom property for edge chromatic highlight
     var opacity = 0.82;
 
-    card.style.setProperty('--mouse-x', percentX + '%');
-    card.style.setProperty('--mouse-y', percentY + '%');
     card.style.setProperty('--highlight-opacity', opacity.toString());
   }
 
@@ -356,8 +352,6 @@
       "perspective(1400px) rotateX(" + card.userData.currentRotateX.toFixed(2) + "deg) rotateY(" +
       card.userData.currentRotateY.toFixed(2) + "deg) translateZ(0px)";
 
-    card.style.setProperty('--mouse-x', '50%');
-    card.style.setProperty('--mouse-y', '50%');
     card.style.setProperty('--highlight-opacity', '0');
   }
 
