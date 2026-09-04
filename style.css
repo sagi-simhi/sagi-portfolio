@@ -100,6 +100,11 @@
   from { transform: translate(0, 0) scale(1); }
   to   { transform: translate(30px, -30px) scale(1.1); }
 }
+@keyframes pulse {
+  0%   { transform: scale(.4); opacity: .55; }
+  70%  { transform: scale(2.1); opacity: 0; }
+  100% { transform: scale(2.1); opacity: 0; }
+}
 @media (prefers-reduced-motion: reduce) {
   .bg-orb { animation: none; }
 }
@@ -137,8 +142,8 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--accent-bright);outl
 
 /* Hero */
 .hero{position:relative;overflow:hidden;min-height:calc(100vh - 50px);padding:124px 32px 70px;display:flex;align-items:flex-start}.hero-inner{width:100%;max-width:1136px;margin:0 auto;position:relative;z-index:1}
-.hero-status-wrapper{margin-bottom:1.1rem}.status-badge{display:inline-flex;align-items:center;gap:.55rem;padding:.3rem .9rem .3rem .7rem;border:1px solid var(--border);border-radius:999px;color:var(--ink-muted);font-size:.75rem}.status-indicator{width:.4rem;height:.4rem;border-radius:50%;background:var(--accent);box-shadow:0 0 10px rgba(var(--accent-rgb),.5)}
-.hero-eyebrow{margin-bottom:20px;color:var(--accent);font:600 .9rem var(--font-mono);text-transform:uppercase;letter-spacing:.05em}.hero-title{max-width:760px;font-size:clamp(2.35rem,5.5vw,4.5rem);line-height:1.08;letter-spacing:-.04em}.hero-bio{max-width:640px;margin-top:24px;font-size:1.1rem}.hero-cta{display:flex;gap:16px;margin-top:34px;flex-wrap:wrap}
+.hero-status-wrapper{margin-bottom:1.1rem}.status-badge{display:inline-flex;align-items:center;gap:.55rem;padding:.3rem .9rem .3rem .7rem;border:1px solid var(--border);border-radius:999px;color:var(--ink-muted);font-size:.75rem}.status-indicator{position:relative;width:.4rem;height:.4rem;border-radius:50%;background:var(--accent);box-shadow:0 0 10px rgba(var(--accent-rgb),.5)}.status-indicator::after{content:"";position:absolute;left:50%;top:50%;width:100%;height:100%;border-radius:50%;background:var(--accent);transform:translate(-50%,-50%) scale(.4);opacity:.55;animation:pulse 1.8s ease-out infinite;pointer-events:none}
+.hero-eyebrow{margin-bottom:20px;color:var(--accent);font:600 .9rem var(--font-mono);text-transform:uppercase;letter-spacing:.05em}.hero-title{max-width:760px;font-size:clamp(2.35rem,5.5vw,4.5rem);line-height:1.08;letter-spacing:-.04em}.hero-lede{max-width:640px;margin-top:16px;margin-bottom:6px;color:var(--ink-muted);font-size:.98rem;line-height:1.45}.hero-bio{max-width:640px;margin-top:24px;font-size:1.1rem}.hero-cta{display:flex;gap:16px;margin-top:34px;flex-wrap:wrap}
 .core-layer{position:fixed;right:0;top:0;width:min(52vw,640px);height:100vh;pointer-events:none;z-index:2}.core-canvas{width:100%;height:100%;display:block}main,.site-footer{position:relative;z-index:1}
 
 /* Shared sections */
@@ -185,4 +190,4 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--accent-bright);outl
 @media(max-width:768px){.section{padding:80px 22px}.project-grid,.edu-grid{grid-template-columns:1fr}.edu-card-primary{grid-column:auto}.timeline{padding-left:20px}.timeline-marker{left:-29px}.project-modal{padding:0}.project-modal-window{border-radius:0}.hero-title{font-size:clamp(2.15rem,12vw,3.3rem)}.about-facts,.edu-card,.project-card,.stack-group,.timeline-content,.approach-step{will-change:auto;backdrop-filter:blur(28px) saturate(180%);transform:none !important}}
 @media(hover:none){.about-facts::after,.edu-card::after,.project-card::after,.stack-group::after,.timeline-content::after,.approach-step::after{display:none}.about-facts:active,.edu-card:active,.project-card:active,.stack-group:active,.timeline-content:active,.approach-step:active{background:rgba(255,255,255,0.055);box-shadow:inset 0 1px 0 rgba(255,255,255,.55),inset 0 -10px 24px var(--glass-glow-inner),0 8px 32px rgba(var(--accent-rgb),.12)}}
 @media(max-width:480px){.nav-contact-btn{display:none}.hero{padding-left:22px;padding-right:22px}.hero-cta{flex-direction:column;align-items:stretch}.site-footer-inner{justify-content:center;text-align:center}}
-@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}.about-facts,.edu-card,.project-card,.stack-group,.timeline-content,.approach-step{transform:none !important;will-change:auto !important}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}.about-facts,.edu-card,.project-card,.stack-group,.timeline-content,.approach-step{transform:none !important;will-change:auto !important}.status-indicator::after{animation:none;opacity:0}
