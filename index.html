@@ -271,24 +271,21 @@
     overflow: hidden;
     padding: 24px 22px 22px;
     border: 1px solid var(--glass-border);
-    --mouse-x: 50%;
-    --mouse-y: 50%;
-    --highlight-opacity: 0;
     border-radius: var(--radius-lg);
     background: var(--glass-bg);
     backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
     -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
     box-shadow:
-      inset 0 1px 1px var(--glass-highlight),
-      inset 0 -6px 14px var(--glass-glow-inner),
-      0 4px 28px var(--glass-glow-outer);
-    transform-style: preserve-3d;
-    will-change: transform;
-    perspective: 1400px;
+      inset 0 1px 0 var(--glass-highlight),
+      inset 0 -1px 0 rgba(255,255,255,.04),
+      inset 0 -8px 16px var(--glass-glow-inner),
+      0 4px 24px var(--glass-glow-outer);
     transition:
-      transform .28s cubic-bezier(.18,.89,.32,1.02),
-      box-shadow .32s var(--motion-ease),
-      border-color .28s ease;
+      transform .4s var(--motion-ease),
+      box-shadow .4s var(--motion-ease),
+      background .28s ease,
+      backdrop-filter .28s ease;
+    will-change: transform, box-shadow;
   }
 
   .lgs-card::after {
@@ -299,7 +296,7 @@
     background:
       linear-gradient(90deg, var(--glass-chromatic-r) 0%, transparent 30%,
                       transparent 72%, var(--glass-chromatic-b) 100%);
-    opacity: var(--highlight-opacity, 0);
+    opacity: .35;
     transition: opacity var(--motion-fast) var(--motion-ease);
     border-radius: inherit;
     mix-blend-mode: screen;
@@ -319,17 +316,17 @@
   }
 
   .lgs-card:hover {
-    border-color: var(--accent-line);
+    transform: scale(1.015);
+    background: rgba(255, 255, 255, 0.055);
     box-shadow:
-      inset 0 1px 0 var(--glass-highlight),
-      inset 0 -8px 18px var(--glass-glow-inner),
-      0 22px 54px rgba(var(--accent-rgb), 0.18),
-      0 0 0 1px var(--accent-line);
-    backdrop-filter: blur(calc(var(--glass-blur) + 2px)) saturate(230%);
-    -webkit-backdrop-filter: blur(calc(var(--glass-blur) + 2px)) saturate(230%);
+      inset 0 1px 0 rgba(255, 255, 255, 0.55),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.05),
+      inset 0 -10px 24px var(--glass-glow-inner),
+      0 8px 32px rgba(var(--accent-rgb), 0.12);
+    backdrop-filter: blur(calc(var(--glass-blur) + 4px)) saturate(200%);
+    -webkit-backdrop-filter: blur(calc(var(--glass-blur) + 4px)) saturate(200%);
   }
-  .lgs-card:hover::after { opacity: .9; }
-  .lgs-card:hover::before { opacity: 1; }
+  .lgs-card:hover::after { opacity: .6; }
 
   .lgs-card-head {
     position: relative;
@@ -348,8 +345,6 @@
     border-radius: 12px;
     color: var(--accent);
     background: rgba(var(--accent-rgb), 0.06);
-    transform: translateZ(28px) scale(1.02);
-    will-change: transform;
   }
   .lgs-icon svg { width: 20px; height: 20px; }
 
@@ -362,7 +357,6 @@
     text-transform: uppercase;
     letter-spacing: .06em;
     background: var(--surface-0);
-    transform: translateZ(20px);
   }
   .lgs-badge.is-live {
     color: var(--accent);
@@ -379,7 +373,6 @@
     font-size: 1.12rem;
     font-weight: 600;
     letter-spacing: -.01em;
-    transform: translateZ(16px);
   }
 
   .lgs-card-desc {
@@ -389,7 +382,6 @@
     color: var(--ink-muted);
     font-size: .92rem;
     line-height: 1.55;
-    transform: translateZ(10px);
   }
 
   .lgs-stats {
@@ -400,7 +392,6 @@
     gap: 14px;
     padding-top: 14px;
     border-top: 1px solid var(--border-soft);
-    transform: translateZ(12px);
   }
   .lgs-stat {
     display: flex;
@@ -429,7 +420,6 @@
     height: 26px;
     z-index: 2;
     opacity: .85;
-    transform: translateZ(14px);
   }
   .lgs-spark path { fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 
@@ -439,20 +429,20 @@
   @media (max-width: 640px) {
     .lgs { padding: 80px 20px 72px; }
     .lgs-grid { grid-template-columns: 1fr; }
-    .lgs-card { will-change: auto; backdrop-filter: blur(28px) saturate(210%); }
+    .lgs-card { will-change: auto; backdrop-filter: blur(28px) saturate(180%); transform: none !important; }
   }
   @media (hover: none) {
     .lgs-card::after { display: none; }
     .lgs-card:active {
+      background: rgba(255, 255, 255, 0.055);
       box-shadow:
-        inset 0 2px 4px var(--glass-edge-top),
-        inset 0 -3px 12px var(--glass-glow-inner),
-        0 18px 48px var(--glass-glow-outer);
+        inset 0 1px 0 rgba(255, 255, 255, 0.55),
+        inset 0 -10px 24px var(--glass-glow-inner),
+        0 8px 32px rgba(var(--accent-rgb), 0.12);
     }
   }
   @media (prefers-reduced-motion: reduce) {
-    .lgs-card { transform: none !important; will-change: auto !important; perspective: none; }
-    .lgs-card::after { opacity: 0 !important; }
+    .lgs-card { transform: none !important; will-change: auto !important; }
   }
 </style>
 
