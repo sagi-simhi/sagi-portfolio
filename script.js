@@ -279,3 +279,132 @@
 
 /* Card hover — Apple Liquid Glass style: pure CSS :hover with scale(1.015).
    No JS tilt, no cursor-following specular. The CSS handles everything. */
+
+
+/* Insights chart — static data object renders an "activity" line chart.
+   Recruiter sees a real Chart.js viz without needing to click through. */
+(function initInsightsChart() {
+  "use strict";
+
+  var canvas = document.getElementById("insightsChart");
+  if (!canvas || typeof Chart === "undefined") return;
+
+  var activityData = {
+    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug"],
+    datasets: [
+      {
+        label: "SQL Queries",
+        data: [0, 1, 1, 2, 2, 3, 3, 4],
+        backgroundColor: "rgba(10, 132, 255, 0.08)",
+        borderColor: "#409CFF",
+        borderWidth: 2,
+        pointRadius: 3,
+        pointBackgroundColor: "#409CFF",
+        pointBorderColor: "transparent",
+        tension: 0.42,
+        fill: true
+      },
+      {
+        label: "Data Cleaned",
+        data: [0, 0, 1, 1, 1, 2, 2, 2],
+        backgroundColor: "transparent",
+        borderColor: "#86868b",
+        borderWidth: 1.5,
+        pointRadius: 2,
+        pointBackgroundColor: "#86868b",
+        pointBorderColor: "transparent",
+        tension: 0.42,
+        borderDash: [4, 4],
+        fill: false
+      },
+      {
+        label: "Charts Built",
+        data: [0, 0, 0, 1, 2, 3, 5, 6],
+        backgroundColor: "rgba(10, 132, 255, 0.04)",
+        borderColor: "#0A84FF",
+        borderWidth: 1.5,
+        pointRadius: 2,
+        pointBackgroundColor: "#0A84FF",
+        pointBorderColor: "transparent",
+        tension: 0.42,
+        fill: true
+      }
+    ]
+  };
+
+  var ctx = canvas.getContext("2d");
+
+  new Chart(ctx, {
+    type: "line",
+    data: activityData,
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: "index", intersect: false },
+      plugins: {
+        legend: {
+          display: true,
+          position: "top",
+          align: "end",
+          labels: {
+            boxWidth: 12,
+            boxHeight: 2,
+            padding: 14,
+            color: "#a1a1a6",
+            font: {
+              family: "'IBM Plex Mono', ui-monospace, monospace",
+              size: 11
+            },
+            usePointStyle: false
+          }
+        },
+        tooltip: {
+          backgroundColor: "rgba(28, 28, 30, 0.92)",
+          borderColor: "rgba(255, 255, 255, 0.10)",
+          borderWidth: 1,
+          padding: 10,
+          titleColor: "#f5f5f7",
+          bodyColor: "#a1a1a6",
+          titleFont: {
+            family: "'IBM Plex Mono', ui-monospace, monospace",
+            size: 11,
+            weight: "600"
+          },
+          bodyFont: {
+            family: "'IBM Plex Mono', ui-monospace, monospace",
+            size: 11
+          },
+          cornerRadius: 8
+        }
+      },
+      scales: {
+        x: {
+          grid: { color: "rgba(255, 255, 255, 0.04)", drawTicks: false },
+          border: { display: false },
+          ticks: {
+            color: "#6e6e73",
+            font: {
+              family: "'IBM Plex Mono', ui-monospace, monospace",
+              size: 10
+            },
+            padding: 8
+          }
+        },
+        y: {
+          beginAtZero: true,
+          grid: { color: "rgba(255, 255, 255, 0.04)", drawTicks: false },
+          border: { display: false, dash: [3, 3] },
+          ticks: {
+            color: "#6e6e73",
+            font: {
+              family: "'IBM Plex Mono', ui-monospace, monospace",
+              size: 10
+            },
+            padding: 8,
+            stepSize: 1
+          }
+        }
+      }
+    }
+  });
+})();
