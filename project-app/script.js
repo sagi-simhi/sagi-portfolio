@@ -66,7 +66,7 @@
     if (titleEl) titleEl.textContent = VIEWS[viewId].title;
     if (subEl) subEl.textContent = VIEWS[viewId].sub;
 
-    document.title = VIEWS[viewId].title + " — Financial Intelligence Platform";
+    document.title = VIEWS[viewId].title + " - Financial Intelligence Platform";
   }
 
   window.addEventListener("hashchange", function () {

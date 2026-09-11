@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sagi Simhi - Aspiring Data Analyst</title>
+    <meta name="description" content="Economics & Computer Science student seeking junior Data Analyst roles. Combining operational expertise with analytical skills in SQL, Excel, and Python.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- AnimeJS for Liquid Glass effects -->
+    <script src="https://cdn.jsdelivr.net/npm/animejs@4.2.2/lib/anime.min.js"></script>
+    <!-- GSAP for scroll-triggered animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <link rel="icon" href="data:,">
+</head>
+<body>
+    <!-- Liquid Glass Distortion Filter -->
+    <svg width="0" height="0" position="absolute">
+      <defs>
+        <filter id="glass-distortion">
+          <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="0" result="NOISE"/>
+          <feDisplacementMap in="SourceGraphic" in2="NOISE" scale="0" />
+        </filter>
+      </defs>
+    </svg>
+<body>
+    <a href="#main" class="skip-link">Skip to content</a>
+
+    <!-- Header -->
+    <header class="site-header" id="siteNav">
+        <nav class="nav-container">
+            <div class="nav-right">
+                <div class="nav-links">
+                    <a href="#about">About</a>
+                    <a href="#projects">Projects</a>
+                    <a href="#stack">Skills</a>
+                    <a href="#education">Education</a>
+                    <a href="#experience">Experience</a>
+                    <a href="#contact" class="nav-contact-btn">Contact</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main id="main">
+        <!-- Hero Section -->
+        <section class="hero" id="top">
+            <div class="hero-content">
+                <img src="assets/headshot.svg" alt="Sagi Simhi - Professional headshot" class="hero-image">
+                <div class="hero-text">
+                    <p class="hero-status">Seeking Junior Data Analyst Role</p>
+                    <h1 class="hero-title">Sagi Simhi</h1>
+                    <p class="hero-subtitle">Economics & Computer Science Student</p>
+                    <p class="hero-description">
+                        Leveraging operational excellence and analytical training to transform data into clear business decisions.
+                        Proven ability to monitor complex systems, detect anomalies, and deliver actionable insights under pressure.
+                    </p>
+                    <div class="hero-actions">
+                        <a href="#projects" class="btn btn-primary">View My Work</a>
+                        <a href="https://www.linkedin.com/in/sagi-simhi" class="btn btn-outline" target="_blank" rel="noopener">LinkedIn</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section class="section" id="about">
+            <div class="section-container">
+                <h2 class="section-title">About Me</h2>
+                <p class="section-description">
+                    I'm currently pursuing a B.A. in Economics and Computer Science (Systems and Applications track)
+                    at the Open University of Israel. This unique combination provides the business acumen and technical skills
+                    essential for modern data analysis roles.
+                </p>
+                <p class="section-description">
+                    As a Shift Supervisor and Control Room Analyst at Teva Pharmaceuticals, I monitor complex operational systems,
+                    detect anomalies in real-time data streams, and translate findings into structured reports that drive operational decisions.
+                    This experience is complemented by international operations work in France, leadership roles at Israel Railways,
+                    and service in an elite reconnaissance unit where I developed exceptional ability to process information under pressure.
+                </p>
+                <p class="section-description">
+                    I am actively building my data analysis toolkit with hands-on practice in SQL, Excel, Tableau, and Python.
+                    My goal is to apply my operational expertise and analytical training to help organizations make confident, data-driven decisions.
+                </p>
+            </div>
+        </section>
+
+        <!-- Education Section -->
+        <section class="section" id="education">
+            <div class="section-container">
+                <h2 class="section-title">Education</h2>
+                <div class="education-content">
+                    <div class="education-item">
+                        <h3 class="education-title">B.A. Economics and Computer Science</h3>
+                        <p class="education-institution">Open University of Israel</p>
+                        <p class="education-period">2025 - Expected 2028</p>
+                        <p class="education-details">Systems and Applications Track</p>
+                    </div>
+
+                    <div class="education-item">
+                        <h3 class="education-title">Completed Coursework</h3>
+                        <ul class="course-list">
+                            <li>Statistics A</li>
+                            <li>Statistics B</li>
+                            <li>Differential Calculus for Economics and Management Students</li>
+                            <li>Organizational Behavior (Micro)</li>
+                            <li>Organizational Behavior (Macro)</li>
+                            <li>Introduction to Microeconomics</li>
+                        </ul>
+                    </div>
+
+                    <div class="education-item">
+                        <h3 class="education-title">In Progress</h3>
+                        <ul class="course-list">
+                            <li>Introduction to Macroeconomics</li>
+                        </ul>
+                    </div>
+
+                    <div class="education-item">
+                        <h3 class="education-title">Planned Next</h3>
+                        <ul class="course-list">
+                            <li>Introduction to Computer Science and Programming in Java</li>
+                        </ul>
+                    </div>
+
+                    <div class="education-item">
+                        <h3 class="education-title">Self-Directed Learning</h3>
+                        <ul class="course-list">
+                            <li>campusIL: First Steps in Computer Science and Programming in Python (Completed)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section class="section" id="skills">
+            <div class="section-container">
+                <h2 class="section-title">Skills & Tools</h2>
+                <p class="section-description">Actively developing proficiency in these core data analysis tools:</p>
+                <div class="skills-grid">
+                    <div class="skill-category">
+                        <h3 class="skill-title">Data Analysis</h3>
+                        <ul class="skill-list">
+                            <li><span class="skill-name">SQL</span> - Building querying, joining, and data manipulation skills</li>
+                            <li><span class="skill-name">Microsoft Excel</span> - Advanced functions, pivot tables, and data modeling</li>
+                            <li><span class="skill-name">Tableau</span> - Creating interactive dashboards and visualizations</li>
+                            <li><span class="skill-name">Python</span> - Data analysis with pandas and visualization libraries</li>
+                        </ul>
+                    </div>
+
+                    <div class="skill-category">
+                        <h3 class="skill-title">Transferable Skills</h3>
+                        <ul class="skill-list">
+                            <li><span class="skill-name">Systems Thinking</span> - Holistic problem analysis from operational background</li>
+                            <li><span class="skill-name">Attention to Detail</span> - Honed through security and control room operations</li>
+                            <li><span class="skill-name">Structured Decision-Making</span> - Experience converting incomplete information into actionable conclusions</li>
+                            <li><span class="skill-name">Technical Communication</span> - Translating complex findings for diverse stakeholders</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Experience Section -->
+        <section class="section" id="experience">
+            <div class="section-container">
+                <h2 class="section-title">Professional Experience</h2>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <h3 class="timeline-title">Shift Supervisor & Control Room Analyst</h3>
+                        <p class="timeline-organization">Teva Pharmaceuticals</p>
+                        <p class="timeline-period">September 2022 &ndash; Present</p>
+                        <ul class="timeline-description">
+                            <li>Monitor concurrent operational systems and live information streams, identifying actionable signals from routine activity</li>
+                            <li>Document structured operational findings that support faster, clearer decisions by subsequent shifts</li>
+                            <li>Develop protocols for anomaly detection and escalation procedures</li>
+                            <li>Collaborate with cross-functional teams to resolve operational discrepancies</li>
+                        </ul>
+                    </div>
+
+                    <div class="timeline-item">
+                        <h3 class="timeline-title">International Operations Manager</h3>
+                        <p class="timeline-organization">ETI Consulting Ltd. - Toulouse, France</p>
+                        <p class="timeline-period">August 2021 &ndash; July 2022</p>
+                        <ul class="timeline-description">
+                            <li>Coordinated cross-border operational data across multiple stakeholders with different reporting formats</li>
+                            <li>Translated regulatory constraints into clear, trackable action plans for international operations</li>
+                            <li>Managed vendor relationships and service level agreements across jurisdictions</li>
+                        </ul>
+                    </div>
+
+                    <div class="timeline-item">
+                        <h3 class="timeline-title">Shift Leader</h3>
+                        <p class="timeline-organization">Israel Railways Ltd.</p>
+                        <p class="timeline-period">August 2019 &ndash; August 2021</p>
+                        <ul class="timeline-description">
+                            <li>Monitored safety and performance KPIs across high-volume rail environments</li>
+                            <li>Identified deviation patterns and escalated potential issues before incidents compounded</li>
+                            <li>Produced structured shift reports briefing management on operational conditions</li>
+                        </ul>
+                    </div>
+
+                    <div class="timeline-item">
+                        <h3 class="timeline-title">Tactical Operator</h3>
+                        <p class="timeline-organization">Special Reconnaissance Unit (Sayeret), IDF</p>
+                        <p class="timeline-period">November 2016 &ndash; June 2019</p>
+                        <ul class="timeline-description">
+                            <li>Processed multiple data streams under time pressure to identify critical patterns</li>
+                            <li>Presented structured assessments with confidence levels and recommendations</li>
+                            <li>Maintained operational readiness while adapting to rapidly changing situations</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section (Placeholder) -->
+        <section class="section" id="projects">
+            <div class="section-container">
+                <h2 class="section-title">Projects</h2>
+                <p class="section-description">Projects currently in development. More case studies will be added as they progress.</p>
+                <div class="projects-placeholder">
+                    <div class="project-card">
+                        <h3 class="project-title">Strategy 20-80</h3>
+                        <p class="project-description">Institutional-style investment research presentation applying Pareto principle to portfolio optimization</p>
+                        <p class="project-tags">Excel • Financial Modeling • Research</p>
+                    </div>
+
+                    <div class="project-card">
+                        <h3 class="project-title">Technical Analysis Lab</h3>
+                        <p class="project-description">Quantitative signal sandbox for developing and testing trading indicators</p>
+                        <p class="project-tags">Python • Data Analysis • Statistics</p>
+                    </div>
+
+                    <div class="project-card">
+                        <h3 class="project-title">Additional Projects</h3>
+                        <p class="project-description">More projects showcasing SQL, Python, and data visualization skills will be added here</p>
+                        <p class="project-tags">Coming Soon</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section class="section" id="contact">
+            <div class="section-container">
+                <h2 class="section-title">Get in Touch</h2>
+                <p class="section-description">
+                    Open to junior data analyst roles, internships, or entry-level positions.
+                    Let's discuss how my unique blend of operational experience and analytical training
+                    can bring value to your team.
+                </p>
+                <div class="contact-actions">
+                    <a href="mailto:sagi.simhi@gmail.com" class="btn btn-primary">Email Me</a>
+                    <a href="https://www.linkedin.com/in/sagi-simhi" class="btn btn-outline" target="_blank" rel="noopener">LinkedIn</a>
+                    <a href="https://github.com/sagi-simhi" class="btn btn-outline" target="_blank" rel="noopener">GitHub</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-container">
+            <p class="footer-credit">All concepts and design created by Sagi</p>
+            <a href="https://github.com/sagi-simhi" class="footer-github-link" target="_blank" rel="noopener" aria-label="Visit Sagi Simhi's GitHub profile">
+                <svg class="footer-github-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true" focusable="false">
+                    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.207 11.387.6.113.793-.26.793-.577 0-.285-.01-1.04-.016-2.04-3.338.725-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.756-1.333-1.756-1.09-.745.083-.729.083-.729 1.205.084 1.84 1.237 1.84 1.237 1.07 1.834 2.807 1.304 3.492.997 .108-.775.42-1.305.763-1.605-2.665-.303-5.467-1.334-5.467-5.93 0-1.31.468-2.38 1.235-3.22 -.123-.303-.535-1.523.117-3.176 0 0 1.008-.322 3.3 1.23A11.5 11.5 0 0 1 12 5.803c1.02.005 2.045.138 3.003.404 2.29-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.873.12 3.176.77.84 1.233 1.91 1.233 3.22 0 4.61-2.807 5.624-5.48 5.92.432.372.816 1.103.816 2.223 0 1.606-.014 2.898-.014 3.293 0 .32.19.694.8.576C20.565 21.795 24 17.298 24 12 c0-6.63-5.37-12-12-12z"/>
+                </svg>
+            </a>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
