@@ -1,2 +1,23 @@
 preview.html
 roadmap.md
+
+# Ignore everything except the site essentials
+.claude/
+gsap-frontend-skill/
+liquid-glass/
+threejs/
+assets/*
+.wrangler/
+.vscode/
+memory/
+skills-lock.json
+.wrangler.toml
+wrangler.jsonc
+LIQUID_GLASS_USAGE.md
+portfolio-v2/
+
+# But keep the needed files
+!index.html
+!style.css
+!script.js
+!assets/headshot.svg
