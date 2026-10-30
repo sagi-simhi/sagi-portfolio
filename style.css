@@ -1240,6 +1240,10 @@ body.ext-modal-locked {
   overflow: hidden;
 }
 
+.ext-modal-backdrop[hidden] {
+  display: none;
+}
+
 .ext-modal-backdrop {
   position: fixed;
   inset: 0;
