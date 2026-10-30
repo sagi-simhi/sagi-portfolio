@@ -291,5 +291,19 @@
     </footer>
 
     <script src="script.js"></script>
+
+    <!-- External link panel: in-site interstitial for destinations outside the site -->
+    <div class="ext-modal-backdrop" id="extModal" hidden>
+        <div class="ext-modal glass-card" role="dialog" aria-modal="true" aria-labelledby="extModalTitle">
+            <button type="button" class="ext-modal-close" id="extModalClose" aria-label="Close">&times;</button>
+            <h3 class="ext-modal-title" id="extModalTitle"></h3>
+            <p class="ext-modal-desc" id="extModalDesc"></p>
+            <p class="ext-modal-url" id="extModalUrl"></p>
+            <div class="ext-modal-actions">
+                <button type="button" class="btn btn-primary" id="extModalGo"></button>
+                <button type="button" class="btn btn-glass" id="extModalCopy" hidden>Copy Address</button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

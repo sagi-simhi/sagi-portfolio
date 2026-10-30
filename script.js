@@ -213,8 +213,112 @@
     });
   }
 
+
+  function initExternalLinkModals() {
+    const modal = document.getElementById("extModal");
+    if (!modal) return;
+    const titleEl = document.getElementById("extModalTitle");
+    const descEl = document.getElementById("extModalDesc");
+    const urlEl = document.getElementById("extModalUrl");
+    const goBtn = document.getElementById("extModalGo");
+    const copyBtn = document.getElementById("extModalCopy");
+    const closeBtn = document.getElementById("extModalClose");
+    let goAction = null;
+    let lastFocus = null;
+
+    function openModal(opts) {
+      lastFocus = document.activeElement;
+      titleEl.textContent = opts.title;
+      descEl.textContent = opts.desc;
+      urlEl.textContent = opts.urlText;
+      goBtn.textContent = opts.goLabel;
+      goAction = opts.onGo;
+      if (opts.copyText) {
+        copyBtn.hidden = false;
+        copyBtn.textContent = "Copy Address";
+        copyBtn.dataset.copy = opts.copyText;
+      } else {
+        copyBtn.hidden = true;
+        delete copyBtn.dataset.copy;
+      }
+      modal.hidden = false;
+      requestAnimationFrame(() => modal.classList.add("ext-modal-open"));
+      document.body.classList.add("ext-modal-locked");
+      goBtn.focus();
+    }
+
+    function closeModal() {
+      modal.classList.remove("ext-modal-open");
+      document.body.classList.remove("ext-modal-locked");
+      goAction = null;
+      window.setTimeout(() => { modal.hidden = true; }, 180);
+      if (lastFocus && lastFocus.focus) lastFocus.focus();
+    }
+
+    document.addEventListener("click", (event) => {
+      const anchor = event.target.closest("a[href]");
+      if (!anchor) return;
+      const href = anchor.getAttribute("href") || "";
+      if (href.startsWith("mailto:")) {
+        event.preventDefault();
+        const address = href.slice("mailto:".length).split("?")[0];
+        openModal({
+          title: "Email",
+          desc: "This opens your mail app with a new message to:",
+          urlText: address,
+          goLabel: "Open Mail App",
+          onGo: () => { window.location.href = href; },
+          copyText: address,
+        });
+        return;
+      }
+    });
+
+    goBtn.addEventListener("click", () => {
+      const action = goAction;
+      closeModal();
+      if (action) action();
+    });
+    copyBtn.addEventListener("click", () => {
+      const text = copyBtn.dataset.copy;
+      if (!text) return;
+      const success = () => { copyBtn.textContent = "Copied"; };
+      const fail = () => {
+        const range = document.createRange();
+        range.selectNodeContents(urlEl);
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+        copyBtn.textContent = "Select and copy";
+      };
+      const legacy = () => {
+        const area = document.createElement("textarea");
+        area.value = text;
+        area.style.position = "fixed";
+        area.style.opacity = "0";
+        document.body.appendChild(area);
+        area.select();
+        let ok = false;
+        try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+        document.body.removeChild(area);
+        if (ok) { success(); } else { fail(); }
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(success).catch(legacy);
+      } else {
+        legacy();
+      }
+    });
+    closeBtn.addEventListener("click", closeModal);
+    modal.addEventListener("click", (event) => { if (event.target === modal) closeModal(); });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && !modal.hidden) closeModal();
+    });
+  }
+
   function init() {
     initAnchorHandlers();
+    initExternalLinkModals();
   initThemeToggle();
     initNavToggle();
     initScrollHandlers();

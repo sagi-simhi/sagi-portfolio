@@ -1234,3 +1234,98 @@ img {
     margin-left: 0.5rem;
   }
 }
+
+/* External link panel */
+body.ext-modal-locked {
+  overflow: hidden;
+}
+
+.ext-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(16, 22, 34, 0.38);
+  backdrop-filter: blur(10px) saturate(150%);
+  -webkit-backdrop-filter: blur(10px) saturate(150%);
+  opacity: 0;
+  transition: opacity 0.18s ease;
+}
+
+[data-theme="dark"] .ext-modal-backdrop {
+  background: rgba(4, 8, 16, 0.55);
+}
+
+.ext-modal-backdrop.ext-modal-open {
+  opacity: 1;
+}
+
+.ext-modal {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  padding: 28px;
+  text-align: center;
+  transform: translateY(10px) scale(0.97);
+  transition: transform 0.18s ease;
+}
+
+.ext-modal-backdrop.ext-modal-open .ext-modal {
+  transform: translateY(0) scale(1);
+}
+
+.ext-modal-title {
+  margin: 0 0 8px;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.ext-modal-desc {
+  margin: 0 0 14px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--ink-muted);
+}
+
+.ext-modal-url {
+  margin: 0 0 20px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 0.85rem;
+  word-break: break-all;
+  color: var(--accent-ink, var(--accent));
+  background: var(--glass-tint-a);
+}
+
+.ext-modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ext-modal-close {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  border: none;
+  background: none;
+  padding: 4px 8px;
+  font-size: 1.4rem;
+  line-height: 1;
+  color: var(--ink-muted);
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.ext-modal-close:hover {
+  color: var(--ink);
+}
+
+.ext-modal-actions .btn[hidden] {
+  display: none;
+}
