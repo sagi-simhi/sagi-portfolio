@@ -8,40 +8,49 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("portfolio-theme");
+        if (!t) { t = (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "dark" : "light"; }
+        document.documentElement.setAttribute("data-theme", t);
+      } catch (e) {}
+    })();
+  </script>
     <link rel="stylesheet" href="style.css">
-    <!-- AnimeJS for Liquid Glass effects -->
-    <script src="https://cdn.jsdelivr.net/npm/animejs@4.2.2/lib/anime.min.js"></script>
-    <!-- GSAP for scroll-triggered animations -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
     <link rel="icon" href="data:,">
 </head>
 <body>
-    <!-- Liquid Glass Distortion Filter -->
-    <svg width="0" height="0" position="absolute">
-      <defs>
-        <filter id="glass-distortion">
-          <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="0" result="NOISE"/>
-          <feDisplacementMap in="SourceGraphic" in2="NOISE" scale="0" />
-        </filter>
-      </defs>
-    </svg>
-<body>
+    <div class="ambient" aria-hidden="true">
+    </div>
+
     <a href="#main" class="skip-link">Skip to content</a>
 
     <!-- Header -->
     <header class="site-header" id="siteNav">
-        <nav class="nav-container">
-            <div class="nav-right">
-                <div class="nav-links">
-                    <a href="#about">About</a>
-                    <a href="#projects">Projects</a>
-                    <a href="#stack">Skills</a>
-                    <a href="#education">Education</a>
-                    <a href="#experience">Experience</a>
-                    <a href="#contact" class="nav-contact-btn">Contact</a>
-                </div>
+        <nav class="nav-container glass-pill" aria-label="Primary">
+            <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navLinks" aria-label="Open menu">
+                <span class="nav-toggle-bar"></span>
+                <span class="nav-toggle-bar"></span>
+                <span class="nav-toggle-bar"></span>
+            </button>
+            <div class="nav-links" id="navLinks">
+                <a href="#about">About</a>
+                <a href="#projects">Projects</a>
+                <a href="#skills">Skills</a>
+                <a href="#education">Education</a>
+                <a href="#experience">Experience</a>
+                <a href="#contact" class="nav-contact-btn">Contact</a>
             </div>
+            <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle light and dark theme" aria-pressed="false">
+                <svg class="theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                    <circle cx="12" cy="12" r="4.5"/>
+                    <path d="M12 2v2.5M12 19.5V22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M2 12h2.5M19.5 12H22M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/>
+                </svg>
+                <svg class="theme-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/>
+                </svg>
+            </button>
         </nav>
     </header>
 
@@ -50,18 +59,22 @@
         <!-- Hero Section -->
         <section class="hero" id="top">
             <div class="hero-content">
-                <img src="assets/headshot.svg" alt="Sagi Simhi - Professional headshot" class="hero-image">
+                <div class="hero-portrait glass-card">
+                    <!-- Replace assets/headshot.jpg with a real photo (square, ~400x400px). Until then the initials show. -->
+                    <div class="hero-avatar-fallback" aria-hidden="true">SS</div>
+                    <img src="assets/headshot.jpg" alt="Sagi Simhi - Professional headshot" class="hero-image" onerror="this.remove()">
+                </div>
                 <div class="hero-text">
-                    <p class="hero-status">Seeking Junior Data Analyst Role</p>
+                    <p class="hero-status glass-chip">Seeking Junior Data Analyst Role</p>
                     <h1 class="hero-title">Sagi Simhi</h1>
-                    <p class="hero-subtitle">Economics & Computer Science Student</p>
+                    <p class="hero-subtitle">Economics &amp; Computer Science Student</p>
                     <p class="hero-description">
-                        Leveraging operational excellence and analytical training to transform data into clear business decisions.
+                        Leveraging operational excellence and analytical training to transform <strong>data into clear business decisions</strong>.
                         Proven ability to monitor complex systems, detect anomalies, and deliver actionable insights under pressure.
                     </p>
                     <div class="hero-actions">
                         <a href="#projects" class="btn btn-primary">View My Work</a>
-                        <a href="https://www.linkedin.com/in/sagi-simhi" class="btn btn-outline" target="_blank" rel="noopener">LinkedIn</a>
+                        <a href="https://www.linkedin.com/in/sagi-simhi" class="btn btn-glass" target="_blank" rel="noopener">LinkedIn</a>
                     </div>
                 </div>
             </div>
@@ -71,21 +84,23 @@
         <section class="section" id="about">
             <div class="section-container">
                 <h2 class="section-title">About Me</h2>
-                <p class="section-description">
-                    I'm currently pursuing a B.A. in Economics and Computer Science (Systems and Applications track)
-                    at the Open University of Israel. This unique combination provides the business acumen and technical skills
-                    essential for modern data analysis roles.
-                </p>
-                <p class="section-description">
-                    As a Shift Supervisor and Control Room Analyst at Teva Pharmaceuticals, I monitor complex operational systems,
-                    detect anomalies in real-time data streams, and translate findings into structured reports that drive operational decisions.
-                    This experience is complemented by international operations work in France, leadership roles at Israel Railways,
-                    and service in an elite reconnaissance unit where I developed exceptional ability to process information under pressure.
-                </p>
-                <p class="section-description">
-                    I am actively building my data analysis toolkit with hands-on practice in SQL, Excel, Tableau, and Python.
-                    My goal is to apply my operational expertise and analytical training to help organizations make confident, data-driven decisions.
-                </p>
+                <div class="glass-card prose-card">
+                    <p class="section-description">
+                        I'm currently pursuing a <strong>B.A. in Economics and Computer Science</strong> (Systems and Applications track)
+                        at the Open University of Israel. This unique combination provides the business acumen and technical skills
+                        essential for modern data analysis roles.
+                    </p>
+                    <p class="section-description">
+                        As a Shift Supervisor and Control Room Analyst at Teva Pharmaceuticals, I monitor complex operational systems,
+                        detect anomalies in real-time data streams, and translate findings into structured reports that <strong>drive operational decisions</strong>.
+                        This experience is complemented by international operations work in France, leadership roles at Israel Railways,
+                        and service in an elite reconnaissance unit where I developed exceptional ability to process information under pressure.
+                    </p>
+                    <p class="section-description">
+                        I am actively building my data analysis toolkit with hands-on practice in <strong>SQL, Excel, Tableau, and Python</strong>.
+                        My goal is to apply my operational expertise and analytical training to help organizations make confident, data-driven decisions.
+                    </p>
+                </div>
             </div>
         </section>
 
@@ -94,14 +109,14 @@
             <div class="section-container">
                 <h2 class="section-title">Education</h2>
                 <div class="education-content">
-                    <div class="education-item">
+                    <div class="education-item glass-card">
                         <h3 class="education-title">B.A. Economics and Computer Science</h3>
                         <p class="education-institution">Open University of Israel</p>
                         <p class="education-period">2025 - Expected 2028</p>
                         <p class="education-details">Systems and Applications Track</p>
                     </div>
 
-                    <div class="education-item">
+                    <div class="education-item glass-card">
                         <h3 class="education-title">Completed Coursework</h3>
                         <ul class="course-list">
                             <li>Statistics A</li>
@@ -113,21 +128,21 @@
                         </ul>
                     </div>
 
-                    <div class="education-item">
+                    <div class="education-item glass-card">
                         <h3 class="education-title">In Progress</h3>
                         <ul class="course-list">
                             <li>Introduction to Macroeconomics</li>
                         </ul>
                     </div>
 
-                    <div class="education-item">
+                    <div class="education-item glass-card">
                         <h3 class="education-title">Planned Next</h3>
                         <ul class="course-list">
                             <li>Introduction to Computer Science and Programming in Java</li>
                         </ul>
                     </div>
 
-                    <div class="education-item">
+                    <div class="education-item glass-card">
                         <h3 class="education-title">Self-Directed Learning</h3>
                         <ul class="course-list">
                             <li>campusIL: First Steps in Computer Science and Programming in Python (Completed)</li>
@@ -140,10 +155,10 @@
         <!-- Skills Section -->
         <section class="section" id="skills">
             <div class="section-container">
-                <h2 class="section-title">Skills & Tools</h2>
+                <h2 class="section-title">Skills &amp; Tools</h2>
                 <p class="section-description">Actively developing proficiency in these core data analysis tools:</p>
                 <div class="skills-grid">
-                    <div class="skill-category">
+                    <div class="skill-category glass-card">
                         <h3 class="skill-title">Data Analysis</h3>
                         <ul class="skill-list">
                             <li><span class="skill-name">SQL</span> - Building querying, joining, and data manipulation skills</li>
@@ -153,7 +168,7 @@
                         </ul>
                     </div>
 
-                    <div class="skill-category">
+                    <div class="skill-category glass-card">
                         <h3 class="skill-title">Transferable Skills</h3>
                         <ul class="skill-list">
                             <li><span class="skill-name">Systems Thinking</span> - Holistic problem analysis from operational background</li>
@@ -172,75 +187,72 @@
                 <h2 class="section-title">Professional Experience</h2>
                 <div class="timeline">
                     <div class="timeline-item">
-                        <h3 class="timeline-title">Shift Supervisor & Control Room Analyst</h3>
-                        <p class="timeline-organization">Teva Pharmaceuticals</p>
-                        <p class="timeline-period">September 2022 &ndash; Present</p>
-                        <ul class="timeline-description">
+                        <span class="timeline-dot" aria-hidden="true"></span>
+                        <div class="timeline-entry glass-card">
+                            <p class="timeline-period">September 2022 &ndash; Present</p>
+                            <h3 class="timeline-title">Shift Supervisor &amp; Control Room Analyst</h3>
+                            <p class="timeline-organization">Teva Pharmaceuticals</p>
+                            <ul class="timeline-description">
                             <li>Monitor concurrent operational systems and live information streams, identifying actionable signals from routine activity</li>
                             <li>Document structured operational findings that support faster, clearer decisions by subsequent shifts</li>
                             <li>Develop protocols for anomaly detection and escalation procedures</li>
                             <li>Collaborate with cross-functional teams to resolve operational discrepancies</li>
-                        </ul>
+                            </ul>
+                        </div>
                     </div>
 
                     <div class="timeline-item">
-                        <h3 class="timeline-title">International Operations Manager</h3>
-                        <p class="timeline-organization">ETI Consulting Ltd. - Toulouse, France</p>
-                        <p class="timeline-period">August 2021 &ndash; July 2022</p>
-                        <ul class="timeline-description">
+                        <span class="timeline-dot" aria-hidden="true"></span>
+                        <div class="timeline-entry glass-card">
+                            <p class="timeline-period">August 2021 &ndash; July 2022</p>
+                            <h3 class="timeline-title">International Operations Manager</h3>
+                            <p class="timeline-organization">ETI Consulting Ltd. - Toulouse, France</p>
+                            <ul class="timeline-description">
                             <li>Coordinated cross-border operational data across multiple stakeholders with different reporting formats</li>
                             <li>Translated regulatory constraints into clear, trackable action plans for international operations</li>
                             <li>Managed vendor relationships and service level agreements across jurisdictions</li>
-                        </ul>
+                            </ul>
+                        </div>
                     </div>
 
                     <div class="timeline-item">
-                        <h3 class="timeline-title">Shift Leader</h3>
-                        <p class="timeline-organization">Israel Railways Ltd.</p>
-                        <p class="timeline-period">August 2019 &ndash; August 2021</p>
-                        <ul class="timeline-description">
+                        <span class="timeline-dot" aria-hidden="true"></span>
+                        <div class="timeline-entry glass-card">
+                            <p class="timeline-period">August 2019 &ndash; August 2021</p>
+                            <h3 class="timeline-title">Shift Leader</h3>
+                            <p class="timeline-organization">Israel Railways Ltd.</p>
+                            <ul class="timeline-description">
                             <li>Monitored safety and performance KPIs across high-volume rail environments</li>
                             <li>Identified deviation patterns and escalated potential issues before incidents compounded</li>
                             <li>Produced structured shift reports briefing management on operational conditions</li>
-                        </ul>
+                            </ul>
+                        </div>
                     </div>
 
                     <div class="timeline-item">
-                        <h3 class="timeline-title">Tactical Operator</h3>
-                        <p class="timeline-organization">Special Reconnaissance Unit (Sayeret), IDF</p>
-                        <p class="timeline-period">November 2016 &ndash; June 2019</p>
-                        <ul class="timeline-description">
+                        <span class="timeline-dot" aria-hidden="true"></span>
+                        <div class="timeline-entry glass-card">
+                            <p class="timeline-period">November 2016 &ndash; June 2019</p>
+                            <h3 class="timeline-title">Tactical Operator</h3>
+                            <p class="timeline-organization">Special Reconnaissance Unit (Sayeret), IDF</p>
+                            <ul class="timeline-description">
                             <li>Processed multiple data streams under time pressure to identify critical patterns</li>
                             <li>Presented structured assessments with confidence levels and recommendations</li>
                             <li>Maintained operational readiness while adapting to rapidly changing situations</li>
-                        </ul>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Projects Section (Placeholder) -->
+        <!-- Projects Section -->
         <section class="section" id="projects">
             <div class="section-container">
                 <h2 class="section-title">Projects</h2>
-                <p class="section-description">Projects currently in development. More case studies will be added as they progress.</p>
                 <div class="projects-placeholder">
-                    <div class="project-card">
-                        <h3 class="project-title">Strategy 20-80</h3>
-                        <p class="project-description">Institutional-style investment research presentation applying Pareto principle to portfolio optimization</p>
-                        <p class="project-tags">Excel • Financial Modeling • Research</p>
-                    </div>
-
-                    <div class="project-card">
-                        <h3 class="project-title">Technical Analysis Lab</h3>
-                        <p class="project-description">Quantitative signal sandbox for developing and testing trading indicators</p>
-                        <p class="project-tags">Python • Data Analysis • Statistics</p>
-                    </div>
-
-                    <div class="project-card">
-                        <h3 class="project-title">Additional Projects</h3>
-                        <p class="project-description">More projects showcasing SQL, Python, and data visualization skills will be added here</p>
-                        <p class="project-tags">Coming Soon</p>
+                    <div class="project-card glass-card">
+                        <h3 class="project-title">Coming Soon</h3>
                     </div>
                 </div>
             </div>
@@ -249,16 +261,18 @@
         <!-- Contact Section -->
         <section class="section" id="contact">
             <div class="section-container">
-                <h2 class="section-title">Get in Touch</h2>
-                <p class="section-description">
-                    Open to junior data analyst roles, internships, or entry-level positions.
-                    Let's discuss how my unique blend of operational experience and analytical training
-                    can bring value to your team.
-                </p>
-                <div class="contact-actions">
-                    <a href="mailto:sagi.simhi@gmail.com" class="btn btn-primary">Email Me</a>
-                    <a href="https://www.linkedin.com/in/sagi-simhi" class="btn btn-outline" target="_blank" rel="noopener">LinkedIn</a>
-                    <a href="https://github.com/sagi-simhi" class="btn btn-outline" target="_blank" rel="noopener">GitHub</a>
+                <div class="glass-card contact-card">
+                    <h2 class="section-title">Get in Touch</h2>
+                    <p class="section-description">
+                        Open to junior data analyst roles, internships, or entry-level positions.
+                        Let's discuss how my unique blend of operational experience and analytical training
+                        can bring value to your team.
+                    </p>
+                    <div class="contact-actions">
+                        <a href="mailto:contact@sagi-simhi.dev" class="btn btn-primary">Email Me</a>
+                        <a href="https://www.linkedin.com/in/sagi-simhi" class="btn btn-glass" target="_blank" rel="noopener">LinkedIn</a>
+                        <a href="https://github.com/sagi-simhi" class="btn btn-glass" target="_blank" rel="noopener">GitHub</a>
+                    </div>
                 </div>
             </div>
         </section>
