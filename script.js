@@ -1,6 +1,6 @@
 /* ============================================================
    SAGI SIMHI - DATA ANALYST PORTFOLIO
-   Vanilla JS interactions (no external dependencies)
+   Vanilla JS interactions
    ============================================================ */
 
 (function () {
@@ -8,6 +8,12 @@
 
   const reduceMotion = window.matchMedia &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const reduceTransparency = window.matchMedia &&
+    window.matchMedia("(prefers-reduced-transparency: reduce)").matches;
+  const coarsePointer = window.matchMedia &&
+    window.matchMedia("(pointer: coarse)").matches;
+  const smallViewport = window.matchMedia &&
+    window.matchMedia("(max-width: 768px)").matches;
 
   /* Theme: stored choice wins, otherwise system preference, fallback light */
   const rootEl = document.documentElement;
@@ -182,8 +188,9 @@
       rootMargin: "0px 0px -60px 0px"
     });
 
-    targets.forEach(function (el) {
+    targets.forEach(function (el, index) {
       el.classList.add("reveal");
+      el.style.setProperty("--reveal-delay", Math.min(index % 4, 3) * 55 + "ms");
       observer.observe(el);
     });
 
@@ -198,7 +205,7 @@
 
   /* Liquid-glass specular highlight follows the pointer over glass surfaces */
   function initSpecularHighlight() {
-    if (reduceMotion || !window.matchMedia("(pointer: fine)").matches) return;
+    if (reduceMotion || coarsePointer || !window.matchMedia("(pointer: fine)").matches) return;
 
     document.querySelectorAll(".glass-card, .glass-pill, .glass-chip, .btn-glass").forEach(function (el) {
       el.addEventListener("pointermove", function (event) {
@@ -213,6 +220,198 @@
     });
   }
 
+  const glassDebug = new URLSearchParams(window.location.search).get("glassdebug") === "1";
+  const tierLog = [];
+  const TIER_ONE_LIMIT = 8;
+  const REFRACTION_SCALE = 24;
+  const DISPERSION_OFFSET = 3.5;
+  const filterCache = new WeakMap();
+
+  function debugGlass(message, details) {
+    if (!glassDebug) return;
+    const entry = details ? { message: message, details: details } : { message: message };
+    tierLog.push(entry);
+    console.info("[glass]", message, details || "");
+  }
+
+  function createEdgeMap(width, height, radius) {
+    const safeRadius = Math.max(0, Math.min(radius, Math.min(width, height) / 2));
+    const edge = Math.max(2, Math.min(12, Math.round(Math.min(width, height) * 0.16)));
+    const svg = [
+      '<svg xmlns="http://www.w3.org/2000/svg" width="', width, '" height="', height,
+      '" viewBox="0 0 ', width, ' ', height, '">',
+      '<defs></defs>',
+      '<rect width="100%" height="100%" rx="', safeRadius, '" fill="rgb(128,128,128)"/>',
+      '<rect x="0" y="0" width="100%" height="', edge, '" rx="', safeRadius, '" fill="rgb(128,168,128)"/>',
+      '<rect x="0" y="', height - edge, '" width="100%" height="', edge, '" rx="', safeRadius, '" fill="rgb(128,88,128)"/>',
+      '<rect x="0" y="', edge, '" width="', edge, '" height="', Math.max(0, height - edge * 2), '" fill="rgb(168,128,128)"/>',
+      '<rect x="', width - edge, '" y="', edge, '" width="', edge, '" height="', Math.max(0, height - edge * 2), '" fill="rgb(88,128,128)"/>',
+      '</svg>'
+    ].join("");
+    return {
+      href: "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg),
+      nonFlat: edge > 1 && width > edge * 2 && height > edge * 2,
+      neutral: svg.indexOf("rgb(128,128,128)") !== -1
+    };
+  }
+
+  function isChromiumEngine() {
+    const brands = navigator.userAgentData && navigator.userAgentData.brands;
+    if (brands && brands.length) return brands.some(function (brand) { return /Chromium|Google Chrome|Microsoft Edge/i.test(brand.brand); });
+    return /Chrome|Edg\//i.test(navigator.userAgent) && !/Firefox|OPR\//i.test(navigator.userAgent);
+  }
+
+  function verifyMapCanvas(map) {
+    if (!map.nonFlat || !map.neutral) return false;
+    const canvas = document.createElement("canvas");
+    canvas.width = 3;
+    canvas.height = 3;
+    const context = canvas.getContext("2d");
+    if (!context) return false;
+    context.fillStyle = "rgb(128,128,128)";
+    context.fillRect(0, 0, 3, 3);
+    context.fillStyle = "rgb(132,128,128)";
+    context.fillRect(0, 0, 1, 1);
+    const pixels = context.getImageData(0, 0, 3, 3).data;
+    return pixels[0] !== pixels[4];
+  }
+
+  function buildFilter(element, width, height, radius) {
+    const filterDefs = document.getElementById("glass-filters");
+    if (!filterDefs) return null;
+    const cached = filterCache.get(element);
+    if (cached && cached.width === width && cached.height === height) return cached;
+    const map = createEdgeMap(width, height, radius);
+    if (!verifyMapCanvas(map)) return null;
+    const id = "glass-refract-" + Math.random().toString(36).slice(2);
+    const filter = document.createElementNS("http://www.w3.org/2000/svg", "filter");
+    filter.id = id;
+    filter.setAttribute("x", "-5%");
+    filter.setAttribute("y", "-5%");
+    filter.setAttribute("width", "110%");
+    filter.setAttribute("height", "110%");
+    filter.setAttribute("color-interpolation-filters", "sRGB");
+    function primitive(name, attrs) {
+      const node = document.createElementNS("http://www.w3.org/2000/svg", name);
+      Object.keys(attrs).forEach(function (key) { node.setAttribute(key, attrs[key]); });
+      node.setAttribute("color-interpolation-filters", "sRGB");
+      filter.appendChild(node);
+      return node;
+    }
+    primitive("feImage", { result: "edge-map", x: "0", y: "0", width: "100%", height: "100%", preserveAspectRatio: "none", href: map.href });
+    primitive("feDisplacementMap", { in: "SourceGraphic", in2: "edge-map", scale: String(REFRACTION_SCALE), xChannelSelector: "R", yChannelSelector: "G", result: "base" });
+    primitive("feDisplacementMap", { in: "SourceGraphic", in2: "edge-map", scale: String(REFRACTION_SCALE + DISPERSION_OFFSET), xChannelSelector: "R", yChannelSelector: "G", result: "red" });
+    primitive("feDisplacementMap", { in: "SourceGraphic", in2: "edge-map", scale: String(REFRACTION_SCALE - DISPERSION_OFFSET), xChannelSelector: "R", yChannelSelector: "G", result: "blue" });
+    primitive("feColorMatrix", { in: "red", type: "matrix", values: "1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0", result: "red-only" });
+    primitive("feColorMatrix", { in: "base", type: "matrix", values: "0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0", result: "green-only" });
+    primitive("feColorMatrix", { in: "blue", type: "matrix", values: "0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0", result: "blue-only" });
+    primitive("feBlend", { in: "red-only", in2: "green-only", mode: "screen", result: "rg" });
+    primitive("feBlend", { in: "rg", in2: "blue-only", mode: "screen", result: "rgb" });
+    filterDefs.appendChild(filter);
+    const result = { id: id, width: width, height: height, map: map };
+    filterCache.set(element, result);
+    return result;
+  }
+
+  function initRefraction() {
+    const targets = Array.from(document.querySelectorAll(".glass-pill, .glass-chip, .btn-glass, .hero-portrait, #themeToggle"));
+    const cards = document.querySelectorAll(".glass-card");
+    function setupDebugStripe() {
+      if (!glassDebug) return;
+      document.body.classList.add("glass-debug");
+      const stripe = document.createElement("div");
+      stripe.className = "glass-debug-stripe";
+      stripe.setAttribute("aria-hidden", "true");
+      document.body.appendChild(stripe);
+    }
+    cards.forEach(function (element) {
+      element.dataset.glassTier = "2";
+      debugGlass("Tier 2", { element: element.className, reason: "content card policy" });
+    });
+    targets.forEach(function (element) { element.dataset.glassTier = "2"; });
+    if (reduceMotion || reduceTransparency || smallViewport || !window.CSS) {
+      targets.forEach(function (element) { debugGlass("Tier 2", { element: element.className, reason: "motion/transparency/mobile gate" }); });
+      setupDebugStripe();
+      return;
+    }
+    const gate = {
+      cssSupports: CSS.supports("backdrop-filter", "url(#x) blur(1px)"),
+      chromium: isChromiumEngine(),
+      mapNonFlat: false,
+      computedFilter: false
+    };
+    const probeMap = createEdgeMap(80, 40, 20);
+    gate.mapNonFlat = verifyMapCanvas(probeMap);
+    const probe = document.querySelector(".glass-pill");
+    if (gate.cssSupports && gate.chromium && gate.mapNonFlat && probe) {
+      const probeFilter = buildFilter(probe, 80, 40, 20);
+      if (probeFilter) {
+        probe.style.setProperty("--refract-filter", 'url("#' + probeFilter.id + '")');
+        probe.classList.add("refract-on");
+        gate.computedFilter = getComputedStyle(probe).backdropFilter !== "none";
+        if (!gate.computedFilter) probe.classList.remove("refract-on");
+      }
+    }
+    debugGlass("CSS.supports URL filter", gate.cssSupports);
+    debugGlass("Chromium engine gate", gate.chromium);
+    debugGlass("Displacement map neutral/non-flat gate", gate.mapNonFlat);
+    debugGlass("Computed backdrop-filter gate", gate.computedFilter);
+    debugGlass("Tier 1 capability gate", gate);
+    if (glassDebug) window.__glassDebug = { tierLog: tierLog, gate: gate, constants: { refractionScale: REFRACTION_SCALE, dispersionOffset: DISPERSION_OFFSET } };
+    if (!(gate.cssSupports && gate.chromium && gate.mapNonFlat && gate.computedFilter)) {
+      targets.forEach(function (element) { debugGlass("Tier 2", { element: element.className, reason: "capability gate failed" }); });
+      setupDebugStripe();
+      return;
+    }
+    const active = new Set();
+    const resizeQueue = new Set();
+    let resizeFrame = 0;
+    function regenerate(element) {
+      if (!active.has(element)) return;
+      const rect = element.getBoundingClientRect();
+      const width = Math.round(rect.width);
+      const height = Math.round(rect.height);
+      if (!width || !height) return;
+      const radius = parseFloat(getComputedStyle(element).borderTopLeftRadius) || 0;
+      const result = buildFilter(element, width, height, radius);
+      if (!result) return;
+      element.style.setProperty("--refract-filter", 'url("#' + result.id + '")');
+      element.dataset.glassTier = "1";
+      if (element.classList.contains("hero-portrait")) element.classList.add("refract-static");
+      debugGlass("Tier 1", { element: element.className, filter: result.id, scale: REFRACTION_SCALE, dispersionOffset: DISPERSION_OFFSET });
+    }
+    function queueResize(element) {
+      resizeQueue.add(element);
+      if (resizeFrame) return;
+      resizeFrame = requestAnimationFrame(function () {
+        resizeQueue.forEach(regenerate);
+        resizeQueue.clear();
+        resizeFrame = 0;
+      });
+    }
+    const resizeObserver = "ResizeObserver" in window ? new ResizeObserver(function (entries) {
+      entries.forEach(function (entry) { queueResize(entry.target); });
+    }) : null;
+    function activate(element) {
+      if (active.size >= TIER_ONE_LIMIT || active.has(element)) return;
+      active.add(element);
+      element.classList.add("refract-on");
+      if (resizeObserver) resizeObserver.observe(element);
+      regenerate(element);
+    }
+    function deactivate(element) {
+      active.delete(element);
+      element.classList.remove("refract-on", "refract-static");
+      if (resizeObserver) resizeObserver.unobserve(element);
+    }
+    targets.slice(0, TIER_ONE_LIMIT).forEach(activate);
+    window.addEventListener("resize", function () { active.forEach(queueResize); }, { passive: true });
+    if (glassDebug) {
+      setupDebugStripe();
+      debugGlass("Debug stripe", { status: "visible behind Tier 1 elements; verify bend and color fringe in screenshot" });
+      window.__glassDebug = { tierLog: tierLog, gate: gate, constants: { refractionScale: REFRACTION_SCALE, dispersionOffset: DISPERSION_OFFSET } };
+    }
+  }
 
   function initExternalLinkModals() {
     const modal = document.getElementById("extModal");
@@ -319,13 +518,14 @@
   function init() {
     initAnchorHandlers();
     initExternalLinkModals();
-  initThemeToggle();
+    initThemeToggle();
     initNavToggle();
     initScrollHandlers();
     initHashHandler();
     initSectionSpy();
     initRevealAnimations();
     initSpecularHighlight();
+    initRefraction();
   }
 
   if (document.readyState === "loading") {
