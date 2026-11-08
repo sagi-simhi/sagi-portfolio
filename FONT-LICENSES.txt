@@ -1,0 +1,22 @@
+Bundled fonts (assets/fonts/)
+
+All three families are licensed under the SIL Open Font License 1.1 (OFL),
+which permits bundling the font files with this website, including for
+commercial use. Full license text: https://openfontlicense.org
+
+Bricolage Grotesque (bricolage-var.woff2, variable, weights 200-800)
+Designer: Mathieu Triay / Atelier Triay
+Source: https://github.com/google/fonts/tree/main/ofl/bricolagegrotesque
+License: SIL Open Font License 1.1
+
+Instrument Serif (instrument-regular.woff2, instrument-italic.woff2)
+Designer: Rodrigo Fuenzalida, Jordan Egstad / Instrument
+Source: https://github.com/google/fonts/tree/main/ofl/instrumentserif
+License: SIL Open Font License 1.1
+
+JetBrains Mono (jetbrains-var.woff2, variable, weights 100-800)
+Designer: Philipp Nurullin, Konstantin Bulenkov / JetBrains
+Source: https://github.com/google/fonts/tree/main/ofl/jetbrainsmono
+License: SIL Open Font License 1.1
+
+Body text uses the Inter / system font stack and bundles no file for it.
