@@ -490,3 +490,7 @@ html { scroll-padding-top: 88px; }
 .mk .legal-content .legal-date { color: #5f656a; font-size: 14px; }
 /* Decorative numbering also stays readable to sighted visitors. */
 .mk2-host .mk-num { color: #067568; }
+
+/* intl-tel-input phone field */
+.iti { display: block; width: 100%; }
+.phone-error { color: #c0392b; font-size: 0.78rem; margin: 4px 0 0; }
