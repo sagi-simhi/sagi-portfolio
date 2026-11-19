@@ -9,9 +9,9 @@ html, body { margin: 0; padding: 0; min-height: 100%; background: #f6f3ec; }
     margin: 18px 0 8px;
     font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     text-align: left;
-    --mk-accent: #0aa38f;
+    --mk-accent: #067568;
     --mk-ink: #17222e;
-    --mk-muted: rgba(23, 34, 46, 0.62);
+    --mk-muted: #5f656a;
     --mk-dark: #101c2b;
     --mk-serif: Georgia, "Times New Roman", serif;
 }
@@ -464,3 +464,29 @@ a.mk2-chip2:hover { border-color: var(--mk-accent); color: var(--mk-accent); }
 .mk2-cta { display: inline-block; font-size: 14px; font-weight: 600; color: #101c2b; background: #5fe0cd; border-radius: 999px; padding: 11px 22px; text-decoration: none; }
 .mk2-cta.is-disabled { opacity: 0.45; cursor: default; }
 .mk2-cta-note { margin-top: 10px; font-size: 13px; color: rgba(238, 244, 241, 0.55); }
+
+/* Accessibility and legal pages, 19 November 2026. Light and dark accents stay distinct. */
+.mk2-stack-label, .mk-tool-label, .mk2-sky-note { color: #5f656a; }
+.mk2-formcard input, .mk2-formcard textarea { border-color: #788087; }
+.mk2-formcard input::placeholder, .mk2-formcard textarea::placeholder { color: #5f656a; opacity: 1; }
+.mk a:focus-visible, .mk button:focus-visible, .mk input:focus-visible, .mk textarea:focus-visible,
+.skip-link:focus-visible { outline: 3px solid #067568; outline-offset: 4px; box-shadow: 0 0 0 2px #fff; }
+.mk .mk-projects a:focus-visible, .mk .mk2-nav.is-dark a:focus-visible { outline-color: #5fe0cd; }
+#main-content:focus { outline: none; }
+html { scroll-padding-top: 88px; }
+.skip-link { position: fixed; top: 10px; left: 12px; z-index: 1000; transform: translateY(-180%); background: #fff; color: #17222e; padding: 12px 18px; border: 2px solid #067568; border-radius: 8px; font: 600 16px/1.4 system-ui, sans-serif; }
+.skip-link:focus { transform: translateY(0); }
+.mk p.contact-privacy { font-size: 13px; line-height: 1.65; color: #5f656a; margin: 8px 0 18px; overflow-wrap: anywhere; }
+.contact-privacy a, .site-footer a, .legal-content a, .legal-header a { color: #067568; text-decoration: underline; text-underline-offset: 3px; }
+.site-footer { padding: 30px 22px; border-top: 1px solid rgba(23,34,46,.15); text-align: center; }
+.site-footer nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px 28px; }
+.site-footer a { font-size: 14px; }
+.legal-shell { margin: 0; border-radius: 0; min-height: 100vh; }
+.legal-header { max-width: 760px; margin: 0 auto; padding: 32px 24px 0; }
+.legal-content { max-width: 760px; margin: 0 auto; padding: 36px 24px 64px; overflow-wrap: anywhere; }
+.legal-content h1 { font-family: var(--mk-display); font-size: clamp(32px, 7vw, 48px); line-height: 1.12; letter-spacing: -.02em; margin: 20px 0 16px; }
+.legal-content h2 { font-family: var(--mk-display); font-size: 24px; margin: 32px 0 12px; }
+.mk .legal-content p { color: #17222e; font-size: 16px; line-height: 1.75; margin: 0 0 16px; }
+.mk .legal-content .legal-date { color: #5f656a; font-size: 14px; }
+/* Decorative numbering also stays readable to sighted visitors. */
+.mk2-host .mk-num { color: #067568; }

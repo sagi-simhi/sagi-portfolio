@@ -20,3 +20,8 @@ Source: https://github.com/google/fonts/tree/main/ofl/jetbrainsmono
 License: SIL Open Font License 1.1
 
 Body text uses the Inter / system font stack and bundles no file for it.
+
+Full original copyright notices and SIL OFL 1.1 texts are bundled in:
+- licenses/bricolagegrotesque-OFL.txt
+- licenses/instrumentserif-OFL.txt
+- licenses/jetbrainsmono-OFL.txt
