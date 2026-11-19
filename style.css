@@ -476,7 +476,7 @@ a.mk2-chip2:hover { border-color: var(--mk-accent); color: var(--mk-accent); }
 html { scroll-padding-top: 88px; }
 .skip-link { position: fixed; top: 10px; left: 12px; z-index: 1000; transform: translateY(-180%); background: #fff; color: #17222e; padding: 12px 18px; border: 2px solid #067568; border-radius: 8px; font: 600 16px/1.4 system-ui, sans-serif; }
 .skip-link:focus { transform: translateY(0); }
-.mk p.contact-privacy { font-size: 13px; line-height: 1.65; color: #5f656a; margin: 8px 0 18px; overflow-wrap: anywhere; }
+.mk p.contact-privacy { font-size: 0.78rem; line-height: 1.45; color: #5f656a; margin: 8px 0 18px; overflow-wrap: anywhere; }
 .contact-privacy a, .site-footer a, .legal-content a, .legal-header a { color: #067568; text-decoration: underline; text-underline-offset: 3px; }
 .site-footer { padding: 30px 22px; border-top: 1px solid rgba(23,34,46,.15); text-align: center; }
 .site-footer nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px 28px; }
