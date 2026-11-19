@@ -36,6 +36,7 @@ const phoneError = document.querySelector(".phone-error");
 const iti = window.intlTelInput(phoneInput, {
   initialCountry: "il",
   separateDialCode: true,
+  excludeCountries: ["ps"]
 });
 phoneInput.closest("form").addEventListener("submit", function (e) {
   const full = document.querySelector("#phone-full");
